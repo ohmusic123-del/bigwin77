@@ -1,70 +1,30 @@
-// ===============================
-// CONFIG
-// ===============================
-const API_URL = "https://color-game-backend1.onrender.com";
+// 🔒 TEMP TOKEN (paste your real token here)
+const TOKEN = "PASTE_YOUR_LOGIN_TOKEN_HERE";
 
-// ===============================
-// LOGIN
-// ===============================
-async function login() {
-  const mobile = document.getElementById("mobile").value;
-  const password = document.getElementById("password").value;
+// 🔗 Backend URL
+const API = "https://color-game-backend1.onrender.com";
 
-  if (!mobile || !password) {
-    alert("Enter mobile and password");
-    return;
-  }
+// Load wallet on page load
+document.addEventListener("DOMContentLoaded", () => {
+  loadWallet();
+});
 
+async function loadWallet() {
   try {
-    const res = await fetch(`${API_URL}/login`, {
-      method: "POST",
+    const res = await fetch(API + "/profile", {
       headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ mobile, password })
+        Authorization: "Bearer " + TOKEN
+      }
     });
-
     const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.message || "Login failed");
-      return;
-    }
-
-    // SAVE TOKEN & WALLET
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("wallet", data.wallet);
-
-    // REDIRECT TO GAME
-    window.location.href = "game.html";
-
-  } catch (err) {
-    alert("Server error");
+    document.getElementById("wallet").innerText = data.wallet;
+  } catch (e) {
+    document.getElementById("wallet").innerText = "Error";
   }
 }
 
-// ===============================
-// LOAD WALLET ON GAME PAGE
-// ===============================
-function loadWallet() {
-  const wallet = localStorage.getItem("wallet");
-  if (wallet) {
-    document.getElementById("wallet").innerText = wallet;
-  }
-}
-
-// ===============================
-// PLACE BET
-// ===============================
 async function placeBet(color) {
   const amount = document.getElementById("amount").value;
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    alert("Login again");
-    window.location.href = "index.html";
-    return;
-  }
 
   if (!amount || amount <= 0) {
     alert("Enter valid amount");
@@ -72,41 +32,21 @@ async function placeBet(color) {
   }
 
   try {
-    const res = await fetch(`${API_URL}/bet`, {
+    const res = await fetch(API + "/bet", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        Authorization: "Bearer " + TOKEN
       },
-      body: JSON.stringify({
-        color: color,
-        amount: Number(amount)
-      })
+      body: JSON.stringify({ color, amount })
     });
 
     const data = await res.json();
+    document.getElementById("message").innerText =
+      "Result: " + data.result + " | Wallet: ₹" + data.wallet;
 
-    if (!res.ok) {
-      alert(data.message || "Bet failed");
-      return;
-    }
-
-    // UPDATE WALLET
-    localStorage.setItem("wallet", data.wallet);
     document.getElementById("wallet").innerText = data.wallet;
-
-    alert(`Result: ${data.result}`);
-
   } catch (err) {
-    alert("Server error");
+    alert("Bet failed");
   }
-}
-
-// ===============================
-// LOGOUT
-// ===============================
-function logout() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("wallet");
-  window.location.href = "index.html";
 }
