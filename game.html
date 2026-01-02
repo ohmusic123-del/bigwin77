@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Color Prediction</title>
+  <title>Color Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <style>
     body {
-      font-family: Arial;
       background: #111;
       color: white;
       text-align: center;
+      font-family: Arial;
     }
     .box {
-      max-width: 420px;
+      max-width: 400px;
       margin: auto;
       padding: 20px;
     }
@@ -29,7 +28,7 @@
     .VIOLET { background: purple; }
     input {
       width: 90%;
-      padding: 12px;
+      padding: 10px;
       margin: 10px 0;
     }
   </style>
@@ -37,25 +36,62 @@
 
 <body onload="loadGame()">
 
-  <div class="box">
-    <h2>🎮 Color Prediction</h2>
+<div class="box">
+  <h2>🎮 Color Prediction</h2>
+  <p>💰 Wallet: ₹ <span id="wallet">0</span></p>
+  <p>⏱ Time Left: <span id="timer">30</span>s</p>
 
-    <p>💰 Wallet: ₹ <span id="wallet">0</span></p>
-    <p>⏱ Time Left: <span id="timer">30</span>s</p>
+  <input id="amount" type="number" placeholder="Enter Amount">
 
-    <input id="amount" type="number" placeholder="Enter Amount">
-
-    <div>
-      <button class="RED" onclick="placeBet('RED')">RED</button>
-      <button class="GREEN" onclick="placeBet('GREEN')">GREEN</button>
-      <button class="VIOLET" onclick="placeBet('VIOLET')">VIOLET</button>
-    </div>
-
-    <p id="msg"></p>
-
-    <button onclick="logout()">Logout</button>
+  <div>
+    <button class="RED" onclick="bet('RED')">RED</button>
+    <button class="GREEN" onclick="bet('GREEN')">GREEN</button>
+    <button class="VIOLET" onclick="bet('VIOLET')">VIOLET</button>
   </div>
 
-  <script src="app.js"></script>
+  <p id="msg"></p>
+
+  <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+const API = "https://color-game-backend1.onrender.com";
+const token = localStorage.getItem("token");
+
+if (!token) {
+  window.location.href = "index.html";
+}
+
+async function loadGame() {
+  const res = await fetch(API + "/wallet", {
+    headers: { Authorization: "Bearer " + token }
+  });
+  const data = await res.json();
+  document.getElementById("wallet").innerText = data.wallet;
+}
+
+async function bet(color) {
+  const amount = document.getElementById("amount").value;
+
+  const res = await fetch(API + "/bet", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify({ color, amount })
+  });
+
+  const data = await res.json();
+  document.getElementById("msg").innerText = data.message;
+  loadGame();
+}
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "index.html";
+}
+</script>
+
 </body>
 </html>
