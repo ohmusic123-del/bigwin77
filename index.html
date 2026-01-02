@@ -1,40 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login - Color Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Color Prediction</title>
   <style>
-    body {
-      background:#111;
-      color:white;
-      text-align:center;
-      font-family:Arial;
-      padding-top:80px;
-    }
-    input, button {
-      width:80%;
-      max-width:300px;
-      padding:12px;
-      margin:10px;
-      font-size:16px;
-    }
-    button {
-      background:#2196f3;
-      color:white;
-      border:none;
-      border-radius:6px;
-    }
+    body { background:#111;color:white;text-align:center;font-family:Arial }
+    input,button { padding:10px;margin:5px }
+    .red{background:red}
+    .green{background:green}
+    .violet{background:purple}
   </style>
 </head>
 <body>
 
-<h2>🔐 Login</h2>
-
-<input id="mobile" placeholder="Mobile number">
-<input id="password" type="password" placeholder="Password">
+<h2>Login / Register</h2>
+<input id="mobile" placeholder="Mobile"><br>
+<input id="password" type="password" placeholder="Password"><br>
+<button onclick="register()">Register</button>
 <button onclick="login()">Login</button>
 
-<p id="msg"></p>
+<h3 id="wallet"></h3>
+
+<input id="amount" placeholder="Amount"><br>
+<button class="red" onclick="bet('RED')">RED</button>
+<button class="green" onclick="bet('GREEN')">GREEN</button>
+<button class="violet" onclick="bet('VIOLET')">VIOLET</button>
 
 <script src="app.js"></script>
 </body>
