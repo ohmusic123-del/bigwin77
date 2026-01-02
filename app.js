@@ -1,45 +1,81 @@
-const API = "https://YOUR-BACKEND-URL";
-let token = localStorage.getItem("token");
+const API = "https://color-game-backend1.onrender.com";
 
-function register() {
-  fetch(API + "/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      mobile: mobile.value,
-      password: password.value
-    })
-  }).then(r=>r.json()).then(alert);
+// Auto login check
+if (localStorage.getItem("token")) {
+  showGame();
 }
 
-function login() {
-  fetch(API + "/login", {
+// REGISTER
+async function register() {
+  const mobile = mobileInput();
+  const password = passwordInput();
+
+  const res = await fetch(API + "/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      mobile: mobile.value,
-      password: password.value
-    })
-  }).then(r=>r.json()).then(d=>{
-    token = d.token;
-    localStorage.setItem("token", token);
-    wallet.innerText = "Wallet ₹" + d.wallet;
+    body: JSON.stringify({ mobile, password })
   });
+
+  const data = await res.json();
+  alert(data.message);
 }
 
-function bet(color) {
-  fetch(API + "/bet", {
+// LOGIN
+async function login() {
+  const mobile = mobileInput();
+  const password = passwordInput();
+
+  const res = await fetch(API + "/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ mobile, password })
+  });
+
+  const data = await res.json();
+
+  if (data.token) {
+    localStorage.setItem("token", data.token);
+    document.getElementById("wallet").innerText = data.wallet;
+    showGame();
+  } else {
+    alert(data.message);
+  }
+}
+
+// PLACE BET
+async function bet(color) {
+  const amount = document.getElementById("amount").value;
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(API + "/bet", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": token
+      "Authorization": "Bearer " + token
     },
-    body: JSON.stringify({
-      color,
-      amount: Number(amount.value)
-    })
-  }).then(r=>r.json()).then(d=>{
-    wallet.innerText = "Wallet ₹" + d.wallet;
-    alert(d.message);
+    body: JSON.stringify({ color, amount })
   });
+
+  const data = await res.json();
+  alert(data.message);
+}
+
+// LOGOUT
+function logout() {
+  localStorage.removeItem("token");
+  location.reload();
+}
+
+// UI HELPERS
+function showGame() {
+  document.getElementById("auth").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+}
+
+function mobileInput() {
+  return document.getElementById("mobile").value;
+}
+
+function passwordInput() {
+  return document.getElementById("password").value;
 }
