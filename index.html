@@ -1,10 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Color Game</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    .wallet {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    .colors button {
+      padding: 15px;
+      margin: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      width: 100px;
+    }
+    .red { background: red; }
+    .green { background: green; }
+    .violet { background: purple; }
+    input {
+      padding: 10px;
+      width: 120px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Color Game Loaded ✅</h1>
-  <p>If you see this, GitHub Pages works.</p>
+  <h1>🎮 Color Prediction Game</h1>
+
+  <div class="wallet">
+    Wallet: ₹<span id="wallet">---</span>
+  </div>
+
+  <input type="number" id="amount" placeholder="Bet amount" />
+
+  <div class="colors">
+    <button class="red" onclick="placeBet('RED')">RED</button>
+    <button class="green" onclick="placeBet('GREEN')">GREEN</button>
+    <button class="violet" onclick="placeBet('VIOLET')">VIOLET</button>
+  </div>
+
+  <p id="message"></p>
+
+  <script src="app.js"></script>
 </body>
 </html>
