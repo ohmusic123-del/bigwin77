@@ -1,9 +1,7 @@
-let time=30,roundId=Date.now()+"";
-setInterval(()=>{
-  timer.innerText="00:"+String(time--).padStart(2,"0");
-  if(time<0){time=30;apiPost("/round/resolve",{roundId});roundId=Date.now()+"";}
-},1000);
+async function placeBet(color) {
+  const amount = document.getElementById("amount").value;
+  if (!amount) return alert("Enter amount");
 
-function bet(color){
-  apiPost("/bet",{color,amount:1,roundId},localStorage.token);
+  const data = await apiPlaceBet(amount, color);
+  alert(data.message || "Bet placed");
 }
