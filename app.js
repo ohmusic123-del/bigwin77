@@ -44,19 +44,27 @@ async function login() {
 }
 
 // BET
-async function bet(color) {
+async function placeBet(color) {
   const amount = document.getElementById("amount").value;
   const token = localStorage.getItem("token");
 
-  const res = await fetch(API + "/bet", {
+  if (!token) {
+    alert("Please login again");
+    return;
+  }
+
+  const res = await fetch("https://color-game-backend1.onrender.com/bet", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
+      "Authorization": "Bearer " + token   // ✅ THIS LINE FIXES EVERYTHING
     },
     body: JSON.stringify({ color, amount })
   });
 
   const data = await res.json();
-  alert(data.message);
+
+  if (data.message) {
+    alert(data.message);
+  }
 }
