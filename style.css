@@ -1,11 +1,22 @@
 body {
-  background: black;
+  background: #0b1220;
   color: white;
   text-align: center;
-  margin-top: 50px;
+  font-family: Arial;
 }
+
+h1 span { color: #22c55e; }
 
 input, button {
   padding: 10px;
   margin: 5px;
+}
+
+.red { background:red; }
+.green { background:green; }
+.violet { background:purple; }
+
+.quick button {
+  background:#222;
+  color:white;
 }
