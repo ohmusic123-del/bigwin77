@@ -1,59 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>BIGWIN</title>
+
 <style>
 body {
-  background:#0b1220;
-  color:white;
-  font-family:Arial;
-  text-align:center;
+  margin: 0;
+  font-family: Arial;
+  background: #0b1220;
+  color: white;
+  text-align: center;
 }
 header {
-  padding:15px;
-  font-size:28px;
-  font-weight:bold;
+  padding: 16px;
+  font-size: 28px;
+  font-weight: bold;
 }
-.win { color:#22c55e; }
+.win { color: #22c55e; }
+
 .card {
-  background:#111827;
-  padding:20px;
-  margin:20px auto;
-  width:320px;
-  border-radius:12px;
+  background: #111827;
+  margin: 20px auto;
+  padding: 20px;
+  width: 320px;
+  border-radius: 12px;
 }
-button {
-  padding:12px;
-  margin:5px;
-  width:90px;
-  border:none;
-  border-radius:8px;
-  font-weight:bold;
-}
-.red { background:#ef4444; }
-.green { background:#22c55e; }
-.small { width:60px; }
+
 input {
-  padding:10px;
-  width:90%;
-  margin:5px;
+  width: 90%;
+  padding: 10px;
+  margin: 6px 0;
 }
+
+button {
+  padding: 12px;
+  margin: 6px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.small { width: 60px; }
+.red { background: #ef4444; color: white; }
+.green { background: #22c55e; color: white; }
 </style>
 </head>
+
 <body>
 
 <header>BIG<span class="win">WIN</span></header>
 
 <div class="card" id="auth">
   <input id="mobile" placeholder="Mobile">
-  <input id="password" placeholder="Password" type="password">
+  <input id="password" type="password" placeholder="Password">
+  <br>
   <button onclick="register()">Register</button>
   <button onclick="login()">Login</button>
 </div>
 
 <div class="card" id="game" style="display:none">
-  <h3>Wallet: ₹<span id="wallet">0</span></h3>
+  <h3>Wallet ₹<span id="wallet">0</span></h3>
 
   <div>
     <button class="small" onclick="setAmt(1)">₹1</button>
@@ -71,60 +78,71 @@ input {
 </div>
 
 <script>
-const API = "https://game-backend1.onrender.com";
-let token = "";
+const API = "https://color-game-backend1.onrender.com";
+let TOKEN = "";
 
-function register(){
-  fetch(API+"/api/register",{
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      mobile:mobile.value,
-      password:password.value
+function register() {
+  fetch(API + "/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      mobile: mobile.value,
+      password: password.value
     })
-  }).then(r=>r.json()).then(alertMsg);
+  })
+  .then(r => r.json())
+  .then(d => alert(d.message || d.error));
 }
 
-function login(){
-  fetch(API+"/api/login",{
-    method:"POST",
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      mobile:mobile.value,
-      password:password.value
+function login() {
+  fetch(API + "/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      mobile: mobile.value,
+      password: password.value
     })
-  }).then(r=>r.json()).then(d=>{
-    if(d.token){
-      token=d.token;
-      wallet.innerText=d.wallet;
-      auth.style.display="none";
-      game.style.display="block";
-    } else alert(d.error);
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.token) {
+      TOKEN = d.token;
+      wallet.innerText = d.wallet;
+      auth.style.display = "none";
+      game.style.display = "block";
+    } else {
+      alert(d.error);
+    }
   });
 }
 
-function setAmt(v){ amount.value=v; }
+function setAmt(v) {
+  amount.value = v;
+}
 
-function bet(color){
-  fetch(API+"/api/game/bet",{
-    method:"POST",
-    headers:{
-      'Content-Type':'application/json',
-      'Authorization':'Bearer '+token
+function bet(color) {
+  fetch(API + "/api/game/bet", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + TOKEN
     },
-    body:JSON.stringify({
-      amount:+amount.value,
-      color
+    body: JSON.stringify({
+      color,
+      amount: Number(amount.value)
     })
-  }).then(r=>r.json()).then(d=>{
-    if(d.wallet!==undefined){
-      wallet.innerText=d.wallet;
+  })
+  .then(r => r.json())
+  .then(d => {
+    if (d.wallet !== undefined) {
+      wallet.innerText = d.wallet;
       alert("Bet placed");
-    } else alert(d.error);
+    } else {
+      alert(d.error);
+    }
   });
 }
-
-function alertMsg(d){ alert(d.message||d.error); }
 </script>
+
 </body>
 </html>
