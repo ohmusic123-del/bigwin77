@@ -1,7 +1,70 @@
-<div class="container">
-<div class="card"><h2 id="timer">00:30</h2></div>
-<button class="gold-btn" onclick="bet('red')">RED</button>
-<button class="gold-btn" onclick="bet('green')">GREEN</button>
-</div>
-<script src="js/api.js"></script>
-<script src="js/game.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BIGWIN – Game</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- 🔐 LOGIN PROTECTION (VERY IMPORTANT) -->
+  <script>
+    if (!localStorage.getItem("token")) {
+      window.location.href = "index.html";
+    }
+  </script>
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <h2>BIGWIN GAME</h2>
+    <button onclick="logout()" class="logout-btn">Logout</button>
+  </header>
+
+  <!-- WALLET -->
+  <div class="wallet-box">
+    Balance: ₹<span id="balance">0</span>
+  </div>
+
+  <!-- GAME CARD -->
+  <div class="game-card">
+
+    <h3>Select Color</h3>
+
+    <div class="color-buttons">
+      <button class="green" onclick="placeBet('green')">Green</button>
+      <button class="violet" onclick="placeBet('violet')">Violet</button>
+      <button class="red" onclick="placeBet('red')">Red</button>
+    </div>
+
+    <input
+      type="number"
+      id="betAmount"
+      placeholder="Enter bet amount"
+      min="1"
+    >
+
+    <button class="play-btn" onclick="playGame()">Play</button>
+
+    <p id="result"></p>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="home.html">Home</a>
+    <a href="game.html" class="active">Game</a>
+    <a href="wallet.html">Wallet</a>
+    <a href="profile.html">Profile</a>
+  </nav>
+
+  <!-- JS FILES -->
+  <script src="js/api.js"></script>
+  <script src="js/game.js"></script>
+
+</body>
+</html>
