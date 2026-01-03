@@ -4,11 +4,6 @@ async function login() {
   const mobile = document.getElementById("phone").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  if (!mobile || !password) {
-    alert("Enter mobile and password");
-    return;
-  }
-
   const res = await fetch(`${API}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -38,8 +33,4 @@ async function register() {
 
   const data = await res.json();
   alert(data.message || data.error || "Registered");
-}  });
-
-  const data = await res.json();
-  alert(data.message || "Registered");
 }
