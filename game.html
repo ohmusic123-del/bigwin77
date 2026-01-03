@@ -1,47 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>BIGWIN - Game</title>
-  <link rel="stylesheet" href="style.css" />
-
-  <!-- 🔐 AUTH CHECK (MUST BE HERE) -->
-  <script>
-    const token = localStorage.getItem("token");
-    if (!token) {
-      window.location.replace("index.html");
-    }
-  </script>
-</head>
-
-<body>
-  <header class="topbar">
-    <div class="logo">
-      <span class="big">BIG</span><span class="win">WIN</span>
-    </div>
-  </header>
-
-  <div class="container card">
-    <h2 id="wallet">Wallet: ₹0</h2>
-
-    <div class="quick-bets">
-      <button onclick="setAmount(1)">₹1</button>
-      <button onclick="setAmount(10)">₹10</button>
-      <button onclick="setAmount(50)">₹50</button>
-      <button onclick="setAmount(100)">₹100</button>
-    </div>
-
-    <input type="number" id="amount" placeholder="Enter amount" />
-
-    <div class="bet-buttons">
-      <button class="red" onclick="placeBet('red')">RED</button>
-      <button class="green" onclick="placeBet('green')">GREEN</button>
-    </div>
-
-    <button class="logout" onclick="logout()">Logout</button>
-  </div>
-
-  <!-- JS MUST LOAD LAST -->
-  <script src="script.js"></script>
-</body>
-</html>
+<div class="container">
+<div class="card"><h2 id="timer">00:30</h2></div>
+<button class="gold-btn" onclick="bet('red')">RED</button>
+<button class="gold-btn" onclick="bet('green')">GREEN</button>
+</div>
+<script src="js/api.js"></script>
+<script src="js/game.js"></script>
