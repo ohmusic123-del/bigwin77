@@ -1,148 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>BIGWIN</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #0b1220;
-  color: white;
-  text-align: center;
-}
-header {
-  padding: 16px;
-  font-size: 28px;
-  font-weight: bold;
-}
-.win { color: #22c55e; }
-
-.card {
-  background: #111827;
-  margin: 20px auto;
-  padding: 20px;
-  width: 320px;
-  border-radius: 12px;
-}
-
-input {
-  width: 90%;
-  padding: 10px;
-  margin: 6px 0;
-}
-
-button {
-  padding: 12px;
-  margin: 6px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-}
-
-.small { width: 60px; }
-.red { background: #ef4444; color: white; }
-.green { background: #22c55e; color: white; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BIGWIN</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
-
 <body>
 
-<header>BIG<span class="win">WIN</span></header>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">BIG<span>WIN</span></div>
+  </header>
 
-<div class="card" id="auth">
-  <input id="mobile" placeholder="Mobile">
-  <input id="password" type="password" placeholder="Password">
-  <br>
-  <button onclick="register()">Register</button>
-  <button onclick="login()">Login</button>
-</div>
-
-<div class="card" id="game" style="display:none">
-  <h3>Wallet ₹<span id="wallet">0</span></h3>
-
-  <div>
-    <button class="small" onclick="setAmt(1)">₹1</button>
-    <button class="small" onclick="setAmt(10)">₹10</button>
-    <button class="small" onclick="setAmt(50)">₹50</button>
-    <button class="small" onclick="setAmt(100)">₹100</button>
+  <!-- LOGIN -->
+  <div id="loginBox" class="card">
+    <h2>Login / Register</h2>
+    <input id="mobile" type="text" placeholder="Mobile number"/>
+    <input id="password" type="password" placeholder="Password"/>
+    <button onclick="register()">Register</button>
+    <button class="primary" onclick="login()">Login</button>
   </div>
 
-  <input id="amount" placeholder="Amount">
+  <!-- GAME -->
+  <div id="gameBox" class="card hidden">
+    <h3>Wallet: ₹<span id="wallet">0</span></h3>
 
-  <div>
-    <button class="red" onclick="bet('RED')">RED</button>
-    <button class="green" onclick="bet('GREEN')">GREEN</button>
+    <!-- QUICK AMOUNTS -->
+    <div class="quick-amounts">
+      <button onclick="setAmount(1)">₹1</button>
+      <button onclick="setAmount(10)">₹10</button>
+      <button onclick="setAmount(50)">₹50</button>
+      <button onclick="setAmount(100)">₹100</button>
+    </div>
+
+    <input id="amount" type="number" placeholder="Enter amount" min="1"/>
+
+    <!-- COLORS -->
+    <div class="colors">
+      <button class="red" onclick="bet('RED')">RED</button>
+      <button class="green" onclick="bet('GREEN')">GREEN</button>
+    </div>
   </div>
-</div>
 
-<script>
-const API = "https://color-game-backend1.onrender.com";
-let TOKEN = "";
-
-function register() {
-  fetch(API + "/api/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      mobile: mobile.value,
-      password: password.value
-    })
-  })
-  .then(r => r.json())
-  .then(d => alert(d.message || d.error));
-}
-
-function login() {
-  fetch(API + "/api/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      mobile: mobile.value,
-      password: password.value
-    })
-  })
-  .then(r => r.json())
-  .then(d => {
-    if (d.token) {
-      TOKEN = d.token;
-      wallet.innerText = d.wallet;
-      auth.style.display = "none";
-      game.style.display = "block";
-    } else {
-      alert(d.error);
-    }
-  });
-}
-
-function setAmt(v) {
-  amount.value = v;
-}
-
-function bet(color) {
-  fetch(API + "/api/game/bet", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + TOKEN
-    },
-    body: JSON.stringify({
-      color,
-      amount: Number(amount.value)
-    })
-  })
-  .then(r => r.json())
-  .then(d => {
-    if (d.wallet !== undefined) {
-      wallet.innerText = d.wallet;
-      alert("Bet placed");
-    } else {
-      alert(d.error);
-    }
-  });
-}
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
