@@ -18,7 +18,7 @@ async function login() {
   }
 
   localStorage.setItem("token", data.token);
-  window.location.href = "home.html";
+  location.href = "home.html";
 }
 
 async function register() {
@@ -32,5 +32,5 @@ async function register() {
   });
 
   const data = await res.json();
-  alert(data.message || data.error || "Registered");
+  alert(data.message || data.error);
 }
