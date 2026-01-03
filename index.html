@@ -1,30 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>BIGWIN – Login</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>BIGWIN - Login</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="topbar">
-  <div class="logo">
-    <span class="big">BIG</span><span class="win">WIN</span>
+  <div class="header">BIG<span style="color:#22c55e">WIN</span></div>
+
+  <div class="card">
+    <h2>Login / Register</h2>
+
+    <input type="text" id="mobile" placeholder="Mobile number">
+    <input type="password" id="password" placeholder="Password">
+
+    <div class="btn-row">
+      <button onclick="register()">Register</button>
+      <button onclick="login()">Login</button>
+    </div>
   </div>
-</header>
 
-<div class="container">
-  <h2>Login / Register</h2>
-
-  <input type="text" id="mobile" placeholder="Mobile number" />
-  <input type="password" id="password" placeholder="Password" />
-
-  <div class="btn-row">
-    <button onclick="register()">Register</button>
-    <button onclick="login()">Login</button>
-  </div>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
