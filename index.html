@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BIGWIN</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -13,36 +13,36 @@
     <div class="logo">BIG<span>WIN</span></div>
   </header>
 
-  <!-- LOGIN -->
+  <!-- LOGIN BOX -->
   <div id="loginBox" class="card">
     <h2>Login / Register</h2>
-    <input id="mobile" type="text" placeholder="Mobile number"/>
-    <input id="password" type="password" placeholder="Password"/>
-    <button onclick="register()">Register</button>
-    <button class="primary" onclick="login()">Login</button>
+    <input id="mobile" type="text" placeholder="Mobile number" />
+    <input id="password" type="password" placeholder="Password" />
+    <div class="btn-row">
+      <button onclick="register()">Register</button>
+      <button onclick="login()">Login</button>
+    </div>
   </div>
 
-  <!-- GAME -->
+  <!-- GAME BOX -->
   <div id="gameBox" class="card hidden">
-    <h3>Wallet: ₹<span id="wallet">0</span></h3>
+    <h2>Wallet: ₹<span id="wallet">0</span></h2>
 
-    <!-- QUICK AMOUNTS -->
-    <div class="quick-amounts">
+    <div class="quick-btns">
       <button onclick="setAmount(1)">₹1</button>
       <button onclick="setAmount(10)">₹10</button>
       <button onclick="setAmount(50)">₹50</button>
       <button onclick="setAmount(100)">₹100</button>
     </div>
 
-    <input id="amount" type="number" placeholder="Enter amount" min="1"/>
+    <input id="amount" type="number" min="1" placeholder="Enter amount" />
 
-    <!-- COLORS -->
-    <div class="colors">
-      <button class="red" onclick="bet('RED')">RED</button>
-      <button class="green" onclick="bet('GREEN')">GREEN</button>
+    <div class="bet-btns">
+      <button class="red" onclick="placeBet('red')">RED</button>
+      <button class="green" onclick="placeBet('green')">GREEN</button>
     </div>
   </div>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
