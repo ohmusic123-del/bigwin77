@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+  if (!localStorage.getItem("token")) {
+    location.href = "index.html";
+  }
+  </script>
   <meta charset="UTF-8">
   <title>BIGWIN – Profile</title>
 
