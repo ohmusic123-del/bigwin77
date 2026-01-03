@@ -1,5 +1,4 @@
 const API = "https://color-game-backend1.onrender.com/api";
-
 async function login() {
   const phone = phoneValue();
   const password = passValue();
