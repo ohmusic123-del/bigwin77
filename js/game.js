@@ -1,39 +1,44 @@
-let selectedColor = null;
-let selectedAmount = 1;
-
 const API = "https://color-game-backend1.onrender.com";
+
+let selectedColor = null;
+let selectedAmount = 0;
+let timeLeft = 30;
+let roundId = Date.now();
+
+const timerEl = document.getElementById("timer");
+const statusEl = document.getElementById("status");
+const roundEl = document.getElementById("roundId");
+
+roundEl.innerText = "Round: " + roundId;
 
 function selectColor(color) {
   selectedColor = color;
-  alert("Selected " + color.toUpperCase());
+  statusEl.innerText = `Selected: ${color.toUpperCase()}`;
 }
 
 function selectAmount(amount) {
   selectedAmount = amount;
+  statusEl.innerText = `Amount: ₹${amount}`;
 }
 
 async function placeBet() {
-  if (!selectedColor) {
-    alert("Please select a color");
+  if (!selectedColor || !selectedAmount) {
+    alert("Select color and amount");
     return;
   }
 
   const token = localStorage.getItem("token");
-  if (!token) {
-    location.href = "index.html";
-    return;
-  }
 
   const res = await fetch(`${API}/bet`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": token
+      Authorization: token
     },
     body: JSON.stringify({
       color: selectedColor,
       amount: selectedAmount,
-      roundId: Date.now()
+      roundId
     })
   });
 
@@ -44,5 +49,25 @@ async function placeBet() {
     return;
   }
 
-  alert("Bet placed successfully");
+  statusEl.innerText = "Bet placed successfully";
+}
+
+function startTimer() {
+  setInterval(() => {
+    timeLeft--;
+    timerEl.innerText = timeLeft;
+
+    if (timeLeft === 0) {
+      statusEl.innerText = "Round ended";
     }
+
+    if (timeLeft < 0) {
+      timeLeft = 30;
+      roundId = Date.now();
+      roundEl.innerText = "Round: " + roundId;
+      statusEl.innerText = "";
+    }
+  }, 1000);
+}
+
+startTimer();
