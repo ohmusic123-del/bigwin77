@@ -4,21 +4,29 @@
   <title>BIGWIN - Profile</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <script>
-  if (!localStorage.getItem("token")) location.href = "index.html";
+  if (!localStorage.getItem("token")) {
+    location.href = "index.html";
+  }
 </script>
 
 <div class="center">
   <div class="card">
-    <div class="logo">Profile</div>
+    <div class="logo">BIGWIN</div>
 
-    <p><b>Mobile:</b> Logged User</p>
-    <p><b>Status:</b> Active</p>
+    <p><strong>Mobile:</strong> <span id="mobile">--</span></p>
+    <p><strong>Wallet:</strong> ₹<span id="wallet">0</span></p>
+    <p><strong>Total Wagered:</strong> ₹<span id="wagered">0</span></p>
 
-    <button class="btn-outline" onclick="logout()">Logout</button>
+    <button
+      class="btn-gold"
+      style="width:100%;margin-top:20px"
+      onclick="logout()"
+    >
+      Logout
+    </button>
   </div>
 </div>
 
@@ -29,12 +37,6 @@
   <a href="profile.html" class="active">Profile</a>
 </div>
 
-<script>
-function logout() {
-  localStorage.removeItem("token");
-  location.href = "index.html";
-}
-</script>
-
+<script src="js/profile.js?v=1"></script>
 </body>
 </html>
