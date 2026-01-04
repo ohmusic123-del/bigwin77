@@ -6,6 +6,11 @@
 </head>
 <body>
 
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">BIGWIN</div>
+</div>
+
 <script>
   if (!localStorage.getItem("token")) {
     location.href = "index.html";
@@ -14,13 +19,29 @@
 
 <div class="center">
   <div class="card">
+
     <h2 style="text-align:center">Wallet Balance</h2>
     <h1 id="balance" style="text-align:center;color:gold">₹0</h1>
 
     <hr style="margin:16px 0;opacity:.2">
 
+    <!-- DEPOSIT / WITHDRAW -->
+    <button class="btn-gold" style="width:100%;margin-bottom:10px"
+      onclick="openDeposit()">
+      ➕ Deposit
+    </button>
+
+    <button class="btn-outline" style="width:100%;margin-bottom:16px"
+      onclick="openWithdraw()">
+      ➖ Withdraw
+    </button>
+
+    <hr style="margin:16px 0;opacity:.2">
+
+    <!-- BET HISTORY -->
     <h3>Recent Bets</h3>
     <ul id="betList" style="list-style:none;padding:0"></ul>
+
   </div>
 </div>
 
@@ -32,5 +53,16 @@
 </div>
 
 <script src="js/wallet.js?v=1"></script>
+
+<script>
+  function openDeposit() {
+    alert("Deposit UI will be added next");
+  }
+
+  function openWithdraw() {
+    alert("Withdraw UI will be added next");
+  }
+</script>
+
 </body>
 </html>
