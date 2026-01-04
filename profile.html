@@ -1,95 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <script>
-  if (!localStorage.getItem("token")) {
-    location.href = "index.html";
-  }
-  </script>
-  <meta charset="UTF-8">
-  <title>BIGWIN – Profile</title>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BIGWIN - Profile</title>
   <link rel="stylesheet" href="style.css">
-
-  <!-- 🔐 LOGIN PROTECTION -->
-  <script>
-    if (!localStorage.getItem("token")) {
-      window.location.href = "index.html";
-    }
-  </script>
 </head>
 
 <body>
 
-  <!-- TOP BAR -->
-  <header class="topbar">
-    <h2>My Profile</h2>
-    <button onclick="logout()" class="logout-btn">Logout</button>
-  </header>
+<script>
+  if (!localStorage.getItem("token")) location.href = "index.html";
+</script>
 
-  <!-- PROFILE CARD -->
-  <div class="profile-card">
-    <div class="avatar">👤</div>
+<div class="center">
+  <div class="card">
+    <div class="logo">Profile</div>
 
-    <h3 id="username">User</h3>
-    <p id="mobile">Mobile: **********</p>
+    <p><b>Mobile:</b> Logged User</p>
+    <p><b>Status:</b> Active</p>
+
+    <button class="btn-outline" onclick="logout()">Logout</button>
   </div>
+</div>
 
-  <!-- PROFILE OPTIONS -->
-  <div class="profile-options">
+<div class="bottom-nav">
+  <a href="home.html">Home</a>
+  <a href="game.html">Game</a>
+  <a href="wallet.html">Wallet</a>
+  <a href="profile.html" class="active">Profile</a>
+</div>
 
-    <div class="profile-item">
-      <span>💰 Wallet Balance</span>
-      <strong>₹<span id="profileBalance">0</span></strong>
-    </div>
-
-    <div class="profile-item" onclick="location.href='wallet.html'">
-      <span>💳 Wallet</span>
-      <span>›</span>
-    </div>
-
-    <div class="profile-item" onclick="location.href='game.html'">
-      <span>🎮 Play Game</span>
-      <span>›</span>
-    </div>
-
-    <div class="profile-item" onclick="logout()">
-      <span>🚪 Logout</span>
-      <span>›</span>
-    </div>
-
-  </div>
-
-  <!-- BOTTOM NAV -->
-  <nav class="bottom-nav">
-    <a href="home.html">Home</a>
-    <a href="game.html">Game</a>
-    <a href="wallet.html">Wallet</a>
-    <a href="profile.html" class="active">Profile</a>
-  </nav>
-
-  <!-- JS -->
-  <script src="js/api.js"></script>
-  <script>
-    async function loadProfile() {
-      try {
-        const data = await apiGet("/me");
-        document.getElementById("username").innerText = data.username || "User";
-        document.getElementById("mobile").innerText = "Mobile: " + (data.mobile || "N/A");
-        document.getElementById("profileBalance").innerText = data.balance || 0;
-      } catch (e) {
-        console.error(e);
-      }
-    }
-
-    function logout() {
-      localStorage.removeItem("token");
-      window.location.href = "index.html";
-    }
-
-    loadProfile();
-  </script>
+<script>
+function logout() {
+  localStorage.removeItem("token");
+  location.href = "index.html";
+}
+</script>
 
 </body>
 </html>
