@@ -1,20 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BIGWIN - Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
-  <script>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">BIGWIN</div>
+</div>
+
+<div class="center">
+  <div class="card">
+
+    <h2 style="text-align:center;margin-bottom:10px">
+      Welcome to BIGWIN
+    </h2>
+
+    <p style="text-align:center;opacity:0.8;margin-bottom:20px">
+      Choose an option to continue
+    </p>
+
+    <button class="btn-gold" style="width:100%;margin-bottom:12px"
+      onclick="location.href='game.html'">
+      🎮 Play Game
+    </button>
+
+    <button class="btn-outline" style="width:100%;margin-bottom:12px"
+      onclick="location.href='wallet.html'">
+      💰 Wallet
+    </button>
+
+    <button class="btn-outline" style="width:100%"
+      onclick="location.href='profile.html'">
+      👤 Profile
+    </button>
+
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="home.html" class="active">Home</a>
+  <a href="game.html">Game</a>
+  <a href="wallet.html">Wallet</a>
+  <a href="profile.html">Profile</a>
+</div>
+
+<script>
   if (!localStorage.getItem("token")) {
     location.href = "index.html";
   }
-  </script>
-  <div class="center">
-    <div class="card">
-      <div class="logo">BIGWIN</div>
-      <p>Welcome to the game</p>
-    </div>
-  </div>
+</script>
 
-  <div class="bottom-nav">
-    <a href="home.html" class="active">Home</a>
-    <a href="game.html">Game</a>
-    <a href="wallet.html">Wallet</a>
-    <a href="profile.html">Profile</a>
-  </div>
 </body>
+</html>
