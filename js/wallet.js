@@ -38,3 +38,40 @@ setInterval(() => {
   loadWallet();
   loadBets();
 }, 5000);
+
+function openDeposit() {
+  document.getElementById("depositModal").style.display = "flex";
+}
+
+function closeDeposit() {
+  document.getElementById("depositModal").style.display = "none";
+}
+
+async function submitDeposit() {
+  const amount = Number(document.getElementById("depositAmount").value);
+
+  if (amount < 100) {
+    alert("Minimum deposit is ₹100");
+    return;
+  }
+
+  const res = await fetch(`${API}/deposit`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify({ amount })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.error || "Deposit failed");
+    return;
+  }
+
+  alert("Deposit successful");
+  closeDeposit();
+  loadWallet();
+}
