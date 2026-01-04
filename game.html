@@ -1,52 +1,117 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>BIGWIN - Game</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+const API = "https://color-game-backend1.onrender.com";
 
-<body>
+let selectedColor = null;
+let selectedAmount = 0;
+let roundId = null;
+let timerInterval = null;
 
-<script>
-  if (!localStorage.getItem("token")) location.href = "index.html";
-</script>
+/* =========================
+   INIT
+========================= */
 
-<div class="center">
-  <div class="card">
-    <h2 id="timer" style="text-align:center">30</h2>
-<p id="roundId" style="text-align:center;font-size:12px;opacity:.7"></p>
-<p id="status" style="text-align:center;color:gold"></p>
-    <div class="logo">BIGWIN</div>
+init();
 
-    <h3 style="text-align:center">Choose Color</h3>
+async function init() {
+  await loadRound();
+}
 
-    <div style="display:flex; gap:12px; margin:20px 0">
-    <button class="btn-gold" style="background:#16a34a"
-  onclick="selectColor('green')">GREEN</button>
+/* =========================
+   ROUND
+========================= */
 
-<button class="btn-gold" style="background:#dc2626"
-  onclick="selectColor('red')">RED</button>
-    </div>
+async function loadRound() {
+  const res = await fetch(`${API}/round/current`);
+  const data = await res.json();
 
+  roundId = data.id;
+  document.getElementById("roundId").innerText = `Round ID: ${roundId}`;
 
-    <div style="display:flex; gap:8px; margin-top:10px">
-      <button class="btn-outline" onclick="selectAmount(1)">₹1</button>
-<button class="btn-outline" onclick="selectAmount(10)">₹10</button>
-<button class="btn-outline" onclick="selectAmount(50)">₹50</button>
-<button class="btn-outline" onclick="selectAmount(100)">₹100</button>
-    </div>
+  startTimer(data.startTime);
+}
 
-    <button class="btn-gold" style="margin-top:16px"
-  onclick="placeBet()">Place Bet</button>
-  </div>
-</div>
+function startTimer(startTime) {
+  clearInterval(timerInterval);
 
-<div class="bottom-nav">
-  <a href="home.html">Home</a>
-  <a href="game.html" class="active">Game</a>
-  <a href="wallet.html">Wallet</a>
-  <a href="profile.html">Profile</a>
-</div>
-<script src="js/game.js"></script>
-</body>
-</html>
+  timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const remaining = 30 - elapsed;
+
+    document.getElementById("timer").innerText =
+      remaining > 0 ? remaining : 0;
+
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+      lockBetting();
+      resolveRound();
+    }
+  }, 1000);
+}
+
+/* =========================
+   BET UI
+========================= */
+
+function selectColor(color) {
+  selectedColor = color;
+  document.getElementById("status").innerText = `Selected: ${color.toUpperCase()}`;
+}
+
+function selectAmount(amount) {
+  selectedAmount = amount;
+  document.getElementById("status").innerText =
+    `Bet ₹${amount} on ${selectedColor?.toUpperCase() || "?"}`;
+}
+
+/* =========================
+   PLACE BET
+========================= */
+
+async function placeBet() {
+  if (!selectedColor || !selectedAmount) {
+    alert("Select color & amount");
+    return;
+  }
+
+  const res = await fetch(`${API}/bet`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token")
+    },
+    body: JSON.stringify({
+      color: selectedColor,
+      amount: selectedAmount
+    })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.error || "Bet failed");
+    return;
+  }
+
+  document.getElementById("status").innerText = "Bet placed ✅";
+}
+
+/* =========================
+   ROUND END
+========================= */
+
+function lockBetting() {
+  document.getElementById("status").innerText = "Betting closed ⛔";
+}
+
+async function resolveRound() {
+  const res = await fetch(`${API}/round/resolve`, {
+    method: "POST"
+  });
+
+  const data = await res.json();
+
+  document.getElementById("status").innerText =
+    `Winner: ${data.winner.toUpperCase()} 🎉`;
+
+  // Load next round after 5 sec
+  setTimeout(loadRound, 5000);
+}
