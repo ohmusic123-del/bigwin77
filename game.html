@@ -1,123 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>BIGWIN Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <style>
-    body {
-      background: #0b0b0b;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      padding: 10px;
-    }
-
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .timer {
-      font-size: 28px;
-      font-weight: bold;
-      color: gold;
-    }
-
-    .round {
-      font-size: 14px;
-      opacity: 0.8;
-    }
-
-    .bets {
-      display: flex;
-      gap: 10px;
-      margin: 15px 0;
-    }
-
-    button {
-      flex: 1;
-      padding: 15px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .red {
-      background: #e53935;
-      color: white;
-    }
-
-    .green {
-      background: #43a047;
-      color: white;
-    }
-
-    button:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    .box {
-      background: #141414;
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-
-    h3 {
-      margin: 5px 0;
-      font-size: 16px;
-      color: gold;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    li {
-      padding: 5px 0;
-      border-bottom: 1px solid #222;
-      font-size: 14px;
-    }
-  </style>
+  <title>BIGWIN - Game</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <!-- TOP BAR -->
-  <div class="top">
-    <div>
-      <div class="round">Round ID</div>
-      <div id="roundId">---</div>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">BIGWIN</div>
+</div>
+
+<script>
+  if (!localStorage.getItem("token")) {
+    location.href = "index.html";
+  }
+</script>
+
+<div class="center">
+  <div class="card">
+
+    <h2 style="text-align:center">Color Game</h2>
+
+    <!-- ROUND INFO -->
+    <p style="text-align:center;font-size:13px;opacity:.7">
+      Round ID: <span id="roundId">---</span>
+    </p>
+
+    <!-- COLOR BUTTONS -->
+    <div style="display:flex;gap:12px;margin:16px 0">
+      <button class="btn-red" style="flex:1" onclick="selectColor('red')">
+        RED
+      </button>
+      <button class="btn-green" style="flex:1" onclick="selectColor('green')">
+        GREEN
+      </button>
     </div>
 
-    <div class="timer" id="timer">30</div>
-  </div>
+    <!-- AMOUNT BUTTONS -->
+    <div class="amounts">
+      <button onclick="setAmount(1)">₹1</button>
+      <button onclick="setAmount(5)">₹5</button>
+      <button onclick="setAmount(10)">₹10</button>
+      <button onclick="setAmount(50)">₹50</button>
+      <button onclick="setAmount(100)">₹100</button>
+    </div>
 
-  <!-- BET BUTTONS -->
-  <div class="bets">
-    <button class="red bet-btn" onclick="placeBet('red')">RED</button>
-    <button class="green bet-btn" onclick="placeBet('green')">GREEN</button>
-  </div>
+    <p style="text-align:center;margin-top:10px">
+      Selected Amount: ₹<span id="selectedAmount">0</span>
+    </p>
 
-  <!-- MY BETS -->
-  <div class="box">
-    <h3>My Bets (Current Round)</h3>
-    <div id="myBets">No bets</div>
-  </div>
+    <!-- PLACE BET -->
+    <button class="btn-gold" style="width:100%;margin-top:16px"
+      onclick="placeBet()">
+      PLACE BET
+    </button>
 
-  <!-- HISTORY -->
-  <div class="box">
-    <h3>Last Results</h3>
-    <ul id="history"></ul>
-  </div>
+    <hr style="margin:16px 0;opacity:.2">
 
-<script src="game.js"></script>
+    <!-- LAST RESULTS -->
+    <h3 style="text-align:center">Last Results</h3>
+    <ul id="history" style="list-style:none;padding:0;text-align:center"></ul>
+
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="home.html">Home</a>
+  <a href="game.html" class="active">Game</a>
+  <a href="wallet.html">Wallet</a>
+  <a href="profile.html">Profile</a>
+</div>
+
+<script src="js/game.js"></script>
 </body>
-      </html>
+</html>
