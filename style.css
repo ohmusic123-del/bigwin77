@@ -1,177 +1,230 @@
+/* ======================
+   GLOBAL RESET
+====================== */
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", system-ui, sans-serif;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 body {
-  margin: 0;
-  background: radial-gradient(circle at top, #1a1a1a, #050505);
+  background: #0e0e0e;
   color: #fff;
+  min-height: 100vh;
+  padding-bottom: 70px;
 }
 
-/* ===== LAYOUT ===== */
+/* ======================
+   HEADER
+====================== */
+.header {
+  background: linear-gradient(135deg, #111, #1a1a1a);
+  padding: 14px;
+  text-align: center;
+  border-bottom: 1px solid #222;
+}
 
+.header-logo {
+  color: gold;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+/* ======================
+   CENTER CARD
+====================== */
 .center {
-  min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding-top: 80px;   /* space for header */
-  padding-bottom: 80px;
+  padding: 16px;
 }
 
 .card {
-  width: 92%;
-  max-width: 380px;
-  background: linear-gradient(180deg, #111, #0b0b0b);
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.08);
-  border: 1px solid rgba(255, 215, 0, 0.15);
+  width: 100%;
+  max-width: 420px;
+  background: #141414;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 0 20px rgba(255,215,0,0.08);
 }
 
-/* ===== BRAND ===== */
-
-.logo {
-  text-align: center;
-  font-size: 28px;
-  font-weight: 900;
-  color: gold;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-}
-
-/* ===== TIMER ===== */
-
-#timer {
-  font-size: 40px;
-  font-weight: bold;
-  color: gold;
-}
-
-#roundId {
-  font-size: 11px;
-  opacity: 0.6;
-}
-
-#status {
-  margin-top: 8px;
-  font-size: 14px;
-  color: gold;
-}
-
-/* ===== BUTTONS ===== */
-
+/* ======================
+   BUTTONS
+====================== */
 button {
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+/* COLOR BUTTONS */
+.btn-red {
+  background: linear-gradient(135deg, #ff4d4d, #c0392b);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 16px;
+}
+
+.btn-green {
+  background: linear-gradient(135deg, #2ecc71, #1e8449);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 16px;
+}
+
+/* GOLD BUTTON */
+.btn-gold {
+  background: linear-gradient(135deg, gold, #b8860b);
+  color: #000;
   border: none;
   border-radius: 14px;
   padding: 14px;
   font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
 }
 
-.btn-gold {
-  background: linear-gradient(180deg, #ffd700, #b8860b);
-  color: #000;
-  box-shadow: 0 4px 14px rgba(255, 215, 0, 0.4);
-}
-
-.btn-outline {
-  background: transparent;
-  color: gold;
-  border: 1px solid rgba(255, 215, 0, 0.4);
-}
-
-.btn-outline:active,
-.btn-gold:active {
-  transform: scale(0.96);
-}
-
-/* ===== COLOR BET BUTTONS ===== */
-
-.bet-row {
+/* ======================
+   AMOUNT BUTTONS
+====================== */
+.amounts {
   display: flex;
-  gap: 12px;
-  margin: 18px 0;
-}
-
-.bet-red {
-  flex: 1;
-  background: linear-gradient(180deg, #ff4d4d, #b91c1c);
-  color: #fff;
-}
-
-.bet-green {
-  flex: 1;
-  background: linear-gradient(180deg, #22c55e, #15803d);
-  color: #fff;
-}
-
-/* ===== AMOUNT BUTTONS ===== */
-
-.amount-row {
-  display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
   margin-top: 10px;
 }
 
-/* ===== WALLET ===== */
-
-#balance {
-  font-size: 36px;
-  font-weight: 900;
+.amounts button {
+  min-width: 60px;
+  background: #1c1c1c;
+  color: gold;
+  border: 1px solid gold;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
 }
 
-/* ===== BET HISTORY ===== */
+.amounts button:hover {
+  background: gold;
+  color: #000;
+}
 
-#betList li {
-  font-size: 13px;
+/* ======================
+   TEXT
+====================== */
+h2 {
+  margin-bottom: 10px;
+}
+
+h3 {
+  margin-bottom: 8px;
+  color: gold;
+}
+
+p {
+  font-size: 14px;
   opacity: 0.85;
-  padding: 4px 0;
 }
 
-/* ===== BOTTOM NAV ===== */
+/* ======================
+   HISTORY LIST
+====================== */
+#history li {
+  padding: 6px 0;
+  font-size: 13px;
+  border-bottom: 1px dashed #333;
+}
 
+#history li:last-child {
+  border-bottom: none;
+}
+
+/* ======================
+   BOTTOM NAVIGATION
+====================== */
 .bottom-nav {
   position: fixed;
   bottom: 0;
-  width: 100%;
-  background: #050505;
+  left: 0;
+  right: 0;
+  background: #111;
+  border-top: 1px solid #222;
   display: flex;
   justify-content: space-around;
-  padding: 12px 0;
-  border-top: 1px solid rgba(255, 215, 0, 0.2);
+  padding: 10px 0;
 }
 
 .bottom-nav a {
-  color: #888;
+  color: #aaa;
   text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 12px;
 }
 
 .bottom-nav a.active {
   color: gold;
 }
-/* ===== HEADER ===== */
 
-.header {
-  position: fixed;
-  top: 0;
+/* ======================
+   FORM INPUTS (WALLET / PROFILE)
+====================== */
+input {
   width: 100%;
-  height: 56px;
-  background: linear-gradient(180deg, #0b0b0b, #000);
-  display: flex;
+  padding: 12px;
+  background: #1c1c1c;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+input:focus {
+  outline: none;
+  border-color: gold;
+}
+
+/* ======================
+   MODAL (DEPOSIT / WITHDRAW)
+====================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: none;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid rgba(255, 215, 0, 0.25);
-  z-index: 1000;
+  z-index: 100;
 }
 
-.header-logo {
-  font-size: 22px;
-  font-weight: 900;
-  color: gold;
-  letter-spacing: 1px;
+.modal-content {
+  background: #141414;
+  width: 90%;
+  max-width: 360px;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 0 20px rgba(255,215,0,0.15);
 }
+
+/* ======================
+   SMALL SCREENS
+====================== */
+@media (max-width: 380px) {
+  .card {
+    padding: 12px;
+  }
+
+  .btn-red,
+  .btn-green,
+  .btn-gold {
+    font-size: 14px;
+    padding: 12px;
+  }
+  }
