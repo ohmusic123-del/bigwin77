@@ -1,11 +1,40 @@
 const API = "https://color-game-backend1.onrender.com";
 const token = localStorage.getItem("adminToken");
 
-if (!token) location.href = "admin-login.html";
+if (!token) {
+  window.location.href = "admin-login.html";
+}
 
+/* LOGOUT */
+function logout() {
+  localStorage.removeItem("adminToken");
+  window.location.href = "admin-login.html";
+}
+
+/* LOAD DASHBOARD STATS */
+async function loadStats() {
+  const res = await fetch(API + "/admin/stats", {
+    headers: {
+      Authorization: token
+    }
+  });
+
+  const data = await res.json();
+
+  document.getElementById("users").innerText = data.totalUsers;
+  document.getElementById("deposits").innerText = data.totalDeposits;
+  document.getElementById("withdrawals").innerText = data.totalWithdrawals;
+  document.getElementById("wallet").innerText = data.totalWallet;
+  document.getElementById("profit").innerText = data.profit;
+  document.getElementById("rounds").innerText = data.totalRounds;
+}
+
+/* LOAD WITHDRAW REQUESTS */
 async function loadWithdraws() {
   const res = await fetch(API + "/admin/withdraws", {
-    headers: { Authorization: token }
+    headers: {
+      Authorization: token
+    }
   });
 
   const data = await res.json();
@@ -25,10 +54,6 @@ async function loadWithdraws() {
         <div><b>Method:</b> ${w.method}</div>
         <div><b>Status:</b> ${w.status}</div>
 
-        ${w.details?.upiId ? `<div><b>UPI:</b> ${w.details.upiId}</div>` : ""}
-        ${w.details?.bankName ? `<div><b>Bank:</b> ${w.details.bankName}</div>` : ""}
-        ${w.details?.usdtAddress ? `<div><b>USDT:</b> ${w.details.usdtAddress}</div>` : ""}
-
         <textarea id="note-${w._id}" placeholder="Admin note"></textarea>
 
         ${
@@ -37,7 +62,8 @@ async function loadWithdraws() {
           <div class="actions">
             <button class="approve" onclick="processWithdraw('${w._id}','APPROVED')">Approve</button>
             <button class="reject" onclick="processWithdraw('${w._id}','REJECTED')">Reject</button>
-          </div>`
+          </div>
+        `
             : ""
         }
       </div>
@@ -45,6 +71,7 @@ async function loadWithdraws() {
   });
 }
 
+/* APPROVE / REJECT */
 async function processWithdraw(id, status) {
   const note = document.getElementById("note-" + id).value;
 
@@ -54,17 +81,18 @@ async function processWithdraw(id, status) {
       "Content-Type": "application/json",
       Authorization: token
     },
-    body: JSON.stringify({ status, adminNote: note })
+    body: JSON.stringify({
+      status,
+      adminNote: note
+    })
   });
 
   const data = await res.json();
   alert(data.message || data.error);
   loadWithdraws();
+  loadStats();
 }
 
-function logout() {
-  localStorage.removeItem("adminToken");
-  location.href = "admin-login.html";
-}
-
+/* INIT */
+loadStats();
 loadWithdraws();
