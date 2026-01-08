@@ -69,3 +69,19 @@ async function processDeposit(id, status) {
 
 /* INIT */
 loadDeposits();
+async function saveDepositInfo() {
+  const upiId = document.getElementById("upiId").value;
+  const qrImage = document.getElementById("qrImage").value;
+
+  const res = await fetch(API + "/admin/deposit-info", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("adminToken")
+    },
+    body: JSON.stringify({ upiId, qrImage })
+  });
+
+  const data = await res.json();
+  alert(data.message || data.error);
+}
