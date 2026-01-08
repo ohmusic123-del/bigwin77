@@ -19,3 +19,16 @@ async function submitDeposit() {
   const data = await res.json();
   alert(data.message || data.error);
 }
+async function loadDepositInfo() {
+  const res = await fetch(API + "/deposit/info");
+  const data = await res.json();
+
+  document.getElementById("upiInfo").innerText =
+    "UPI ID: " + (data.upiId || "Not available");
+
+  if (data.qrImage) {
+    document.getElementById("qrImage").src = data.qrImage;
+  }
+}
+
+loadDepositInfo();
