@@ -1,32 +1,16 @@
-const API = "https://color-game-backend1.onrender.com";
+const API = "http://localhost:3000";
+const ADMIN_KEY = "bigwin_admin_123";
 
 async function loadWithdraws() {
-  const adminKey = document.getElementById("adminKey").value;
-  if (!adminKey) {
-    alert("Enter admin key");
-    return;
-  }
-
   const res = await fetch(`${API}/admin/withdraws`, {
     headers: {
-      "x-admin-key": adminKey
+      "x-admin-key": ADMIN_KEY
     }
   });
 
   const data = await res.json();
-
-  if (!res.ok) {
-    alert(data.error || "Access denied");
-    return;
-  }
-
-  const tbody = document.getElementById("withdrawTable");
-  tbody.innerHTML = "";
-
-  if (!data.length) {
-    tbody.innerHTML = "<tr><td colspan='6'>No withdraw requests</td></tr>";
-    return;
-  }
+  const table = document.getElementById("withdrawTable");
+  table.innerHTML = "";
 
   data.forEach(w => {
     const tr = document.createElement("tr");
@@ -34,50 +18,49 @@ async function loadWithdraws() {
     tr.innerHTML = `
       <td>${w.mobile}</td>
       <td>₹${w.amount}</td>
-      <td>${w.method}</td>
-      <td class="status-${w.status.toLowerCase()}">${w.status}</td>
-      <td>${formatDetails(w)}</td>
+      <td>${w.method.toUpperCase()}</td>
+      <td>${formatDetails(w.details)}</td>
+      <td class="status ${w.status.toLowerCase()}">${w.status}</td>
       <td>
         ${w.status === "PENDING" ? `
-          <button class="action-btn approve" onclick="processWithdraw('${w._id}','APPROVED')">Approve</button>
-          <button class="action-btn reject" onclick="processWithdraw('${w._id}','REJECTED')">Reject</button>
+          <button class="approve" onclick="updateWithdraw('${w._id}','APPROVED')">Approve</button>
+          <button class="reject" onclick="updateWithdraw('${w._id}','REJECTED')">Reject</button>
         ` : "-"}
       </td>
     `;
 
-    tbody.appendChild(tr);
+    table.appendChild(tr);
   });
 }
 
-function formatDetails(w) {
-  if (w.method === "upi") return w.details.upiId || "-";
-  if (w.method === "bank")
-    return `${w.details.bankName}<br>${w.details.accountNumber}<br>${w.details.ifsc}`;
-  if (w.method === "usdt") return w.details.usdtAddress;
+function formatDetails(d) {
+  if (!d) return "-";
+  if (d.upiId) return `UPI: ${d.upiId}`;
+  if (d.accountNumber) return `Bank: ${d.accountNumber}`;
+  if (d.usdtAddress) return `USDT: ${d.usdtAddress}`;
   return "-";
 }
 
-async function processWithdraw(id, status) {
-  const adminKey = document.getElementById("adminKey").value;
-
-  const note = prompt(`Admin note for ${status} (optional):`) || "";
+async function updateWithdraw(id, status) {
+  const note = prompt("Admin note (optional):") || "";
 
   const res = await fetch(`${API}/admin/withdraw/${id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "x-admin-key": adminKey
+      "x-admin-key": ADMIN_KEY
     },
     body: JSON.stringify({ status, adminNote: note })
   });
 
   const data = await res.json();
+  alert(data.message || "Updated");
 
-  if (!res.ok) {
-    alert(data.error || "Failed");
-    return;
-  }
-
-  alert(data.message);
   loadWithdraws();
 }
+
+/* AUTO REFRESH */
+setInterval(loadWithdraws, 5000);
+
+/* INIT */
+loadWithdraws();
