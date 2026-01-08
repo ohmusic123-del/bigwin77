@@ -1,114 +1,114 @@
-const API = "https://color-game-backend1.onrender.com";
+const API = "http://localhost:3000";
 const token = localStorage.getItem("token");
 
-let selectedAmount = null;
-let roundStart = 0;
+/* ===== ELEMENTS ===== */
+const walletEl = document.getElementById("wallet");
+const roundIdEl = document.getElementById("roundId");
 
-/* ===== SELECT AMOUNT ===== */
-function selectAmount(amount) {
-  selectedAmount = amount;
-  document.querySelectorAll(".amt-btn").forEach(b => b.classList.remove("active"));
-  event.target.classList.add("active");
+const tabResults = document.getElementById("tabResults");
+const tabMyBets = document.getElementById("tabMyBets");
+const resultsBox = document.getElementById("resultsBox");
+const betsBox = document.getElementById("betsBox");
+
+/* ===== TAB SWITCH ===== */
+tabResults.onclick = () => {
+  tabResults.classList.add("active");
+  tabMyBets.classList.remove("active");
+  resultsBox.classList.remove("hidden");
+  betsBox.classList.add("hidden");
+};
+
+tabMyBets.onclick = () => {
+  tabMyBets.classList.add("active");
+  tabResults.classList.remove("active");
+  betsBox.classList.remove("hidden");
+  resultsBox.classList.add("hidden");
+};
+
+/* ===== LOAD WALLET ===== */
+async function loadWallet() {
+  const res = await fetch(`${API}/wallet`, {
+    headers: { Authorization: token }
+  });
+  const data = await res.json();
+  walletEl.innerText = data.wallet;
 }
 
-/* ===== LOAD CURRENT ROUND ===== */
-async function loadRound() {
+/* ===== LOAD ROUND ===== */
+async function loadCurrentRound() {
   const res = await fetch(`${API}/round/current`);
   const data = await res.json();
-  roundStart = data.startTime;
-  document.getElementById("roundId").innerText = data.id;
+  roundIdEl.innerText = data.id;
 }
 
-/* ===== TIMER ===== */
-setInterval(() => {
-  if (!roundStart) return;
-  const elapsed = Math.floor((Date.now() - roundStart) / 1000);
-  const remaining = Math.max(0, 30 - elapsed);
-
-  const timer = document.getElementById("timer");
-  timer.innerText = `⏱ ${remaining}s`;
-
-  if (remaining <= 5) timer.style.color = "red";
-  else if (remaining <= 10) timer.style.color = "orange";
-  else timer.style.color = "lightgreen";
-}, 1000);
-
 /* ===== PLACE BET ===== */
-async function placeBet(color) {
-  const msg = document.getElementById("statusMsg");
-
-  if (!selectedAmount) {
-    msg.innerText = "Select amount first";
-    return;
-  }
-
-  msg.innerText = "Placing bet...";
-
+async function placeBet(color, amount) {
   const res = await fetch(`${API}/bet`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: token
     },
-    body: JSON.stringify({ color, amount: selectedAmount })
+    body: JSON.stringify({ color, amount })
   });
 
   const data = await res.json();
-
-  if (!res.ok) {
-    msg.innerText = data.error || "Bet failed";
-    return;
+  if (data.error) {
+    alert(data.error);
+  } else {
+    loadWallet();
+    loadMyBets();
   }
-
-  msg.innerText = "✅ Bet placed";
-  loadCurrentBets();
 }
 
-/* ===== CURRENT ROUND BETS ===== */
-async function loadCurrentBets() {
-  const res = await fetch(`${API}/bets/current`, {
+/* ===== ROUND HISTORY ===== */
+async function loadRoundHistory() {
+  const res = await fetch(`${API}/rounds/history`);
+  const data = await res.json();
+
+  const list = document.getElementById("roundHistory");
+  list.innerHTML = "";
+
+  data.forEach(r => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>${r.roundId}</span>
+      <span class="${r.winner}">${r.winner.toUpperCase()}</span>
+    `;
+    list.appendChild(li);
+  });
+}
+
+/* ===== USER BET HISTORY ===== */
+async function loadMyBets() {
+  const res = await fetch(`${API}/bets`, {
     headers: { Authorization: token }
   });
   const data = await res.json();
 
-  const ul = document.getElementById("currentBets");
-  ul.innerHTML = "";
+  const list = document.getElementById("myBets");
+  list.innerHTML = "";
 
-  if (!data.bets.length) {
-    ul.innerHTML = "<li>No bets this round</li>";
-    return;
-  }
-
-  data.bets.forEach(b => {
+  data.forEach(b => {
     const li = document.createElement("li");
-    li.innerText = `${b.color.toUpperCase()} ₹${b.amount} – ${b.status}`;
-    ul.appendChild(li);
+    li.innerHTML = `
+      <span>${b.color.toUpperCase()} ₹${b.amount}</span>
+      <span>${b.status || "-"}</span>
+    `;
+    list.appendChild(li);
   });
 }
 
-/* ===== LAST RESULTS ===== */
-async function loadHistory() {
-  const res = await fetch(`${API}/rounds/history`);
-  const rounds = await res.json();
-
-  const box = document.getElementById("history");
-  box.innerHTML = "";
-
-  rounds.forEach(r => {
-    const s = document.createElement("span");
-    s.className = r.winner;
-    s.innerText = r.winner[0].toUpperCase();
-    box.appendChild(s);
-  });
-}
+/* ===== AUTO REFRESH ===== */
+setInterval(() => {
+  loadCurrentRound();
+  loadWallet();
+  loadRoundHistory();
+  loadMyBets();
+}, 3000);
 
 /* ===== INIT ===== */
-loadRound();
-loadCurrentBets();
-loadHistory();
-
-setInterval(() => {
-  loadRound();
-  loadCurrentBets();
-  loadHistory();
-}, 5000);
+loadCurrentRound();
+loadWallet();
+loadRoundHistory();
+loadMyBets();
