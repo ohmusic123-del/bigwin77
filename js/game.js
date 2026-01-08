@@ -1,56 +1,48 @@
 const API = "https://color-game-backend1.onrender.com";
 const token = localStorage.getItem("token");
 
-let selectedAmount = 0;
-let selectedColor = null;
+let selectedAmount = null;
+let roundStart = 0;
 
-/* ======================
-   ROUND INFO
-====================== */
+/* ===== SELECT AMOUNT ===== */
+function selectAmount(amount) {
+  selectedAmount = amount;
+  document.querySelectorAll(".amt-btn").forEach(b => b.classList.remove("active"));
+  event.target.classList.add("active");
+}
+
+/* ===== LOAD CURRENT ROUND ===== */
 async function loadRound() {
   const res = await fetch(`${API}/round/current`);
   const data = await res.json();
+  roundStart = data.startTime;
   document.getElementById("roundId").innerText = data.id;
 }
 
-/* ======================
-   ROUND HISTORY
-====================== */
-async function loadHistory() {
-  const res = await fetch(`${API}/rounds/history`);
-  const rounds = await res.json();
+/* ===== TIMER ===== */
+setInterval(() => {
+  if (!roundStart) return;
+  const elapsed = Math.floor((Date.now() - roundStart) / 1000);
+  const remaining = Math.max(0, 30 - elapsed);
 
-  const ul = document.getElementById("history");
-  ul.innerHTML = "";
+  const timer = document.getElementById("timer");
+  timer.innerText = `⏱ ${remaining}s`;
 
-  rounds.forEach(r => {
-    const li = document.createElement("li");
-    li.innerText = `${r.roundId} → ${r.winner.toUpperCase()}`;
-    ul.appendChild(li);
-  });
-}
+  if (remaining <= 5) timer.style.color = "red";
+  else if (remaining <= 10) timer.style.color = "orange";
+  else timer.style.color = "lightgreen";
+}, 1000);
 
-/* ======================
-   SELECT AMOUNT / COLOR
-====================== */
-function setAmount(amount) {
-  selectedAmount = amount;
-  document.getElementById("selectedAmount").innerText = amount;
-}
+/* ===== PLACE BET ===== */
+async function placeBet(color) {
+  const msg = document.getElementById("statusMsg");
 
-function selectColor(color) {
-  selectedColor = color;
-  alert(`Selected ${color.toUpperCase()}`);
-}
-
-/* ======================
-   PLACE BET
-====================== */
-async function placeBet() {
-  if (!selectedColor || selectedAmount < 1) {
-    alert("Select color & amount");
+  if (!selectedAmount) {
+    msg.innerText = "Select amount first";
     return;
   }
+
+  msg.innerText = "Placing bet...";
 
   const res = await fetch(`${API}/bet`, {
     method: "POST",
@@ -58,62 +50,65 @@ async function placeBet() {
       "Content-Type": "application/json",
       Authorization: token
     },
-    body: JSON.stringify({
-      color: selectedColor,
-      amount: selectedAmount
-    })
+    body: JSON.stringify({ color, amount: selectedAmount })
   });
 
   const data = await res.json();
 
   if (!res.ok) {
-    alert(data.error || "Bet failed");
+    msg.innerText = data.error || "Bet failed";
     return;
   }
 
-  alert("Bet placed successfully");
-
-  // reset
-  selectedAmount = 0;
-  selectedColor = null;
-  document.getElementById("selectedAmount").innerText = 0;
+  msg.innerText = "✅ Bet placed";
+  loadCurrentBets();
 }
 
-/* ======================
-   INIT
-====================== */
+/* ===== CURRENT ROUND BETS ===== */
+async function loadCurrentBets() {
+  const res = await fetch(`${API}/bets/current`, {
+    headers: { Authorization: token }
+  });
+  const data = await res.json();
+
+  const ul = document.getElementById("currentBets");
+  ul.innerHTML = "";
+
+  if (!data.bets.length) {
+    ul.innerHTML = "<li>No bets this round</li>";
+    return;
+  }
+
+  data.bets.forEach(b => {
+    const li = document.createElement("li");
+    li.innerText = `${b.color.toUpperCase()} ₹${b.amount} – ${b.status}`;
+    ul.appendChild(li);
+  });
+}
+
+/* ===== LAST RESULTS ===== */
+async function loadHistory() {
+  const res = await fetch(`${API}/rounds/history`);
+  const rounds = await res.json();
+
+  const box = document.getElementById("history");
+  box.innerHTML = "";
+
+  rounds.forEach(r => {
+    const s = document.createElement("span");
+    s.className = r.winner;
+    s.innerText = r.winner[0].toUpperCase();
+    box.appendChild(s);
+  });
+}
+
+/* ===== INIT ===== */
 loadRound();
+loadCurrentBets();
 loadHistory();
 
 setInterval(() => {
   loadRound();
+  loadCurrentBets();
   loadHistory();
 }, 5000);
-function showResult(result) {
-  const card = document.querySelector(".card");
-
-  // Remove old states
-  card.classList.remove("win", "lose");
-
-  // Create floating text
-  const text = document.createElement("div");
-  text.classList.add("result-text");
-
-  if (result === "WIN") {
-    card.classList.add("win");
-    text.classList.add("result-win");
-    text.innerText = "WIN 🎉";
-  } else {
-    card.classList.add("lose");
-    text.classList.add("result-lose");
-    text.innerText = "LOSE ❌";
-  }
-
-  document.body.appendChild(text);
-
-  // Cleanup
-  setTimeout(() => {
-    card.classList.remove("win", "lose");
-    text.remove();
-  }, 1500);
-}
