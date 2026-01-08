@@ -1,37 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>BIGWIN Admin Panel</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="admin.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="admin.css">
 </head>
 <body>
 
-<div class="admin-app">
+<header class="admin-header">
+  <h2>BIGWIN – Admin Panel</h2>
+</header>
 
-  <header class="admin-header">
-    <h2>BIGWIN Admin</h2>
-    <span>Withdraw Requests</span>
-  </header>
+<div class="container">
 
-  <section class="withdraw-list">
-    <table>
-      <thead>
-        <tr>
-          <th>User</th>
-          <th>Amount</th>
-          <th>Method</th>
-          <th>Details</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody id="withdrawTable">
-        <!-- DATA -->
-      </tbody>
-    </table>
-  </section>
+  <h3>Withdrawal Requests</h3>
+
+  <div id="withdrawList" class="list"></div>
 
 </div>
 
