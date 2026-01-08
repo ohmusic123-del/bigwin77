@@ -11,40 +11,53 @@
 <div class="app">
 
   <!-- HEADER -->
-  <header class="top">
-    <div>Round: <span id="roundId">---</span></div>
-    <div>Wallet: ₹<span id="wallet">0</span></div>
+  <header class="top-bar">
+    <div class="wallet">Wallet: ₹<span id="walletAmount">0</span></div>
+    <div class="round">
+      Round: <span id="roundId">---</span>
+    </div>
+    <div class="timer">
+      ⏱ <span id="timer">30</span>s
+    </div>
   </header>
 
-  <!-- BETTING -->
-  <section class="bet-section">
-    <button class="bet red" onclick="placeBet('red', 1)">RED ₹1</button>
-    <button class="bet green" onclick="placeBet('green', 1)">GREEN ₹1</button>
-
-    <button class="bet red" onclick="placeBet('red', 5)">RED ₹5</button>
-    <button class="bet green" onclick="placeBet('green', 5)">GREEN ₹5</button>
-  </section>
-
-  <!-- HISTORY + BETS -->
-  <section class="history-section">
-
-    <div class="tabs">
-      <button id="tabResults" class="active">Last Results</button>
-      <button id="tabMyBets">Your Bets</button>
+  <!-- BETTING AREA -->
+  <div class="bet-area">
+    <div class="bet-card red" onclick="selectColor('red')">
+      <h2>RED</h2>
     </div>
 
-    <div id="resultsBox" class="tab-content">
-      <ul id="roundHistory"></ul>
+    <div class="bet-card green" onclick="selectColor('green')">
+      <h2>GREEN</h2>
     </div>
+  </div>
 
-    <div id="betsBox" class="tab-content hidden">
-      <ul id="myBets"></ul>
+  <!-- AMOUNT -->
+  <div class="amount-box">
+    <input type="number" id="betAmount" value="1" min="1" />
+    <div class="quick-buttons">
+      <button onclick="setAmount(1)">₹1</button>
+      <button onclick="setAmount(5)">₹5</button>
+      <button onclick="setAmount(10)">₹10</button>
+      <button onclick="setAmount(50)">₹50</button>
     </div>
+  </div>
 
-  </section>
+  <!-- BET BUTTON -->
+  <button class="bet-btn" onclick="placeBet()">PLACE BET</button>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button id="tabResults" class="active" onclick="showResults()">Last Results</button>
+    <button id="tabBets" onclick="showMyBets()">Your Bets</button>
+  </div>
+
+  <!-- TAB CONTENT -->
+  <div id="resultsBox" class="tab-content"></div>
+  <div id="betsBox" class="tab-content hidden"></div>
 
 </div>
 
 <script src="game.js"></script>
 </body>
-</html>
+    </html>
