@@ -1,45 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Admin Login - BIGWIN</title>
-  <link rel="stylesheet" href="admin.css">
+  <meta charset="UTF-8" />
+  <title>BIGWIN | Admin Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="css/admin.css" />
 </head>
-<body class="center">
+<body>
 
-  <div class="card">
-    <h2>Admin Login</h2>
+<div class="admin-login-container">
 
-    <input id="username" placeholder="Admin Username">
-    <input id="password" type="password" placeholder="Password">
+  <h2>BIGWIN Admin Panel</h2>
+  <p class="subtitle">Secure Admin Access</p>
 
-    <button onclick="login()">Login</button>
-    <p id="error"></p>
-  </div>
+  <input type="text" id="username" placeholder="Admin Username" />
+  <input type="password" id="password" placeholder="Admin Password" />
 
-<script>
-const API = "https://color-game-backend1.onrender.com";
+  <button onclick="adminLogin()">Login</button>
 
-async function login() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+  <p id="error" class="error"></p>
 
-  const res = await fetch(API + "/admin/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  });
+</div>
 
-  const data = await res.json();
-
-  if (!res.ok) {
-    document.getElementById("error").innerText = data.error;
-    return;
-  }
-
-  localStorage.setItem("adminToken", data.token);
-  location.href = "admin.html";
-}
-</script>
+<script src="js/api.js"></script>
+<script src="js/admin-login.js"></script>
 
 </body>
 </html>
