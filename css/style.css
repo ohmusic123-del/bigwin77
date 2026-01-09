@@ -1,126 +1,98 @@
-/* ===== MOBILE ONLY RESET ===== */
 * {
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-  -webkit-tap-highlight-color: transparent;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
 }
 
 body {
   margin: 0;
-  background: #020617;
-  color: #ffffff;
+  background: #0b1220;
+  color: #fff;
 }
 
-/* LOCK WIDTH */
 .app {
-  width: 390px;
+  width: 100%;
+  max-width: 390px;
   min-height: 100vh;
-  margin: auto;
-  background: linear-gradient(180deg, #0a0f1f, #020617);
+  margin: 0 auto;
+  background: linear-gradient(180deg, #0e1628, #0b1220);
 }
 
 /* HEADER */
 .header {
-  height: 56px;
-  padding: 0 14px;
+  padding: 14px 16px;
+  background: #0a0f1c;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  background: #050b1d;
+  align-items: center;
   font-weight: 700;
   font-size: 18px;
 }
 
-/* BALANCE */
-.balance {
-  background: #1e293b;
-  padding: 6px 12px;
-  border-radius: 16px;
-  font-size: 14px;
-}
-
-/* PAGE CONTENT */
+/* PAGE */
 .page {
-  padding: 16px;
+  padding: 20px 16px;
 }
 
-/* INPUT */
+/* TEXT */
+h2 {
+  margin: 10px 0;
+}
+
+.small {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+/* INPUTS */
 input {
   width: 100%;
-  height: 48px;
+  padding: 14px;
   margin-top: 14px;
-  padding: 0 14px;
-  font-size: 16px;
   border-radius: 10px;
   border: none;
-  background: #0f172a;
+  outline: none;
+  font-size: 15px;
+  background: #151e33;
   color: #fff;
 }
 
-input::placeholder {
-  color: #94a3b8;
-}
-
-/* BUTTON */
+/* BUTTONS */
 button {
   width: 100%;
-  height: 48px;
-  margin-top: 14px;
-  border-radius: 12px;
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 10px;
   border: none;
-  font-size: 16px;
-  font-weight: 700;
+  background: #2563eb;
   color: #fff;
-  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+  font-size: 16px;
+  font-weight: 600;
 }
 
 button.secondary {
   background: #1e293b;
 }
 
-/* GAME */
-.game-buttons {
+/* MENU LIST */
+.menu {
   display: flex;
+  flex-direction: column;
   gap: 12px;
-  margin-top: 18px;
 }
 
-.red {
-  background: linear-gradient(90deg, #dc2626, #b91c1c);
+.menu a {
+  padding: 14px;
+  border-radius: 12px;
+  background: #111827;
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
 }
 
-.green {
-  background: linear-gradient(90deg, #16a34a, #15803d);
-}
-
-.amount-row button {
-  height: 38px;
-  font-size: 14px;
-  margin: 6px 6px 0 0;
-  width: auto;
-  padding: 0 12px;
-}
-
-/* LIST */
-.card {
-  background: #020617;
-  border-radius: 10px;
-  padding: 12px;
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-/* TEXT */
-.small {
+/* BADGE */
+.badge {
+  background: #1e293b;
+  padding: 6px 10px;
+  border-radius: 999px;
   font-size: 13px;
-  color: #94a3b8;
-  margin-top: 6px;
-}
-
-/* REMOVE DESKTOP */
-@media (min-width: 600px) {
-  body {
-    display: flex;
-    justify-content: center;
-  }
-   }
+    }
