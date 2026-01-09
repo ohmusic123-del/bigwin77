@@ -1,48 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>BIGWIN Admin Panel</title>
-  <link rel="stylesheet" href="admin.css">
+  <meta charset="UTF-8" />
+  <title>BIGWIN | Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="css/admin.css" />
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <h2>BIGWIN Admin Panel</h2>
-  <button onclick="logout()">Logout</button>
+  <button class="logout" onclick="logout()">Logout</button>
 </div>
 
+<!-- STATS -->
 <div class="container">
 
-  <!-- STATS -->
+  <h3>Platform Statistics</h3>
+
   <div class="stats">
     <div class="stat-card">Users<br><span id="users">0</span></div>
     <div class="stat-card">Deposits<br>₹<span id="deposits">0</span></div>
     <div class="stat-card">Withdrawals<br>₹<span id="withdrawals">0</span></div>
-    <div class="stat-card">Wallet<br>₹<span id="wallet">0</span></div>
+    <div class="stat-card">Wallet Balance<br>₹<span id="wallet">0</span></div>
     <div class="stat-card profit">Profit<br>₹<span id="profit">0</span></div>
     <div class="stat-card">Rounds<br><span id="rounds">0</span></div>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button onclick="showTab('deposits')" class="active">Deposits</button>
-    <button onclick="showTab('withdraws')">Withdrawals</button>
-  </div>
-
-  <!-- DEPOSIT LIST -->
-  <div id="deposits" class="tab-content">
-    <h3>Deposit Requests</h3>
-    <div id="depositList"></div>
-  </div>
-
-  <!-- WITHDRAW LIST -->
-  <div id="withdraws" class="tab-content hidden">
-    <h3>Withdrawal Requests</h3>
-    <div id="withdrawList"></div>
-  </div>
+  <!-- WITHDRAW REQUESTS -->
+  <h3>Withdrawal Requests</h3>
+  <div id="withdrawList"></div>
 
 </div>
 
-<script src="admin.js"></script>
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+
 </body>
 </html>
