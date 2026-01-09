@@ -1,25 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Deposit - BIGWIN</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>BIGWIN | Deposit</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-<h2>Deposit via UPI</h2>
+  <!-- HEADER -->
+  <div class="header">
+    <h2>Deposit</h2>
+    <button class="back-btn" onclick="goBack()">← Back</button>
+  </div>
 
-<div class="qr-box">
-  <img src="upi-qr.png" alt="UPI QR" />
-  <p>UPI ID: yourupi@bank</p>
-</div>
+  <!-- CONTENT -->
+  <div class="container">
 
-<input id="amount" type="number" placeholder="Enter Amount">
-<input id="utr" type="text" placeholder="Enter UTR Number">
+    <div class="deposit-card">
+      <p>Enter Deposit Amount</p>
 
-<button onclick="submitDeposit()">Submit</button>
+      <input
+        type="number"
+        id="amount"
+        placeholder="Minimum ₹100"
+        min="100"
+      />
 
-<script src="deposit.js"></script>
-  <div id="upiInfo"></div>
-<img id="qrImage" width="200">
+      <button class="deposit-btn" onclick="deposit()">Deposit Now</button>
+    </div>
+
+    <!-- QUICK AMOUNTS -->
+    <div class="quick-amounts">
+      <button onclick="setAmount(100)">₹100</button>
+      <button onclick="setAmount(300)">₹300</button>
+      <button onclick="setAmount(500)">₹500</button>
+      <button onclick="setAmount(1000)">₹1000</button>
+    </div>
+
+    <!-- INFO -->
+    <div class="deposit-info">
+      <p>✔ Minimum deposit ₹100</p>
+      <p>✔ Instant wallet credit</p>
+      <p>✔ Secure & fast</p>
+    </div>
+
+  </div>
+
+  <!-- JS -->
+  <script src="js/api.js"></script>
+  <script src="js/deposit.js"></script>
+
+  <script>
+    function goBack() {
+      window.location.href = "wallet.html";
+    }
+
+    function setAmount(val) {
+      document.getElementById("amount").value = val;
+    }
+
+    function deposit() {
+      const amount = Number(document.getElementById("amount").value);
+
+      if (amount < 100) {
+        alert("Minimum deposit ₹100");
+        return;
+      }
+
+      fetch(API + "/deposit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": localStorage.getItem("token")
+        },
+        body: JSON.stringify({ amount })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message || data.error);
+        if (data.wallet !== undefined) {
+          window.location.href = "wallet.html";
+        }
+      });
+    }
+  </script>
+
 </body>
 </html>
