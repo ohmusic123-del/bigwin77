@@ -1,30 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BIGWIN | Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-logo">BIGWIN</div>
-</div>
+  <div class="auth-container">
+    <div class="auth-card">
+      <h2>BIGWIN</h2>
+      <p class="subtitle">Login or Register</p>
 
-<div class="center">
-  <div class="card">
+      <input type="text" id="mobile" placeholder="Mobile Number" />
+      <input type="password" id="password" placeholder="Password" />
 
-    <h2 style="text-align:center;margin-bottom:16px">Login / Register</h2>
+      <button onclick="login()">Login</button>
+      <button class="secondary" onclick="register()">Register</button>
 
-    <input id="phone" placeholder="Mobile number" style="width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:none">
-
-    <input id="password" type="password" placeholder="Password"
-      style="width:100%;padding:12px;margin-bottom:16px;border-radius:10px;border:none">
-
-    <button class="btn-gold" onclick="login()" style="width:100%;margin-bottom:10px">
-      Login
-    </button>
-
-    <button class="btn-outline" onclick="register()" style="width:100%">
-      Register
-    </button>
-
+      <p class="hint">
+        New users get <b>₹100 bonus</b> on registration
+      </p>
+    </div>
   </div>
-</div>
 
-<script src="js/auth.js"></script>
+  <!-- JS -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
 </body>
+</html>
