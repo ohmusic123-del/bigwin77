@@ -1,140 +1,142 @@
-const API = "https://color-game-backend1.onrender.com";
+// frontend/js/profile.js
+// api.js must be loaded before this file
+
 const token = localStorage.getItem("token");
 
-let currentMethod = null;
+if (!token) {
+  window.location.href = "index.html";
+}
 
-/* ===== LOAD PROFILE ===== */
-
+/* =========================
+   LOAD PROFILE
+========================= */
 async function loadProfile() {
-  const res = await fetch(`${API}/profile`, {
-    headers: { Authorization: token }
-  });
-  const data = await res.json();
+  try {
+    const res = await fetch(API + "/profile", {
+      headers: {
+        Authorization: token
+      }
+    });
 
-  document.getElementById("mobile").innerText = data.mobile;
-  document.getElementById("wallet").innerText = data.wallet;
-  document.getElementById("wagered").innerText = data.totalWagered;
+    const data = await res.json();
+
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
+    document.getElementById("mobile").innerText = data.mobile;
+    document.getElementById("wallet").innerText = "₹" + data.wallet.toFixed(2);
+    document.getElementById("wagered").innerText =
+      "₹" + data.totalWagered.toFixed(2);
+  } catch (err) {
+    console.error("Profile load error");
+  }
 }
 
-loadProfile();
-loadWithdrawDetails();
-
+/* =========================
+   LOAD WITHDRAW DETAILS
+========================= */
 async function loadWithdrawDetails() {
-  const res = await fetch(`${API}/withdraw/details`, {
-    headers: { Authorization: token }
-  });
+  try {
+    const res = await fetch(API + "/withdraw/details", {
+      headers: {
+        Authorization: token
+      }
+    });
 
-  const data = await res.json();
+    const data = await res.json();
+    const box = document.getElementById("withdrawInfo");
 
-  if (!data.method) {
-    document.getElementById("activeMethod").innerText =
-      "No withdrawal method saved";
-    return;
-  }
+    if (!data.method) {
+      box.innerText = "No withdrawal details added";
+      box.style.color = "orange";
+      return;
+    }
 
-  document.getElementById("activeMethod").innerText =
-    `Active method: ${data.method.toUpperCase()}`;
+    if (data.method === "upi") {
+      box.innerText = `UPI ID: ${data.details.upiId}`;
+    }
 
-  // Prefill values
-  if (data.method === "upi" && data.details.upiId) {
-    document.getElementById("upiId").value = data.details.upiId;
-  }
+    if (data.method === "bank") {
+      box.innerText = `Bank: ${data.details.bankName}`;
+    }
 
-  if (data.method === "bank") {
-    document.getElementById("bankName").value = data.details.bankName || "";
-    document.getElementById("accountHolder").value = data.details.accountHolder || "";
-    document.getElementById("accountNumber").value = data.details.accountNumber || "";
-    document.getElementById("ifsc").value = data.details.ifsc || "";
-  }
+    if (data.method === "usdt") {
+      box.innerText = `USDT Address: ${data.details.usdtAddress}`;
+    }
 
-  if (data.method === "usdt" && data.details.usdtAddress) {
-    document.getElementById("usdtAddress").value = data.details.usdtAddress;
+    box.style.color = "#0f0";
+  } catch (err) {
+    console.error("Withdraw details error");
   }
 }
 
-/* ===== WITHDRAW DETAILS ===== */
+/* =========================
+   SAVE WITHDRAW DETAILS
+========================= */
+async function saveWithdrawDetails() {
+  const method = document.getElementById("method").value;
 
-function openWithdrawDetails(method) {
-  currentMethod = method;
-
-  document.getElementById("withdrawModal").style.display = "flex";
-
-  document.getElementById("upiForm").style.display = "none";
-  document.getElementById("bankForm").style.display = "none";
-  document.getElementById("usdtForm").style.display = "none";
+  const body = { method };
 
   if (method === "upi") {
-    document.getElementById("withdrawTitle").innerText = "UPI Details";
-    document.getElementById("upiForm").style.display = "block";
-  }
-
-  if (method === "bank") {
-    document.getElementById("withdrawTitle").innerText = "Bank Details";
-    document.getElementById("bankForm").style.display = "block";
-  }
-
-  if (method === "usdt") {
-    document.getElementById("withdrawTitle").innerText = "USDT Details";
-    document.getElementById("usdtForm").style.display = "block";
-  }
-}
-
-function closeWithdrawModal() {
-  document.getElementById("withdrawModal").style.display = "none";
-}
-
-/* ===== SAVE DETAILS ===== */
-
-async function saveWithdrawDetails() {
-  let body = { method: currentMethod };
-
-  if (currentMethod === "upi") {
-    body.upiId = document.getElementById("upiId").value.trim();
+    body.upiId = document.getElementById("upiId").value;
     if (!body.upiId) return alert("Enter UPI ID");
   }
 
-  if (currentMethod === "bank") {
-    body.bankName = document.getElementById("bankName").value.trim();
-    body.accountHolder = document.getElementById("accountHolder").value.trim();
-    body.accountNumber = document.getElementById("accountNumber").value.trim();
-    body.ifsc = document.getElementById("ifsc").value.trim();
+  if (method === "bank") {
+    body.bankName = document.getElementById("bankName").value;
+    body.accountNumber = document.getElementById("accountNumber").value;
+    body.ifsc = document.getElementById("ifsc").value;
+    body.accountHolder = document.getElementById("accountHolder").value;
 
-    if (!body.bankName || !body.accountHolder || !body.accountNumber || !body.ifsc) {
+    if (!body.bankName || !body.accountNumber || !body.ifsc || !body.accountHolder) {
       return alert("Fill all bank details");
     }
   }
 
-  if (currentMethod === "usdt") {
-    body.usdtAddress = document.getElementById("usdtAddress").value.trim();
+  if (method === "usdt") {
+    body.usdtAddress = document.getElementById("usdtAddress").value;
     if (!body.usdtAddress) return alert("Enter USDT address");
   }
 
-  const res = await fetch(`${API}/withdraw/details`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token
-    },
-    body: JSON.stringify(body)
-  });
+  try {
+    const res = await fetch(API + "/withdraw/details", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token
+      },
+      body: JSON.stringify(body)
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if (!res.ok) {
-    alert(data.error || "Failed to save details");
-    return;
+    if (data.error) {
+      alert(data.error);
+      return;
+    }
+
+    alert("Withdrawal details saved");
+    loadWithdrawDetails();
+  } catch (err) {
+    console.error("Save withdraw error");
   }
-
-  document.getElementById("activeMethod").innerText =
-    `Active method: ${currentMethod.toUpperCase()}`;
-
-  alert("Withdrawal details saved");
-  closeWithdrawModal();
 }
 
-/* ===== LOGOUT ===== */
-
+/* =========================
+   LOGOUT
+========================= */
 function logout() {
   localStorage.removeItem("token");
-  location.href = "index.html";
-                            }
+  window.location.href = "index.html";
+}
+
+/* =========================
+   INIT
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+  loadProfile();
+  loadWithdrawDetails();
+});
