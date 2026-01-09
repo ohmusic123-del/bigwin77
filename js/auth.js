@@ -1,3 +1,6 @@
+// auth.js
+// LOGIN & REGISTER LOGIC
+
 async function login() {
   const mobile = document.getElementById("mobile").value.trim();
   const password = document.getElementById("password").value.trim();
@@ -10,7 +13,9 @@ async function login() {
   try {
     const res = await fetch(API + "/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({ mobile, password })
     });
 
@@ -23,13 +28,12 @@ async function login() {
 
     localStorage.setItem("token", data.token);
     window.location.href = "home.html";
-
   } catch (err) {
     alert("Server error");
   }
 }
 
-async function register() {
+async function registerUser() {
   const mobile = document.getElementById("mobile").value.trim();
   const password = document.getElementById("password").value.trim();
 
@@ -38,15 +42,12 @@ async function register() {
     return;
   }
 
-  if (password.length < 4) {
-    alert("Password must be at least 4 characters");
-    return;
-  }
-
   try {
     const res = await fetch(API + "/register", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({ mobile, password })
     });
 
@@ -57,8 +58,7 @@ async function register() {
       return;
     }
 
-    alert("Registered successfully! Now login.");
-
+    alert("Registered successfully. Now login.");
   } catch (err) {
     alert("Server error");
   }
