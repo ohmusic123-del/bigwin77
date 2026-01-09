@@ -1,32 +1,16 @@
-// frontend/js/auth.js
-
-// Base API
-// api.js must be loaded BEFORE this file
-// <script src="js/api.js"></script>
-
-const loginForm = document.getElementById("loginForm");
-const registerForm = document.getElementById("registerForm");
-
-/* =========================
-   LOGIN
-========================= */
-async function login(e) {
-  e.preventDefault();
-
-  const mobile = document.getElementById("loginMobile").value.trim();
-  const password = document.getElementById("loginPassword").value.trim();
+async function login() {
+  const mobile = document.getElementById("mobile").value.trim();
+  const password = document.getElementById("password").value.trim();
 
   if (!mobile || !password) {
-    alert("Please enter mobile and password");
+    alert("Enter mobile and password");
     return;
   }
 
   try {
     const res = await fetch(API + "/login", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ mobile, password })
     });
 
@@ -37,10 +21,7 @@ async function login(e) {
       return;
     }
 
-    // ✅ Save user token
     localStorage.setItem("token", data.token);
-
-    // Redirect to home
     window.location.href = "home.html";
 
   } catch (err) {
@@ -48,17 +29,12 @@ async function login(e) {
   }
 }
 
-/* =========================
-   REGISTER
-========================= */
-async function register(e) {
-  e.preventDefault();
-
-  const mobile = document.getElementById("registerMobile").value.trim();
-  const password = document.getElementById("registerPassword").value.trim();
+async function register() {
+  const mobile = document.getElementById("mobile").value.trim();
+  const password = document.getElementById("password").value.trim();
 
   if (!mobile || !password) {
-    alert("Please enter mobile and password");
+    alert("Enter mobile and password");
     return;
   }
 
@@ -70,9 +46,7 @@ async function register(e) {
   try {
     const res = await fetch(API + "/register", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ mobile, password })
     });
 
@@ -83,21 +57,9 @@ async function register(e) {
       return;
     }
 
-    alert("Registered successfully. Please login.");
-    window.location.reload();
+    alert("Registered successfully! Now login.");
 
   } catch (err) {
     alert("Server error");
   }
 }
-
-/* =========================
-   AUTO ATTACH
-========================= */
-if (loginForm) {
-  loginForm.addEventListener("submit", login);
-}
-
-if (registerForm) {
-  registerForm.addEventListener("submit", register);
-      }
