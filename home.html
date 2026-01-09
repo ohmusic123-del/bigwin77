@@ -1,75 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>BIGWIN | Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Main CSS -->
-  <link rel="stylesheet" href="css/style.css" />
+  <title>BIGWIN - Home</title>
+  <meta name="viewport" content="width=390, user-scalable=no">
+  <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
+<div class="app">
 
-  <!-- HEADER -->
   <div class="header">
-    <h2>BIGWIN</h2>
-    <div class="wallet">
-      Balance: ₹<span id="balance">0</span>
-    </div>
+    <div>BIGWIN</div>
+    <div class="badge" id="balance">₹0</div>
   </div>
 
-  <!-- MAIN -->
-  <div class="container">
+  <div class="page">
 
-    <div class="card-grid">
-
-      <a href="game.html" class="card red">
-        <h3>Play Game</h3>
-        <p>Red / Green</p>
-      </a>
-
-      <a href="wallet.html" class="card green">
-        <h3>Wallet</h3>
-        <p>Deposit & Withdraw</p>
-      </a>
-
-      <a href="profile.html" class="card blue">
-        <h3>Profile</h3>
-        <p>Account Details</p>
-      </a>
-
-      <a href="docs/terms.html" class="card gray">
-        <h3>Terms</h3>
-        <p>Read Rules</p>
-      </a>
-
+    <div class="menu">
+      <a href="game.html">🎮 Play Game (Red / Green)</a>
+      <a href="wallet.html">💰 Wallet</a>
+      <a href="deposit.html">➕ Deposit & Withdraw</a>
+      <a href="profile.html">👤 Profile</a>
+      <a href="terms.html">📄 Terms & Rules</a>
+      <a href="#" onclick="logout()">🚪 Logout</a>
     </div>
-
-    <button class="logout-btn" onclick="logout()">Logout</button>
 
   </div>
 
-  <!-- JS -->
-  <script src="js/api.js"></script>
-  <script>
-    const token = localStorage.getItem("token");
-    if (!token) location.href = "index.html";
+</div>
 
-    async function loadWallet() {
-      const res = await fetch(API + "/wallet", {
-        headers: { Authorization: token }
-      });
-      const data = await res.json();
-      document.getElementById("balance").innerText = data.wallet || 0;
-    }
+<script src="js/api.js"></script>
+<script>
+  document.getElementById("balance").innerText =
+    "₹" + (localStorage.getItem("wallet") || 0);
 
-    function logout() {
-      localStorage.clear();
-      location.href = "index.html";
-    }
-
-    loadWallet();
-  </script>
-
+  function logout() {
+    localStorage.clear();
+    location.href = "index.html";
+  }
+</script>
 </body>
 </html>
