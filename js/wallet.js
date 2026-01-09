@@ -1,171 +1,72 @@
-const API = "https://color-game-backend1.onrender.com";
+// frontend/js/wallet.js
+// api.js must be loaded before this file
+
 const token = localStorage.getItem("token");
 
-/* ======================
-   LOAD WALLET
-====================== */
+if (!token) {
+  window.location.href = "index.html";
+}
+
+/* =========================
+   LOAD WALLET BALANCE
+========================= */
 async function loadWallet() {
-  const res = await fetch(`${API}/wallet`, {
-    headers: { Authorization: token }
-  });
+  try {
+    const res = await fetch(API + "/wallet", {
+      headers: {
+        Authorization: token
+      }
+    });
 
-  const data = await res.json();
-  document.getElementById("balance").innerText = `₹${data.wallet}`;
-}
+    const data = await res.json();
 
-/* ======================
-   LOAD BET HISTORY
-====================== */
-async function loadBets() {
-  const res = await fetch(`${API}/bets`, {
-    headers: { Authorization: token }
-  });
-
-  const bets = await res.json();
-  const list = document.getElementById("betList");
-  list.innerHTML = "";
-
-  if (!bets.length) {
-    list.innerHTML = "<li>No bets yet</li>";
-    return;
-  }
-
-  bets.forEach(b => {
-    const li = document.createElement("li");
-    li.innerText =
-      `${b.color.toUpperCase()} | ₹${b.amount} | ${new Date(b.createdAt).toLocaleTimeString()}`;
-    list.appendChild(li);
-  });
-}
-
-/* ======================
-   LOAD WITHDRAW METHOD
-====================== */
-async function loadWithdrawMethod() {
-  const res = await fetch(`${API}/withdraw/details`, {
-    headers: { Authorization: token }
-  });
-
-  const data = await res.json();
-  const el = document.getElementById("withdrawMethodInfo");
-
-  if (!data.method) {
-    el.innerText = "⚠ No withdrawal method added";
-    el.style.color = "orange";
-    return;
-  }
-
-  if (data.method === "upi") {
-    el.innerText = `Withdrawal via UPI: ${data.details.upiId}`;
-  }
-
-  if (data.method === "bank") {
-    el.innerText = "Withdrawal via Bank Account";
-  }
-
-  if (data.method === "usdt") {
-    el.innerText = "Withdrawal via USDT (TRC20)";
-  }
-
-  el.style.color = "gold";
-}
-
-/* ======================
-   INIT
-====================== */
-loadWallet();
-loadBets();
-loadWithdrawMethod();
-
-setInterval(() => {
-  loadWallet();
-  loadBets();
-}, 5000);
-
-/* ======================
-   DEPOSIT
-====================== */
-function openDeposit() {
-  document.getElementById("depositModal").style.display = "flex";
-}
-
-function closeDeposit() {
-  document.getElementById("depositModal").style.display = "none";
-}
-
-async function submitDeposit() {
-  const amount = Number(document.getElementById("depositAmount").value);
-
-  if (amount < 100) {
-    alert("Minimum deposit is ₹100");
-    return;
-  }
-
-  const res = await fetch(`${API}/deposit`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token
-    },
-    body: JSON.stringify({ amount })
-  });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    alert(data.error || "Deposit failed");
-    return;
-  }
-
-  alert("Deposit successful");
-  closeDeposit();
-  loadWallet();
-}
-
-/* ======================
-   WITHDRAW
-====================== */
-function openWithdraw() {
-  document.getElementById("withdrawModal").style.display = "flex";
-}
-
-function closeWithdraw() {
-  document.getElementById("withdrawModal").style.display = "none";
-}
-
-async function submitWithdraw() {
-  const amount = Number(document.getElementById("withdrawAmount").value);
-
-  if (amount < 100) {
-    alert("Minimum withdrawal is ₹100");
-    return;
-  }
-
-  const res = await fetch(`${API}/withdraw`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token
-    },
-    body: JSON.stringify({ amount })
-  });
-
-  const data = await res.json();
-
-  if (data.error && data.error.includes("withdrawal details")) {
-    alert("Please add withdrawal details first");
-    closeWithdraw();
-    setTimeout(() => location.href = "profile.html", 500);
-    return;
-  }
-
-  if (!res.ok) {
-    alert(data.error || "Withdrawal failed");
-    return;
-  }
-
-  alert("Withdrawal request submitted successfully");
-  closeWithdraw();
-  loadWallet();
-  loadWithdrawMethod();
+    if (data.error) {
+      alert(data.error);
+      return;
     }
+
+    document.getElementById("walletBalance").innerText =
+      "₹" + data.wallet.toFixed(2);
+  } catch (err) {
+    console.error("Wallet load error");
+  }
+}
+
+/* =========================
+   LOAD USER PROFILE (BASIC)
+========================= */
+async function loadProfile() {
+  try {
+    const res = await fetch(API + "/profile", {
+      headers: {
+        Authorization: token
+      }
+    });
+
+    const data = await res.json();
+
+    if (data.error) return;
+
+    document.getElementById("userMobile").innerText = data.mobile;
+    document.getElementById("totalWagered").innerText =
+      "₹" + data.totalWagered.toFixed(2);
+  } catch (err) {
+    console.error("Profile load error");
+  }
+}
+
+/* =========================
+   LOGOUT
+========================= */
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "index.html";
+}
+
+/* =========================
+   INIT
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+  loadWallet();
+  loadProfile();
+});
