@@ -1,29 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>BIGWIN | Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BIGWIN Login</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<div class="auth-container">
-  <div class="auth-card">
-    <h2>BIGWIN</h2>
-    <p class="subtitle">Login or Register</p>
+<div class="login-box">
+  <h2>BIGWIN</h2>
+  <p>Login or Register</p>
 
-    <input type="text" id="mobile" placeholder="Mobile Number">
-    <input type="password" id="password" placeholder="Password">
+  <input type="text" id="mobile" placeholder="Mobile Number">
+  <input type="password" id="password" placeholder="Password">
 
-    <button onclick="login()">Login</button>
-    <button class="secondary" onclick="register()">Register</button>
+  <button onclick="login()">Login</button>
+  <button onclick="registerUser()">Register</button>
 
-    <p class="hint">New users get ₹100 bonus on registration</p>
-  </div>
+  <p class="bonus">New users get ₹100 bonus</p>
 </div>
 
+<!-- ORDER MATTERS -->
 <script src="js/api.js"></script>
 <script src="js/auth.js"></script>
+
 </body>
 </html>
