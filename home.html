@@ -1,57 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>BIGWIN - Home</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>BIGWIN | Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-logo">BIGWIN</div>
-</div>
+  <!-- HEADER -->
+  <div class="header">
+    <h2>BIGWIN</h2>
+    <div class="wallet">
+      Balance: ₹<span id="balance">0</span>
+    </div>
+  </div>
 
-<div class="center">
-  <div class="card">
+  <!-- MAIN -->
+  <div class="container">
 
-    <h2 style="text-align:center;margin-bottom:6px">
-  BIGWIN Dashboard
-    </h2>
+    <div class="card-grid">
 
-    <p style="text-align:center;opacity:0.65;margin-bottom:22px">
-      Choose an option to continue
-    </p>
+      <a href="game.html" class="card red">
+        <h3>Play Game</h3>
+        <p>Red / Green</p>
+      </a>
 
-    <button class="btn-gold" style="width:100%;margin-bottom:12px"
-      onclick="location.href='game.html'">
-      🎮 Play Game
-    </button>
+      <a href="wallet.html" class="card green">
+        <h3>Wallet</h3>
+        <p>Deposit & Withdraw</p>
+      </a>
 
-    <button class="btn-outline" style="width:100%;margin-bottom:12px"
-      onclick="location.href='wallet.html'">
-      💰 Wallet
-    </button>
+      <a href="profile.html" class="card blue">
+        <h3>Profile</h3>
+        <p>Account Details</p>
+      </a>
 
-    <button class="btn-outline" style="width:100%"
-      onclick="location.href='profile.html'">
-      👤 Profile
-    </button>
+      <a href="docs/terms.html" class="card gray">
+        <h3>Terms</h3>
+        <p>Read Rules</p>
+      </a>
+
+    </div>
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
 
   </div>
-</div>
 
-<div class="bottom-nav">
-  <a href="home.html" class="active">Home</a>
-  <a href="game.html">Game</a>
-  <a href="wallet.html">Wallet</a>
-  <a href="profile.html">Profile</a>
-</div>
+  <!-- JS -->
+  <script src="js/api.js"></script>
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) location.href = "index.html";
 
-<script>
-  if (!localStorage.getItem("token")) {
-    location.href = "index.html";
-  }
-</script>
+    async function loadWallet() {
+      const res = await fetch(API + "/wallet", {
+        headers: { Authorization: token }
+      });
+      const data = await res.json();
+      document.getElementById("balance").innerText = data.wallet || 0;
+    }
+
+    function logout() {
+      localStorage.clear();
+      location.href = "index.html";
+    }
+
+    loadWallet();
+  </script>
 
 </body>
 </html>
