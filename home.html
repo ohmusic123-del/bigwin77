@@ -13,16 +13,34 @@
     <div class="balance">₹0</div>
   </div>
 
-  <div class="menu">
-    <a href="game.html">🎮 Play Game (Red / Green)</a>
-    <a href="wallet.html">💰 Wallet</a>
-    <a href="deposit.html">➕ Deposit</a>
-    <a href="profile.html">👤 Profile</a>
-    <a href="#" onclick="logout()">🚪 Logout</a>
+  <div class="card">
+    <h2>Welcome 👋</h2>
+    <p class="subtext">Choose an option to continue</p>
+  </div>
+
+  <div class="card">
+    <button class="btn btn-primary" onclick="location.href='game.html'">
+      🎮 Play Red / Green
+    </button>
+
+    <button class="btn btn-dark" onclick="location.href='wallet.html'">
+      💰 Wallet
+    </button>
+
+    <button class="btn btn-dark" onclick="location.href='profile.html'">
+      👤 Profile
+    </button>
   </div>
 
 </div>
 
-<script src="js/auth.js"></script>
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <a href="home.html" class="active">Home</a>
+  <a href="game.html">Game</a>
+  <a href="wallet.html">Wallet</a>
+  <a href="profile.html">Profile</a>
+</div>
+
 </body>
 </html>
