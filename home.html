@@ -1,43 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>BIGWIN - Home</title>
-  <meta name="viewport" content="width=390, user-scalable=no">
+  <title>BIGWIN – Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 <div class="app">
 
   <div class="header">
-    <div>BIGWIN</div>
-    <div class="badge" id="balance">₹0</div>
+    <div class="logo">BIGWIN</div>
+    <div class="balance">₹0</div>
   </div>
 
-  <div class="page">
-
-    <div class="menu">
-      <a href="game.html">🎮 Play Game (Red / Green)</a>
-      <a href="wallet.html">💰 Wallet</a>
-      <a href="deposit.html">➕ Deposit & Withdraw</a>
-      <a href="profile.html">👤 Profile</a>
-      <a href="terms.html">📄 Terms & Rules</a>
-      <a href="#" onclick="logout()">🚪 Logout</a>
-    </div>
-
+  <div class="menu">
+    <a href="game.html">🎮 Play Game (Red / Green)</a>
+    <a href="wallet.html">💰 Wallet</a>
+    <a href="deposit.html">➕ Deposit</a>
+    <a href="profile.html">👤 Profile</a>
+    <a href="#" onclick="logout()">🚪 Logout</a>
   </div>
 
 </div>
 
-<script src="js/api.js"></script>
-<script>
-  document.getElementById("balance").innerText =
-    "₹" + (localStorage.getItem("wallet") || 0);
-
-  function logout() {
-    localStorage.clear();
-    location.href = "index.html";
-  }
-</script>
+<script src="js/auth.js"></script>
 </body>
 </html>
