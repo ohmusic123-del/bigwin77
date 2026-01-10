@@ -1,31 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>BIGWIN – Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Main Mobile CSS -->
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-<div class="app">
 
-  <div class="header">
-    <div class="logo">BIGWIN</div>
+  <div class="auth-container">
+    <div class="logo-box">
+      <h1>BIGWIN</h1>
+      <p>Login or Register</p>
+    </div>
+
+    <div class="auth-card">
+      <input
+        type="tel"
+        id="mobile"
+        placeholder="Mobile number"
+        maxlength="10"
+      />
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+      />
+
+      <button id="loginBtn" class="btn primary">Login</button>
+      <button id="registerBtn" class="btn secondary">Register</button>
+    </div>
+
+    <p class="note">
+      By continuing you agree to our Terms & Privacy Policy
+    </p>
   </div>
 
-  <h1>Login or Register</h1>
-  <p class="subtext">New users get ₹100 bonus</p>
+  <!-- JS -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
 
-  <input class="input" id="mobile" placeholder="Mobile Number">
-  <input class="input" id="password" type="password" placeholder="Password">
-
-  <button class="btn btn-primary" onclick="login()">Login</button>
-  <button class="btn btn-dark" onclick="register()">Register</button>
-
-  <p class="note">By continuing you agree to our Terms & Privacy Policy</p>
-
-</div>
-
-<script src="js/api.js"></script>
-<script src="js/auth.js"></script>
 </body>
 </html>
