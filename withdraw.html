@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Withdraw – BIGWIN</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <h2>Withdraw</h2>
+  </div>
+
+  <!-- WITHDRAW CARD -->
+  <div class="card">
+    <p class="label">Enter Withdrawal Amount</p>
+
+    <input
+      type="number"
+      id="withdrawAmount"
+      placeholder="Minimum ₹100"
+      class="input"
+    />
+
+    <button class="full-btn red" onclick="submitWithdraw()">
+      Withdraw Now
+    </button>
+  </div>
+
+  <!-- QUICK AMOUNTS -->
+  <div class="card quick">
+    <button onclick="setAmount(100)">₹100</button>
+    <button onclick="setAmount(500)">₹500</button>
+    <button onclick="setAmount(1000)">₹1000</button>
+    <button onclick="setAmount(5000)">₹5000</button>
+  </div>
+
+  <!-- INFO -->
+  <div class="card info">
+    <p>• Minimum withdrawal ₹100</p>
+    <p>• Withdrawal processed after admin approval</p>
+    <p>• Ensure wager conditions are completed</p>
+  </div>
+
+  <!-- JS -->
+  <script src="js/api.js"></script>
+  <script src="js/withdraw.js"></script>
+
+</body>
+</html>
