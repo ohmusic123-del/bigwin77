@@ -1,51 +1,33 @@
-// frontend/js/admin-login.js
+async function adminLogin() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const errorEl = document.getElementById("error");
 
-// api.js must be loaded before this file
-// <script src="js/api.js"></script>
-
-const adminLoginForm = document.getElementById("adminLoginForm");
-
-async function adminLogin(e) {
-  e.preventDefault();
-
-  const username = document.getElementById("adminUsername").value.trim();
-  const password = document.getElementById("adminPassword").value.trim();
+  errorEl.innerText = "";
 
   if (!username || !password) {
-    alert("Enter admin username and password");
+    errorEl.innerText = "Enter username and password";
     return;
   }
 
   try {
     const res = await fetch(API + "/admin/login", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password })
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      alert(data.error || "Admin login failed");
+      errorEl.innerText = data.error || "Login failed";
       return;
     }
 
-    // ✅ Save admin token separately
     localStorage.setItem("adminToken", data.token);
-
-    // Redirect to admin dashboard
     window.location.href = "admin.html";
 
   } catch (err) {
-    alert("Server error");
+    errorEl.innerText = "Server error";
   }
-}
-
-/* =========================
-   AUTO ATTACH
-========================= */
-if (adminLoginForm) {
-  adminLoginForm.addEventListener("submit", adminLogin);
 }
