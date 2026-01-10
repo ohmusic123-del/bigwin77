@@ -1,46 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>BIGWIN - Login</title>
-  <meta name="viewport" content="width=390, user-scalable=no">
+  <title>BIGWIN – Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
 <div class="app">
 
-  <!-- HEADER -->
   <div class="header">
-    BIGWIN
+    <div class="logo">BIGWIN</div>
   </div>
 
-  <!-- PAGE -->
-  <div class="page">
+  <h1>Login or Register</h1>
+  <p class="subtext">New users get ₹100 bonus</p>
 
-    <h2>Login or Register</h2>
-    <p class="small">New users get ₹100 bonus</p>
+  <input class="input" id="mobile" placeholder="Mobile Number">
+  <input class="input" id="password" type="password" placeholder="Password">
 
-    <input
-      id="mobile"
-      type="tel"
-      placeholder="Mobile Number"
-      maxlength="10"
-    >
+  <button class="btn btn-primary" onclick="login()">Login</button>
+  <button class="btn btn-dark" onclick="register()">Register</button>
 
-    <input
-      id="password"
-      type="password"
-      placeholder="Password"
-    >
-
-    <button onclick="login()">Login</button>
-    <button class="secondary" onclick="register()">Register</button>
-
-    <p class="small" style="margin-top:20px">
-      By continuing you agree to our Terms & Privacy Policy
-    </p>
-
-  </div>
+  <p class="note">By continuing you agree to our Terms & Privacy Policy</p>
 
 </div>
 
