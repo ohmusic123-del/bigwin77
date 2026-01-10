@@ -1,24 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>BIGWIN – Deposit</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Deposit – BIGWIN</title>
+
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-<div class="app">
 
-  <h1>Deposit</h1>
+  <!-- HEADER -->
+  <div class="header">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <h2>Deposit</h2>
+  </div>
 
-  <input class="input" placeholder="Minimum ₹100">
+  <!-- DEPOSIT CARD -->
+  <div class="card">
+    <p class="label">Enter Deposit Amount</p>
 
-  <button class="btn btn-primary">Deposit Now</button>
+    <input
+      type="number"
+      id="depositAmount"
+      placeholder="Minimum ₹100"
+      class="input"
+    />
 
-  <button class="btn btn-dark">₹100</button>
-  <button class="btn btn-dark">₹300</button>
-  <button class="btn btn-dark">₹500</button>
-  <button class="btn btn-dark">₹1000</button>
+    <button class="full-btn green" onclick="submitDeposit()">
+      Deposit Now
+    </button>
+  </div>
 
-</div>
+  <!-- QUICK AMOUNTS -->
+  <div class="card quick">
+    <button onclick="setAmount(100)">₹100</button>
+    <button onclick="setAmount(500)">₹500</button>
+    <button onclick="setAmount(1000)">₹1000</button>
+    <button onclick="setAmount(5000)">₹5000</button>
+  </div>
+
+  <!-- INFO -->
+  <div class="card info">
+    <p>• Minimum deposit ₹100</p>
+    <p>• Amount will be added instantly</p>
+    <p>• 100% safe & secure</p>
+  </div>
+
+  <!-- JS -->
+  <script src="js/api.js"></script>
+  <script src="js/deposit.js"></script>
+
 </body>
 </html>
