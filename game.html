@@ -2,77 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>BIGWIN – Game</title>
-
-  <!-- Mobile only -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>BIGWIN – Red / Green</title>
 
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body class="mobile">
+<body>
 
   <!-- HEADER -->
-  <header class="app-header">
-    <h2>BIGWIN</h2>
-    <span id="roundId">Round: --</span>
+  <header class="top-header">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <h1>BIGWIN</h1>
+    <div class="balance" id="walletBalance">₹0</div>
   </header>
 
-  <!-- TIMER -->
-  <section class="timer-card">
-    <div class="timer-info">
-      <span>Time Left</span>
-      <strong id="timeLeft">30</strong>s
-    </div>
-    <div class="timer-bar">
-      <div id="timerProgress"></div>
+  <!-- ROUND INFO -->
+  <section class="card">
+    <div class="round-info">
+      <div>Round ID: <span id="roundId">---</span></div>
+      <div>Time Left: <span id="timeLeft">--</span>s</div>
     </div>
   </section>
 
-  <!-- COLOR SELECTION -->
+  <!-- SELECT COLOR -->
   <section class="card">
-    <h3>Select Color</h3>
-    <div class="color-buttons">
+    <h2>Select Color</h2>
+    <div class="color-row">
       <button id="redBtn" class="color-btn red">RED</button>
       <button id="greenBtn" class="color-btn green">GREEN</button>
     </div>
   </section>
 
-  <!-- BET SECTION (HIDDEN INITIALLY) -->
-  <section id="betSection" class="card hidden">
-    <h3>Choose Amount</h3>
+  <!-- BET AMOUNT (HIDDEN UNTIL COLOR SELECTED) -->
+  <section class="card hidden" id="betSection">
+    <h2>How much do you want to bet?</h2>
 
-    <div class="amount-buttons">
-      <button class="amt-btn" data-amt="1">1</button>
-      <button class="amt-btn" data-amt="5">5</button>
-      <button class="amt-btn" data-amt="10">10</button>
-      <button class="amt-btn" data-amt="50">50</button>
+    <div class="amount-row">
+      <button class="amount-btn" data-amount="1">₹1</button>
+      <button class="amount-btn" data-amount="5">₹5</button>
+      <button class="amount-btn" data-amount="10">₹10</button>
+      <button class="amount-btn" data-amount="50">₹50</button>
     </div>
 
-    <div class="bet-summary">
-      <span>Bet: ₹<span id="betAmount">0</span></span>
+    <div class="bet-row">
       <button id="plusBtn" class="plus-btn">+</button>
+      <div class="bet-amount">Bet: ₹<span id="betAmount">0</span></div>
     </div>
 
-    <button id="placeBetBtn" class="primary-btn" disabled>
-      Place Bet
-    </button>
+    <button id="placeBetBtn" class="primary-btn disabled">Place Bet</button>
   </section>
 
-  <!-- TABS -->
+  <!-- RESULTS / MY BETS -->
   <section class="card">
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="results">Results</button>
-      <button class="tab-btn" data-tab="mybets">My Bets</button>
+    <div class="tab-header">
+      <button id="resultsTab" class="tab active">Results</button>
+      <button id="myBetsTab" class="tab">My Bets</button>
     </div>
 
-    <!-- LAST 10 RESULTS -->
-    <div id="resultsTab" class="tab-content">
-      <ul id="resultsList" class="list"></ul>
+    <div class="tab-content" id="resultsList">
+      <!-- Last 10 results injected by JS -->
     </div>
 
-    <!-- USER BET HISTORY -->
-    <div id="myBetsTab" class="tab-content hidden">
-      <ul id="myBetsList" class="list"></ul>
+    <div class="tab-content hidden" id="myBetsList">
+      <!-- User bet history injected by JS -->
     </div>
   </section>
 
@@ -86,8 +78,8 @@
 
   <!-- SCRIPTS -->
   <script src="js/api.js"></script>
-  <script src="js/game.js"></script>
   <script src="js/timer.js"></script>
+  <script src="js/game.js"></script>
 
 </body>
-                                               </html>
+</html>
