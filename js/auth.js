@@ -1,86 +1,67 @@
-/* =========================
-   AUTH : LOGIN & REGISTER
-========================= */
+const API = window.API || "https://color-game-backend1.onrender.com";
 
-// Elements
-const loginBtn = document.getElementById("loginBtn");
-const registerBtn = document.getElementById("registerBtn");
+function getInput(id) {
+  return document.getElementById(id).value.trim();
+}
 
-if (loginBtn) loginBtn.addEventListener("click", login);
-if (registerBtn) registerBtn.addEventListener("click", registerUser);
-
-/* =========================
-        REGISTER
-========================= */
-async function registerUser() {
-  const mobile = document.getElementById("mobile").value.trim();
-  const password = document.getElementById("password").value.trim();
+/* ======================
+   REGISTER
+====================== */
+async function register() {
+  const mobile = getInput("mobile");
+  const password = getInput("password");
 
   if (!mobile || !password) {
-    alert("Enter mobile & password");
+    alert("Enter mobile and password");
     return;
   }
 
-  try {
-    const res = await fetch(API + "/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mobile, password })
-    });
+  const res = await fetch(API + "/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ mobile, password })
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.error || "Registration failed");
-      return;
-    }
-
-    alert("Registered successfully ✅ Now login");
-  } catch (err) {
-    alert("Server error");
+  if (res.ok) {
+    alert("Registered successfully. Please login.");
+  } else {
+    alert(data.error || "Registration failed");
   }
 }
 
-/* =========================
-        LOGIN
-========================= */
+/* ======================
+   LOGIN
+====================== */
 async function login() {
-  const mobile = document.getElementById("mobile").value.trim();
-  const password = document.getElementById("password").value.trim();
+  const mobile = getInput("mobile");
+  const password = getInput("password");
 
   if (!mobile || !password) {
-    alert("Enter mobile & password");
+    alert("Enter mobile and password");
     return;
   }
 
-  try {
-    const res = await fetch(API + "/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mobile, password })
-    });
+  const res = await fetch(API + "/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ mobile, password })
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.error || "Login failed");
-      return;
-    }
-
-    // ✅ Save token
-    localStorage.setItem("token", data.token);
-
-    // Redirect
-    window.location.href = "home.html";
-  } catch (err) {
-    alert("Server error");
+  if (!res.ok) {
+    alert(data.error || "Login failed");
+    return;
   }
-}
 
-/* =========================
-        LOGOUT
-========================= */
-function logout() {
-  localStorage.removeItem("token");
-  window.location.href = "index.html";
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("wallet", data.wallet);
+
+  window.location.href = "home.html";
 }
