@@ -2,45 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>BIGWIN – Login</title>
+  <title>BIGWIN – Login / Register</title>
 
-  <!-- Main Mobile CSS -->
+  <!-- Mobile only -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
+<body class="auth-page">
 
   <div class="auth-container">
-    <div class="logo-box">
-      <h1>BIGWIN</h1>
-      <p>Login or Register</p>
-    </div>
-
     <div class="auth-card">
+
+      <h2 class="logo-text">BIGWIN</h2>
+      <p class="auth-sub">Login or Create Account</p>
+
+      <!-- MOBILE -->
       <input
-        type="tel"
+        type="text"
         id="mobile"
-        placeholder="Mobile number"
-        maxlength="10"
+        placeholder="Enter mobile number"
+        autocomplete="off"
       />
 
+      <!-- PASSWORD -->
       <input
         type="password"
         id="password"
-        placeholder="Password"
+        placeholder="Enter password"
       />
 
-      <button id="loginBtn" class="btn primary">Login</button>
-      <button id="registerBtn" class="btn secondary">Register</button>
-    </div>
+      <!-- ACTION BUTTONS -->
+      <button class="btn-primary" onclick="login()">Login</button>
+      <button class="btn-outline" onclick="register()">Register</button>
 
-    <p class="note">
-      By continuing you agree to our Terms & Privacy Policy
-    </p>
+    </div>
   </div>
 
-  <!-- JS -->
-  <script src="js/api.js"></script>
+  <!-- AUTH SCRIPT -->
   <script src="js/auth.js"></script>
 
 </body>
