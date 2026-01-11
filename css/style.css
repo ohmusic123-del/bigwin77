@@ -154,3 +154,124 @@ body {
 .bottom-nav a.active {
   color: #22c55e;
 }
+/* =========================
+   HOME PAGE ONLY
+   ========================= */
+
+body {
+  background: radial-gradient(circle at top, #0b132b, #020617);
+}
+
+/* Header */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+}
+
+.top-bar h1 {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.logout-btn {
+  background: #111827;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Page spacing */
+.page {
+  padding: 12px;
+  padding-bottom: 90px;
+}
+
+/* Card layout */
+.card {
+  background: linear-gradient(180deg, #0b1225, #050914);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.45);
+}
+
+/* Card title */
+.card-title {
+  font-size: 16px;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+/* Wallet amount */
+.amount {
+  font-size: 30px;
+  font-weight: 900;
+}
+
+/* Rows */
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 15px;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+/* Quick action buttons */
+.action-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border-radius: 14px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 16px;
+  text-decoration: none;
+  color: #fff;
+}
+
+.action-btn.green {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.action-btn.blue {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.action-btn.red {
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+}
+
+/* Bottom nav */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #020617;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.bottom-nav a {
+  color: #9ca3af;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.bottom-nav a.active {
+  color: #22c55e;
+  }
