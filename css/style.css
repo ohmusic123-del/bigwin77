@@ -226,20 +226,25 @@ body {
   border-bottom: none;
 }
 
-/* Quick action buttons */
+/* HOME QUICK ACTION FIX */
+.card a {
+  display: block;
+  text-decoration: none;
+}
+
 .action-btn {
   display: block;
   width: 100%;
-  padding: 14px;
-  margin-top: 10px;
-  border-radius: 14px;
-  text-align: center;
-  font-weight: 800;
+  margin-top: 12px;
+  padding: 15px;
+  border-radius: 16px;
   font-size: 16px;
-  text-decoration: none;
+  font-weight: 900;
+  text-align: center;
   color: #fff;
 }
 
+/* Colors */
 .action-btn.green {
   background: linear-gradient(135deg, #22c55e, #16a34a);
 }
@@ -251,27 +256,3 @@ body {
 .action-btn.red {
   background: linear-gradient(135deg, #ef4444, #b91c1c);
 }
-
-/* Bottom nav */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background: #020617;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  border-top: 1px solid rgba(255,255,255,.08);
-}
-
-.bottom-nav a {
-  color: #9ca3af;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.bottom-nav a.active {
-  color: #22c55e;
-  }
