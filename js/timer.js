@@ -1,60 +1,59 @@
 /* =========================
-   ROUND TIMER
+   CONFIG
 ========================= */
+const roundIdEl = document.getElementById("roundId");
+const timerEl = document.getElementById("timer");
 
-const roundTimeEl = document.getElementById("roundTimer");
-
-let roundEndTime = 0;
+/* =========================
+   STATE
+========================= */
+let roundStartTime = 0;
+let roundId = "";
 
 /* =========================
    FETCH CURRENT ROUND
 ========================= */
-async function loadRound() {
+async function loadCurrentRound() {
   try {
-    const res = await fetch(`${API}/round/current`);
+    const res = await fetch(API + "/round/current");
     const data = await res.json();
 
-    // Round is always 30 seconds
-    roundEndTime = data.startTime + 30 * 1000;
-  } catch (err) {
-    console.error("Failed to load round", err);
-  }
-}
+    roundId = data.id;
+    roundStartTime = data.startTime;
 
-/* =========================
-   UPDATE TIMER
-========================= */
-function updateTimer() {
-  if (!roundEndTime) return;
-
-  const now = Date.now();
-  let remaining = Math.floor((roundEndTime - now) / 1000);
-
-  if (remaining < 0) remaining = 0;
-
-  roundTimeEl.innerText = remaining + "s";
-
-  // Disable betting when round ends
-  if (remaining === 0) {
-    if (typeof disableBetting === "function") {
-      disableBetting();
+    if (roundIdEl) {
+      roundIdEl.innerText = roundId;
     }
+  } catch (err) {
+    console.error("Failed to load round");
   }
 }
 
 /* =========================
-   OPTIONAL: DISABLE BET UI
+   TIMER LOOP
 ========================= */
-function disableBetting() {
-  const placeBtn = document.getElementById("placeBetBtn");
-  if (placeBtn) placeBtn.disabled = true;
+function startTimer() {
+  setInterval(() => {
+    if (!roundStartTime) return;
+
+    const elapsed = Math.floor((Date.now() - roundStartTime) / 1000);
+    let remaining = 30 - elapsed;
+
+    if (remaining < 0) remaining = 0;
+
+    if (timerEl) {
+      timerEl.innerText = remaining + "s";
+    }
+
+    // 🔁 When round ends → reload round
+    if (remaining === 0) {
+      loadCurrentRound();
+    }
+  }, 1000);
 }
 
 /* =========================
    INIT
 ========================= */
-loadRound();
-setInterval(updateTimer, 1000);
-
-// Reload round every 30 seconds (sync safety)
-setInterval(loadRound, 30000);
+loadCurrentRound();
+startTimer();
