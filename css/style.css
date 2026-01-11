@@ -261,8 +261,9 @@ body {
 /* ============================= */
 
 .profile-page {
-  padding: 16px;
-  padding-bottom: 90px;
+  padding-bottom: 80px;
+
+
 }
 
 /* Header */
@@ -352,3 +353,33 @@ body {
   background: #ef4444;
   color: #fff;
     }
+/* ============================= */
+/* BOTTOM NAV – SHARED (HOME + PROFILE) */
+/* ============================= */
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: linear-gradient(180deg, #0b1020, #070b16);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  z-index: 999;
+}
+
+.bottom-nav a {
+  flex: 1;
+  text-align: center;
+  color: #9ca3af;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.bottom-nav a.active {
+  color: #22c55e;
+}
