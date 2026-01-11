@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deposit History</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="top-header">
+    <h1>Deposit History</h1>
+    <button class="btn-back" onclick="history.back()">← Back</button>
+  </div>
+
+  <!-- HISTORY CARD -->
+  <div class="card">
+    <h3>Recent Deposits</h3>
+
+    <div id="depositHistory" class="history-list">
+      <p class="loading">Loading deposit history...</p>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <a href="home.html">Home</a>
+    <a href="game.html">Game</a>
+    <a href="wallet.html" class="active">Wallet</a>
+    <a href="profile.html">Profile</a>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/deposit-history.js"></script>
+
+</body>
+</html>
