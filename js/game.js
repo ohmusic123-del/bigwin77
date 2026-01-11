@@ -22,8 +22,8 @@ const myBetsList = document.getElementById("myBetsList");
 /* =========================
    COLOR SELECTION
 ========================= */
-redBtn.addEventListener("click", () => selectColor("RED"));
-greenBtn.addEventListener("click", () => selectColor("GREEN"));
+redBtn.onclick = () => selectColor("red");
+greenBtn.onclick = () => selectColor("green");
 
 function selectColor(color) {
   selectedColor = color;
@@ -31,149 +31,128 @@ function selectColor(color) {
   redBtn.classList.remove("active");
   greenBtn.classList.remove("active");
 
-  if (color === "RED") redBtn.classList.add("active");
-  if (color === "GREEN") greenBtn.classList.add("active");
+  if (color === "red") redBtn.classList.add("active");
+  if (color === "green") greenBtn.classList.add("active");
 
-  // Show bet section only after color selected
   betSection.classList.remove("hidden");
-
   resetBet();
 }
 
 /* =========================
-   AMOUNT SELECTION
+   AMOUNT BUTTONS
 ========================= */
 amountBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
+  btn.onclick = () => {
     selectedAmount = parseInt(btn.dataset.amt);
     updateAmount();
-  });
+  };
 });
 
 /* =========================
-   PLUS BUTTON (DOUBLE LOGIC)
+   PLUS BUTTON (DOUBLE)
 ========================= */
-plusBtn.addEventListener("click", () => {
+plusBtn.onclick = () => {
   if (selectedAmount > 0) {
-    selectedAmount = selectedAmount * 2;
+    selectedAmount *= 2;
     updateAmount();
   }
-});
+};
 
-/* =========================
-   UPDATE AMOUNT UI
-========================= */
 function updateAmount() {
-  betAmountEl.textContent = selectedAmount;
+  betAmountEl.innerText = selectedAmount;
   placeBetBtn.disabled = selectedAmount <= 0;
 }
 
-/* =========================
-   RESET BET
-========================= */
 function resetBet() {
   selectedAmount = 0;
-  betAmountEl.textContent = "0";
+  betAmountEl.innerText = "0";
   placeBetBtn.disabled = true;
 }
 
 /* =========================
-   PLACE BET
+   PLACE BET (FIXED API)
 ========================= */
-placeBetBtn.addEventListener("click", async () => {
+placeBetBtn.onclick = async () => {
   if (!selectedColor || selectedAmount <= 0) {
     alert("Select color and amount");
     return;
   }
 
-  try {
-    const res = await fetch(`${API}/bet/place`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("token")
-      },
-      body: JSON.stringify({
-        color: selectedColor,
-        amount: selectedAmount
-      })
-    });
+  const res = await fetch(`${API}/bet`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token")
+    },
+    body: JSON.stringify({
+      color: selectedColor,
+      amount: selectedAmount
+    })
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.message || "Bet failed");
-      return;
-    }
-
-    alert("Bet placed successfully");
-    resetBet();
-    loadMyBets();
-  } catch (err) {
-    alert("Network error");
+  if (!res.ok) {
+    alert(data.error || "Bet failed");
+    return;
   }
-});
+
+  resetBet();
+  loadMyBets();
+};
 
 /* =========================
-   RESULTS
+   LOAD LAST 10 RESULTS (FIXED)
 ========================= */
 async function loadResults() {
-  try {
-    const res = await fetch(`${API}/round/results`);
-    const data = await res.json();
+  const res = await fetch(`${API}/rounds/history`);
+  const data = await res.json();
 
-    resultsList.innerHTML = "";
+  resultsList.innerHTML = "";
 
-    data.forEach(r => {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <span>#${r.roundId}</span>
-        <span class="${r.result === 'RED' ? 'red' : 'green'}">
-          ${r.result}
-        </span>
-      `;
-      resultsList.appendChild(li);
-    });
-  } catch (e) {
-    console.log("Results error");
-  }
+  data.slice(0, 10).forEach(r => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>#${r.roundId}</span>
+      <span class="${r.winner === "red" ? "red" : "green"}">
+        ${r.winner.toUpperCase()}
+      </span>
+    `;
+    resultsList.appendChild(li);
+  });
 }
 
 /* =========================
-   MY BETS
+   LOAD MY BETS (FIXED)
 ========================= */
 async function loadMyBets() {
-  try {
-    const res = await fetch(`${API}/bet/my`, {
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token")
-      }
-    });
-    const data = await res.json();
+  const res = await fetch(`${API}/bets`, {
+    headers: {
+      Authorization: localStorage.getItem("token")
+    }
+  });
 
-    myBetsList.innerHTML = "";
+  const data = await res.json();
+  myBetsList.innerHTML = "";
 
-    data.forEach(b => {
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <span>₹${b.amount}</span>
-        <span class="${b.color === 'RED' ? 'red' : 'green'}">
-          ${b.color}
-        </span>
-        <span>${b.status}</span>
-      `;
-      myBetsList.appendChild(li);
-    });
-  } catch (e) {
-    console.log("My bets error");
-  }
+  data.forEach(b => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>₹${b.amount}</span>
+      <span class="${b.color === "red" ? "red" : "green"}">
+        ${b.color.toUpperCase()}
+      </span>
+      <span>${b.status}</span>
+    `;
+    myBetsList.appendChild(li);
+  });
 }
 
 /* =========================
    TABS
 ========================= */
 document.querySelectorAll(".tab-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
+  btn.onclick = () => {
     document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
@@ -185,7 +164,7 @@ document.querySelectorAll(".tab-btn").forEach(btn => {
     } else {
       document.getElementById("myBetsTab").classList.remove("hidden");
     }
-  });
+  };
 });
 
 /* =========================
