@@ -24,12 +24,12 @@ async function loadStats() {
 
   const data = await res.json();
 
-  document.getElementById("users").innerText = data.totalUsers;
-  document.getElementById("deposits").innerText = data.totalDeposits;
-  document.getElementById("withdrawals").innerText = data.totalWithdrawals;
-  document.getElementById("wallet").innerText = data.totalWallet;
-  document.getElementById("profit").innerText = data.profit;
-  document.getElementById("rounds").innerText = data.totalRounds;
+  document.getElementById("users").innerText = data.users;        // Changed
+document.getElementById("deposits").innerText = data.deposits;  // Changed
+document.getElementById("withdrawals").innerText = data.withdrawals; // Changed
+document.getElementById("wallet").innerText = data.wallet;      // Changed
+document.getElementById("profit").innerText = data.profit;
+document.getElementById("rounds").innerText = data.rounds;      // Changed
 }
 
 /* ======================
