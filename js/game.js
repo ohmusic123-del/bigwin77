@@ -95,7 +95,36 @@ async function loadGame() {
   });
   const wd = await w.json();
   walletBalance.textContent = "₹" + wd.wallet;
+// ✅ Add auto-refresh wallet after bet
+placeBetBtn.onclick = async () => {
+  if (!selectedColor || betAmount <= 0) return;
 
+  const res = await fetch(API + "/bet", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token
+    },
+    body: JSON.stringify({
+      color: selectedColor,
+      amount: betAmount
+    })
+  });
+
+  const data = await res.json();
+  
+  if (res.ok) {
+    alert(data.message);
+    // ✅ Reload wallet immediately
+    loadGame();
+  } else {
+    alert(data.error);
+  }
+
+  betSection.classList.add("hidden");
+  selectedColor = null;
+  betAmount = 0;
+};
   loadResults();
   loadMyBets();
 }
