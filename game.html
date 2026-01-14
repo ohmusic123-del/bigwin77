@@ -2,42 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BIGWIN – Game</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BIGWIN - Game</title>
+
+  <!-- MAIN CSS -->
+  <link rel="stylesheet" href="/style.css">
+
 </head>
 <body>
 
   <header class="top-bar">
     <button onclick="history.back()">←</button>
     <h1>BIGWIN</h1>
-    <div id="walletBalance">₹0</div>
+    <div id="wallet">₹0</div>
   </header>
 
   <div class="card">
     <div>Round: <span id="roundId">---</span></div>
-    <div>Time: <span id="timeLeft">--</span>s</div>
+    <div>Time: <span id="timer">--s</span></div>
   </div>
 
   <div class="card">
-    <h3>Select Color</h3>
-    <div class="buttons">
-      <button class="red" onclick="placeBet('RED')">RED</button>
-      <button class="green" onclick="placeBet('GREEN')">GREEN</button>
-    </div>
+    <h2>Select Color</h2>
+    <button class="red" onclick="placeBet('red')">RED</button>
+    <button class="green" onclick="placeBet('green')">GREEN</button>
   </div>
 
   <div class="card">
     <button onclick="showResults()">Results</button>
     <button onclick="showMyBets()">My Bets</button>
+    <div id="betList"></div>
   </div>
 
-  <!-- 🔑 API must be defined BEFORE JS files -->
+  <!-- API CONFIG -->
   <script>
     const API = "https://color-game-backend1.onrender.com";
+    const token = localStorage.getItem("token");
+    if (!token) {
+      location.href = "/index.html";
+    }
   </script>
 
-  <script src="game.js"></script>
-  <script src="timer.js"></script>
+  <!-- JS FILES (ORDER MATTERS) -->
+  <script src="/js/timer.js"></script>
+  <script src="/js/game.js"></script>
+
 </body>
 </html>
