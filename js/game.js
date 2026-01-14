@@ -1,5 +1,10 @@
 const API = "https://color-game-backend1.onrender.com";
 
+// ✅ IMMEDIATE DEBUG
+console.log("🚀 Game.js starting to load...");
+console.log("API:", API);
+console.log("Token exists:", !!localStorage.getItem("token"));
+
 let selectedColor = null;
 let betAmount = 0;
 
@@ -24,7 +29,16 @@ const myBetsList = document.getElementById("myBetsList");
 
 const token = localStorage.getItem("token");
 
+console.log("✅ All elements found:", {
+  walletBalance: !!walletBalance,
+  roundIdEl: !!roundIdEl,
+  timeLeftEl: !!timeLeftEl,
+  redBtn: !!redBtn,
+  greenBtn: !!greenBtn
+});
+
 if (!token) {
+  console.error("❌ No token found, redirecting to login");
   alert("Please login first");
   location.href = "index.html";
 }
@@ -33,6 +47,7 @@ if (!token) {
    COLOR SELECTION
 ====================== */
 function selectColor(color) {
+  console.log("Color selected:", color);
   selectedColor = color;
   betAmount = 0;
   betAmountEl.textContent = "0";
@@ -40,8 +55,8 @@ function selectColor(color) {
   placeBetBtn.classList.add("disabled");
 }
 
-redBtn.onclick = () => selectColor("red");
-greenBtn.onclick = () => selectColor("green");
+if (redBtn) redBtn.onclick = () => selectColor("red");
+if (greenBtn) greenBtn.onclick = () => selectColor("green");
 
 /* ======================
    AMOUNT SELECTION
@@ -57,51 +72,55 @@ amountBtns.forEach(btn => {
 /* ======================
    PLUS BUTTON (DOUBLE)
 ====================== */
-plusBtn.onclick = () => {
-  if (betAmount > 0) {
-    betAmount *= 2;
-    betAmountEl.textContent = betAmount;
-  }
-};
+if (plusBtn) {
+  plusBtn.onclick = () => {
+    if (betAmount > 0) {
+      betAmount *= 2;
+      betAmountEl.textContent = betAmount;
+    }
+  };
+}
 
 /* ======================
    PLACE BET
 ====================== */
-placeBetBtn.onclick = async () => {
-  if (!selectedColor || betAmount <= 0) {
-    alert("Select color and amount first");
-    return;
-  }
-
-  try {
-    const res = await fetch(API + "/bet", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token
-      },
-      body: JSON.stringify({
-        color: selectedColor,
-        amount: betAmount
-      })
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      alert(data.message);
-      loadGame();
-      betSection.classList.add("hidden");
-      selectedColor = null;
-      betAmount = 0;
-    } else {
-      alert(data.error || "Bet failed");
+if (placeBetBtn) {
+  placeBetBtn.onclick = async () => {
+    if (!selectedColor || betAmount <= 0) {
+      alert("Select color and amount first");
+      return;
     }
-  } catch (err) {
-    console.error("Bet error:", err);
-    alert("Network error. Please try again.");
-  }
-};
+
+    try {
+      const res = await fetch(API + "/bet", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token
+        },
+        body: JSON.stringify({
+          color: selectedColor,
+          amount: betAmount
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(data.message);
+        loadGame();
+        betSection.classList.add("hidden");
+        selectedColor = null;
+        betAmount = 0;
+      } else {
+        alert(data.error || "Bet failed");
+      }
+    } catch (err) {
+      console.error("Bet error:", err);
+      alert("Network error. Please try again.");
+    }
+  };
+}
 
 /* ======================
    TIMER
@@ -110,6 +129,8 @@ async function updateTimer() {
   try {
     const res = await fetch(API + "/round/current");
     const data = await res.json();
+
+    console.log("Round data:", data);
 
     if (data.id) {
       roundIdEl.textContent = data.id.substring(0, 8);
@@ -137,11 +158,13 @@ async function updateTimer() {
 ====================== */
 async function loadWallet() {
   try {
+    console.log("Loading wallet...");
     const res = await fetch(API + "/wallet", {
       headers: { Authorization: token }
     });
     
     const data = await res.json();
+    console.log("Wallet data:", data);
     
     if (data.wallet !== undefined) {
       walletBalance.textContent = "₹" + data.wallet;
@@ -218,6 +241,7 @@ async function loadMyBets() {
    LOAD GAME
 ====================== */
 async function loadGame() {
+  console.log("🎮 Loading game...");
   loadWallet();
   loadResults();
   loadMyBets();
@@ -226,25 +250,38 @@ async function loadGame() {
 /* ======================
    TABS
 ====================== */
-resultsTab.onclick = () => {
-  resultsTab.classList.add("active");
-  myBetsTab.classList.remove("active");
-  resultsList.classList.remove("hidden");
-  myBetsList.classList.add("hidden");
-};
+if (resultsTab) {
+  resultsTab.onclick = () => {
+    resultsTab.classList.add("active");
+    myBetsTab.classList.remove("active");
+    resultsList.classList.remove("hidden");
+    myBetsList.classList.add("hidden");
+  };
+}
 
-myBetsTab.onclick = () => {
-  myBetsTab.classList.add("active");
-  resultsTab.classList.remove("active");
-  myBetsList.classList.remove("hidden");
-  resultsList.classList.add("hidden");
-};
+if (myBetsTab) {
+  myBetsTab.onclick = () => {
+    myBetsTab.classList.add("active");
+    resultsTab.classList.remove("active");
+    myBetsList.classList.remove("hidden");
+    resultsList.classList.add("hidden");
+  };
+}
 
 /* ======================
    INIT
 ====================== */
+console.log("🎯 Initializing game...");
 loadGame();
 setInterval(updateTimer, 1000);
 updateTimer();
 
-console.log("✅ Game.js loaded successfully");
+console.log("✅ Game.js loaded successfully!");
+
+// ✅ Visual confirmation
+setTimeout(() => {
+  if (walletBalance && walletBalance.textContent === "₹0") {
+    console.error("⚠️ Game didn't load! Check console for errors.");
+    alert("Game loading issue detected. Please refresh the page.");
+  }
+}, 3000);
