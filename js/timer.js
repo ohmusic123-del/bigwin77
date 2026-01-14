@@ -1,14 +1,21 @@
-const timeLeftEl = document.getElementById("timeLeft");
+async function updateRound() {
+  try {
+    const res = await fetch(API + "/round/current");
+    const data = await res.json();
 
-async function updateTimer() {
-  const res = await fetch(API + "/round/current");
-  const data = await res.json();
+    // Update round ID
+    document.getElementById("roundId").innerText = data.id;
 
-  const elapsed = Math.floor((Date.now() - data.startTime) / 1000);
-  const remaining = Math.max(0, 30 - elapsed);
+    // Calculate remaining time
+    const elapsed = Math.floor((Date.now() - data.startTime) / 1000);
+    const remaining = Math.max(0, 30 - elapsed);
 
-  timeLeftEl.textContent = remaining;
+    document.getElementById("timeLeft").innerText = remaining;
+  } catch (err) {
+    console.error("Round fetch error", err);
+  }
 }
 
-setInterval(updateTimer, 1000);
-updateTimer();
+// Update every second
+updateRound();
+setInterval(updateRound, 1000);
