@@ -2,69 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>BIGWIN Game</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BIGWIN – Game</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<header class="top-header">
-  <button class="back-btn" onclick="location.href='home.html'">←</button>
-  <h1>BIGWIN</h1>
-  <div class="balance" id="walletBalance">₹0</div>
-</header>
+  <header class="top-bar">
+    <button onclick="history.back()">←</button>
+    <h1>BIGWIN</h1>
+    <div id="walletBalance">₹0</div>
+  </header>
 
-<section class="card">
-  <div class="round-info">
+  <div class="card">
     <div>Round: <span id="roundId">---</span></div>
     <div>Time: <span id="timeLeft">--</span>s</div>
   </div>
-</section>
 
-<section class="card">
-  <h2>Select Color</h2>
-  <div class="color-row">
-    <button id="redBtn" class="color-btn red">RED</button>
-    <button id="greenBtn" class="color-btn green">GREEN</button>
-  </div>
-</section>
-
-<section class="card hidden" id="betSection">
-  <h2>Select Amount</h2>
-
-  <div class="amount-row">
-    <button class="amount-btn" data-amount="1">₹1</button>
-    <button class="amount-btn" data-amount="5">₹5</button>
-    <button class="amount-btn" data-amount="10">₹10</button>
-    <button class="amount-btn" data-amount="50">₹50</button>
+  <div class="card">
+    <h3>Select Color</h3>
+    <div class="buttons">
+      <button class="red" onclick="placeBet('RED')">RED</button>
+      <button class="green" onclick="placeBet('GREEN')">GREEN</button>
+    </div>
   </div>
 
-  <div class="bet-row">
-    <button id="plusBtn" class="plus-btn">+</button>
-    <div class="bet-display">₹<span id="betAmount">0</span></div>
+  <div class="card">
+    <button onclick="showResults()">Results</button>
+    <button onclick="showMyBets()">My Bets</button>
   </div>
 
-  <button id="placeBetBtn" class="primary-btn disabled">Place Bet</button>
-</section>
+  <!-- 🔑 API must be defined BEFORE JS files -->
+  <script>
+    const API = "https://color-game-backend1.onrender.com";
+  </script>
 
-<section class="card">
-  <div class="tab-header">
-    <button id="resultsTab" class="tab active">Results</button>
-    <button id="myBetsTab" class="tab">My Bets</button>
-  </div>
-
-  <div id="resultsList" class="tab-content"></div>
-  <div id="myBetsList" class="tab-content hidden"></div>
-</section>
-
-<nav class="bottom-nav">
-  <a href="home.html">Home</a>
-  <a href="wallet.html">Wallet</a>
-  <a href="game.html" class="active">Game</a>
-  <a href="profile.html">Profile</a>
-</nav>
-
-<script src="js/api.js?v=10"></script>
-<script src="js/game.js?v=10"></script>
+  <script src="game.js"></script>
+  <script src="timer.js"></script>
 </body>
 </html>
