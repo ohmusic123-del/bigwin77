@@ -80,6 +80,49 @@ const API = "https://color-game-backend1.onrender.com";
 
 console.log("🚀 Game.js INLINE starting...");
 
+/* ======================
+   POPUP SYSTEM
+====================== */
+function showPopup(type, message, amount = null) {
+  const overlay = document.getElementById("popup-overlay");
+  const icon = document.getElementById("popup-icon");
+  const messageEl = document.getElementById("popup-message");
+  const amountEl = document.getElementById("popup-amount");
+
+  // Set icon
+  icon.className = `popup-icon ${type}`;
+  
+  if (type === "bet") {
+    icon.innerHTML = "🎲";
+  } else if (type === "win") {
+    icon.innerHTML = "🎉";
+  } else if (type === "loss") {
+    icon.innerHTML = "😔";
+  }
+
+  // Set message
+  messageEl.textContent = message;
+
+  // Set amount
+  if (amount !== null) {
+    amountEl.textContent = `₹${amount}`;
+    amountEl.className = type === "loss" ? "popup-amount loss" : "popup-amount";
+    amountEl.style.display = "block";
+  } else {
+    amountEl.style.display = "none";
+  }
+
+  // Show popup
+  overlay.classList.add("show");
+
+  // Auto-close after 3 seconds
+  setTimeout(() => {
+    overlay.classList.remove("show");
+  }, 3000);
+}
+
+// ... rest of your existing game.js code below ...
+
 let selectedColor = null;
 let betAmount = 0;
 
