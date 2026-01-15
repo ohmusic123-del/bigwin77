@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Withdrawal Method • BIGWIN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="header">
+  <h2>Withdrawal Method</h2>
+  <button onclick="history.back()">← Back</button>
+</div>
+
+<div class="container page-padding">
+
+  <!-- METHOD SELECTOR -->
+  <div class="card">
+    <div class="card-title">Select Method</div>
+    
+    <select id="methodType" class="input" onchange="showMethodForm()">
+      <option value="">Choose...</option>
+      <option value="upi">UPI</option>
+      <option value="bank">Bank Account</option>
+    </select>
+  </div>
+
+  <!-- UPI FORM -->
+  <div id="upiForm" class="card" style="display: none;">
+    <div class="card-title">UPI Details</div>
+    <input type="text" id="upiId" class="input" placeholder="Enter UPI ID (e.g., 9876543210@paytm)" />
+    <button class="btn btn-primary" onclick="saveMethod('upi')">Save UPI</button>
+  </div>
+
+  <!-- BANK FORM -->
+  <div id="bankForm" class="card" style="display: none;">
+    <div class="card-title">Bank Account Details</div>
+    <input type="text" id="accountHolder" class="input" placeholder="Account Holder Name" />
+    <input type="text" id="accountNumber" class="input" placeholder="Account Number" />
+    <input type="text" id="ifsc" class="input" placeholder="IFSC Code" />
+    <input type="text" id="bankName" class="input" placeholder="Bank Name" />
+    <button class="btn btn-primary" onclick="saveMethod('bank')">Save Bank Account</button>
+  </div>
+
+</div>
+
+<div class="footer">
+  <a href="home.html">Home</a>
+  <a href="game.html">Game</a>
+  <a href="wallet.html">Wallet</a>
+  <a href="profile.html">Profile</a>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  function showMethodForm() {
+    const method = document.getElementById("methodType").value;
+    
+    document.getElementById("upiForm").style.display = method === "upi" ? "block" : "none";
+    document.getElementById("bankForm").style.display = method === "bank" ? "block" : "none";
+  }
+
+  async function saveMethod(type) {
+    let details = {};
+
+    if (type === "upi") {
+      const upiId = document.getElementById("upiId").value.trim();
+      if (!upiId) {
+        alert("Please enter UPI ID");
+        return;
+      }
+      details = { upiId };
+    } else if (type === "bank") {
+      const accountHolder = document.getElementById("accountHolder").value.trim();
+      const accountNumber = document.getElementById("accountNumber").value.trim();
+      const ifsc = document.getElementById("ifsc").value.trim();
+      const bankName = document.getElementById("bankName").value.trim();
+
+      if (!accountHolder || !accountNumber || !ifsc || !bankName) {
+        alert("Please fill all bank details");
+        return;
+      }
+
+      details = { accountHolder, accountNumber, ifsc, bankName };
+    }
+
+    try {
+      const res = await fetch(API + "/user/withdrawal-method", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token")
+        },
+        body: JSON.stringify({ method: type, details })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Withdrawal method saved successfully!");
+        window.location.href = "withdraw.html";
+      } else {
+        alert(data.error || "Failed to save");
+      }
+    } catch (err) {
+      console.error("Save method error:", err);
+      alert("Network error");
+    }
+  }
+</script>
+</body>
+</html>
