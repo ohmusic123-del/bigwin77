@@ -1,46 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>BIGWIN – Login / Register</title>
-
-  <!-- Mobile only -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-
-  <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIGWIN - Register</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="auth-page">
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1>BIGWIN</h1>
+            <h2>Create Account</h2>
+            
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input 
+                        type="tel" 
+                        id="mobile" 
+                        placeholder="Enter 10-digit mobile" 
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                        required
+                    >
+                    <small class="error-msg" id="mobileError"></small>
+                </div>
 
-  <div class="auth-container">
-    <div class="auth-card">
+                <div class="form-group">
+                    <label>Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        placeholder="Enter password" 
+                        minlength="6"
+                        required
+                    >
+                    <small class="error-msg" id="passwordError"></small>
+                </div>
 
-      <h2 class="logo-text">BIGWIN</h2>
-      <p class="auth-sub">Login or Create Account</p>
+                <div class="form-group">
+                    <label>Referral Code (Optional)</label>
+                    <input 
+                        type="text" 
+                        id="referralCode" 
+                        placeholder="Enter referral code if you have one"
+                        style="text-transform: uppercase;"
+                    >
+                    <small class="info-msg">Get ₹100 bonus + earn from referrals!</small>
+                </div>
 
-      <!-- MOBILE -->
-      <input
-        type="text"
-        id="mobile"
-        placeholder="Enter mobile number"
-        autocomplete="off"
-      />
+                <button type="submit" class="btn-primary" id="registerBtn">
+                    Register
+                </button>
+            </form>
 
-      <!-- PASSWORD -->
-      <input
-        type="password"
-        id="password"
-        placeholder="Enter password"
-      />
-
-      <!-- ACTION BUTTONS -->
-      <button class="btn-primary" onclick="login()">Login</button>
-      <button class="btn-outline" onclick="register()">Register</button>
-
+            <p class="auth-link">
+                Already have an account? <a href="index.html">Login</a>
+            </p>
+        </div>
     </div>
-  </div>
 
-  <!-- AUTH SCRIPT -->
-  <script src="js/auth.js"></script>
+    <script>
+        const API = "https://color-game-backend1.onrender.com";
 
+        // Real-time mobile validation
+        document.getElementById('mobile').addEventListener('input', function(e) {
+            // Only allow numbers
+            this.value = this.value.replace(/[^0-9]/g, '');
+            
+            const errorMsg = document.getElementById('mobileError');
+            if (this.value.length > 0 && this.value.length < 10) {
+                errorMsg.textContent = 'Mobile number must be 10 digits';
+                errorMsg.style.color = '#ef4444';
+            } else if (this.value.length === 10) {
+                errorMsg.textContent = '✓ Valid';
+                errorMsg.style.color = '#22c55e';
+            } else {
+                errorMsg.textContent = '';
+            }
+        });
+
+        // Password validation
+        document.getElementById('password').addEventListener('input', function(e) {
+            const errorMsg = document.getElementById('passwordError');
+            if (this.value.length > 0 && this.value.length < 6) {
+                errorMsg.textContent = 'Password must be at least 6 characters';
+                errorMsg.style.color = '#ef4444';
+            } else if (this.value.length >= 6) {
+                errorMsg.textContent = '✓ Strong password';
+                errorMsg.style.color = '#22c55e';
+            } else {
+                errorMsg.textContent = '';
+            }
+        });
+
+        // Form submission
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const mobile = document.getElementById('mobile').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const referralCode = document.getElementById('referralCode').value.trim().toUpperCase();
+            const registerBtn = document.getElementById('registerBtn');
+
+            // Validation
+            if (!/^[0-9]{10}$/.test(mobile)) {
+                alert('❌ Please enter a valid 10-digit mobile number');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('❌ Password must be at least 6 characters');
+                return;
+            }
+
+            // Disable button
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'Creating Account...';
+
+            try {
+                const payload = { mobile, password };
+                if (referralCode) {
+                    payload.referralCode = referralCode;
+                }
+
+                const res = await fetch(`${API}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    // Store token
+                    localStorage.setItem('token', data.token);
+                    
+                    // Show success message
+                    alert(`✅ Registration Successful!\n\n🎁 Welcome Bonus: ₹100\n💰 Bonus: ₹100\n\nRedirecting to dashboard...`);
+                    
+                    // Auto-redirect to home
+                    setTimeout(() => {
+                        window.location.href = 'home.html';
+                    }, 1500);
+                } else {
+                    alert(`❌ ${data.message || 'Registration failed'}`);
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = 'Register';
+                }
+            } catch (err) {
+                console.error('Registration error:', err);
+                alert('❌ Network error. Please check your connection.');
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Register';
+            }
+        });
+    </script>
 </body>
 </html>
