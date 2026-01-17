@@ -2,66 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Wallet • BIGWIN</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wallet</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div class="container">
+    <h2>Wallet</h2>
+    <button onclick="location.href='home.html'">⬅ Back</button>
 
-<!-- HEADER -->
-<div class="header">
-  <h2>Wallet</h2>
-  <button onclick="history.back()">← Back</button>
-</div>
+    <div class="card">
+      <button onclick="location.href='deposit.html'">Deposit</button>
+      <button onclick="location.href='deposit-history.html'">Deposit History</button>
 
-<!-- CONTENT -->
-<div class="container page-padding">
+      <button onclick="location.href='withdraw.html'">Withdraw</button>
+      <button onclick="location.href='withdraw-history.html'">Withdraw History</button>
 
-  <!-- BALANCE CARD -->
-  <div class="card">
-    <div class="card-title">Available Balance</div>
-    <h1 style="margin-top:8px">₹ <span id="wallet">0</span></h1>
-  </div>
-
-  <!-- ACTIONS -->
-  <div class="card">
-    <a href="deposit.html">
-      <div class="btn btn-primary">➕ Deposit</div>
-    </a>
-
-    <a href="withdraw.html">
-      <div class="btn btn-red">⬇ Withdraw</div>
-    </a>
-  </div>
-
-  <!-- INFO -->
-  <div class="card">
-    <div class="list-item">
-      <span>Total Wagered</span>
-      <span>₹ <span id="wagered">0</span></span>
-    </div>
-    <div class="list-item">
-      <span>Bonus</span>
-      <span>₹ <span id="bonus">0</span></span>
-    </div>
-    <div class="list-item">
-      <span>Deposited</span>
-      <span id="deposited">No</span>
+      <button onclick="location.href='wallet-history.html'">Wallet History</button>
     </div>
   </div>
 
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-  <a href="home.html">Home</a>
-  <a href="game.html">Game</a>
-  <a href="wallet.html" class="active">Wallet</a>
-  <a href="profile.html">Profile</a>
-</div>
-
-<script src="js/api.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/wallet.js"></script>
+  <script src="js/config.js"></script>
 </body>
-  </html>
+</html>
