@@ -1,39 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Wallet History</title>
-
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div class="container">
+    <h2>Wallet History</h2>
+    <button onclick="location.href='wallet.html'">⬅ Back</button>
 
-  <!-- HEADER -->
-  <div class="top-header">
-    <h1>Wallet History</h1>
-    <button class="btn-back" onclick="history.back()">← Back</button>
+    <div id="history"></div>
   </div>
 
-  <!-- HISTORY CARD -->
-  <div class="card">
-    <h3>Recent Transactions</h3>
-
-    <div id="historyList" class="history-list">
-      <p class="loading">Loading history...</p>
-    </div>
-  </div>
-
-  <!-- BOTTOM NAV -->
-  <div class="bottom-nav">
-    <a href="home.html">Home</a>
-    <a href="game.html">Game</a>
-    <a href="wallet.html" class="active">Wallet</a>
-    <a href="profile.html">Profile</a>
-  </div>
-
-  <script src="js/api.js"></script>
+  <script src="js/config.js"></script>
   <script src="js/wallet-history.js"></script>
-
 </body>
 </html>
