@@ -2,61 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Profile | BIGWIN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div class="container">
+    <h2>Profile</h2>
+    <button onclick="location.href='home.html'">⬅ Back</button>
 
-  <!-- Header -->
-  <div class="page-header">
-    <h1>Profile</h1>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </div>
-
-  <div class="profile-page">
-
-    <!-- Account Info -->
     <div class="card">
-      <h3 class="card-title">Account Info</h3>
-
-      <div class="info-row">
-        <span>Mobile</span>
-        <strong id="userMobile">1111111111</strong>
-      </div>
-
-      <div class="info-row">
-        <span>Wallet Balance</span>
-        <strong id="walletBalance">₹0</strong>
-      </div>
-
-      <div class="info-row">
-        <span>Total Wagered</span>
-        <strong id="totalWagered">₹0</strong>
-      </div>
+      <p>This page is reserved for profile details.</p>
     </div>
-
-    <!-- Account Actions -->
-    <div class="card">
-      <h3 class="card-title">Account</h3>
-
-      <div class="profile-actions">
-        <a href="wallet.html" class="action-btn wallet">Wallet</a>
-        <a href="deposit.html" class="action-btn deposit">Deposit</a>
-        <a href="withdraw.html" class="action-btn withdraw">Withdraw</a>
-      </div>
-    </div>
-
   </div>
 
-  <!-- Bottom Navigation -->
-  <div class="bottom-nav">
-    <a href="home.html">Home</a>
-    <a href="game.html">Game</a>
-    <a href="wallet.html">Wallet</a>
-    <a href="profile.html" class="active">Profile</a>
-  </div>
-
-  <script src="js/profile.js"></script>
+  <script src="js/config.js"></script>
 </body>
 </html>
