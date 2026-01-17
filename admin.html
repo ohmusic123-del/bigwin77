@@ -1,176 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel | BIGWIN</title>
-  <link rel="stylesheet" href="css/admin.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div class="container">
+    <h2>Admin Panel</h2>
 
-<header class="admin-header">
-  <h2>BIGWIN Admin</h2>
-  <button onclick="logout()" class="logout-btn">Logout</button>
-</header>
+    <h2>Pending Deposits</h2>
+    <div id="pendingDeposits"></div>
 
-<!-- NAVIGATION TABS -->
-<nav class="admin-tabs">
-  <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
-  <button class="tab-btn" data-tab="users">Users</button>
-  <button class="tab-btn" data-tab="deposits">Deposits</button>
-  <button class="tab-btn" data-tab="withdrawals">Withdrawals</button>
-  <button class="tab-btn" data-tab="transactions">Transactions</button>
-  <button class="tab-btn" data-tab="settings">Settings</button>
-</nav>
+    <h2 style="margin-top:20px;">Pending Withdraws</h2>
+    <div id="pendingWithdraws"></div>
 
-<!-- DASHBOARD TAB -->
-<section id="dashboard" class="tab-content active">
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">Total Users</div>
-      <div class="stat-value" id="totalUsers">0</div>
+    <div style="margin-top:20px;padding:12px;border:1px solid #ccc;border-radius:10px;">
+      <h3>Forced Winner (Next Round)</h3>
+      <select id="forcedWinner">
+        <option value="">Auto Random</option>
+        <option value="RED">RED</option>
+        <option value="GREEN">GREEN</option>
+        <option value="VIOLET">VIOLET</option>
+      </select>
+      <button onclick="setForcedWinner()">Update</button>
+      <p id="forcedWinnerStatus"></p>
     </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Deposits</div>
-      <div class="stat-value green">₹<span id="totalDeposits">0</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Withdrawals</div>
-      <div class="stat-value red">₹<span id="totalWithdrawals">0</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Wallet</div>
-      <div class="stat-value">₹<span id="totalWallet">0</span></div>
-    </div>
-    <div class="stat-card highlight">
-      <div class="stat-label">Total Profit</div>
-      <div class="stat-value">₹<span id="totalProfit">0</span></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total Rounds</div>
-      <div class="stat-value" id="totalRounds">0</div>
+
+    <div style="margin-top:10px;">
+      <button onclick="location.href='admin-audit.html'">View Audit Logs</button>
+      <button onclick="location.href='admin-users.html'">User Search</button>
+      <button onclick="location.href='admin-reports.html'">Reports</button>
+      <button onclick="location.href='admin-house-stats.html'">House Profit</button>
+      <button onclick="location.href='admin-probabilities.html'">Probability Control</button>
     </div>
   </div>
 
-  <!-- GAME CONTROLS -->
-  <div class="card">
-    <h3>Game Controls</h3>
-    <div class="controls-grid">
-      <button class="control-btn" onclick="pauseGame()">⏸ Pause Game</button>
-      <button class="control-btn" onclick="resumeGame()">▶ Resume Game</button>
-      <button class="control-btn" onclick="refreshStats()">🔄 Refresh Stats</button>
-    </div>
-  </div>
-
-  <!-- RECENT ACTIVITY -->
-  <div class="card">
-    <h3>Recent Activity</h3>
-    <div id="recentActivity"></div>
-  </div>
-</section>
-
-<!-- USERS TAB -->
-<section id="users" class="tab-content">
-  <div class="card">
-    <h3>User Management</h3>
-    <input type="text" id="userSearch" placeholder="Search by mobile..." class="search-input" />
-    <div id="usersList" class="data-table"></div>
-  </div>
-</section>
-
-<!-- DEPOSITS TAB -->
-<section id="deposits" class="tab-content">
-  <div class="card">
-    <h3>Deposit Requests</h3>
-    <div class="filter-tabs">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="PENDING">Pending</button>
-      <button class="filter-btn" data-filter="SUCCESS">Approved</button>
-      <button class="filter-btn" data-filter="FAILED">Rejected</button>
-    </div>
-    <div id="depositsList"></div>
-  </div>
-</section>
-
-<!-- WITHDRAWALS TAB -->
-<section id="withdrawals" class="tab-content">
-  <div class="card">
-    <h3>Withdrawal Requests</h3>
-    <div class="filter-tabs">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="PENDING">Pending</button>
-      <button class="filter-btn" data-filter="APPROVED">Approved</button>
-      <button class="filter-btn" data-filter="REJECTED">Rejected</button>
-    </div>
-    <div id="withdrawalsList"></div>
-  </div>
-</section>
-
-<!-- TRANSACTIONS TAB -->
-<section id="transactions" class="tab-content">
-  <div class="card">
-    <h3>All Transactions</h3>
-    <div class="filter-tabs">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="deposits">Deposits</button>
-      <button class="filter-btn" data-filter="withdrawals">Withdrawals</button>
-      <button class="filter-btn" data-filter="bets">Bets</button>
-    </div>
-    <button class="export-btn" onclick="exportTransactions()">📥 Export CSV</button>
-    <div id="transactionsList"></div>
-  </div>
-</section>
-
-<!-- SETTINGS TAB -->
-<section id="settings" class="tab-content">
-  <div class="card">
-    <h3>Platform Settings</h3>
-    
-    <div class="setting-group">
-      <label>Minimum Bet Amount</label>
-      <input type="number" id="minBet" value="1" />
-      <button onclick="updateSetting('minBet')">Save</button>
-    </div>
-
-    <div class="setting-group">
-      <label>Maximum Bet Amount</label>
-      <input type="number" id="maxBet" value="10000" />
-      <button onclick="updateSetting('maxBet')">Save</button>
-    </div>
-
-    <div class="setting-group">
-      <label>House Edge (%)</label>
-      <input type="number" id="houseEdge" value="2" step="0.1" />
-      <button onclick="updateSetting('houseEdge')">Save</button>
-    </div>
-
-    <div class="setting-group">
-      <label>Minimum Deposit</label>
-      <input type="number" id="minDeposit" value="100" />
-      <button onclick="updateSetting('minDeposit')">Save</button>
-    </div>
-
-    <div class="setting-group">
-      <label>Minimum Withdrawal</label>
-      <input type="number" id="minWithdraw" value="100" />
-      <button onclick="updateSetting('minWithdraw')">Save</button>
-    </div>
-
-    <div class="setting-group">
-      <label>UPI ID</label>
-      <input type="text" id="upiId" placeholder="admin@upi" />
-      <button onclick="updateSetting('upiId')">Save</button>
-    </div>
-
-    <div class="setting-group">
-      <label>First Deposit Bonus (%)</label>
-      <input type="number" id="bonusPercent" value="100" />
-      <button onclick="updateSetting('bonusPercent')">Save</button>
-    </div>
-  </div>
-</section>
-
-<script src="js/api.js"></script>
-<script src="js/admin.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
 </body>
 </html>
