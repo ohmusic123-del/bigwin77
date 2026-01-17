@@ -2,90 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>BIGWIN • Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div class="container">
+    <h2>Welcome</h2>
 
-<!-- HEADER -->
-<div class="top-bar">
-  <h1>BIGWIN</h1>
-  <button class="logout-btn" onclick="logout()">Logout</button>
-</div>
+    <button onclick="location.href='game.html'">Play Game</button>
+    <button onclick="location.href='wallet.html'">Wallet</button>
+    <button onclick="location.href='profile.html'">Profile</button>
+    <button onclick="location.href='referral.html'">Referral</button>
 
-<!-- PAGE -->
-<div class="page">
-
-  <!-- WALLET CARD -->
-  <div class="card">
-    <div class="card-title">Wallet Balance</div>
-    <div class="amount">₹ <span id="wallet">0</span></div>
-  </div>
-
-<!-- QUICK ACTIONS -->
-  <div class="card">
-    <div class="card-title">Quick Actions</div>
-    <a href="game.html" class="action-btn green">🎮 Play Game</a>
-    <a href="deposit.html" class="action-btn blue">➕ Deposit</a>
-    <a href="withdraw.html" class="action-btn red">⬇ Withdraw</a>
-  </div>
-
-  <!-- ✅ ADD THIS -->
-  <div class="card">
-    <a href="referral.html" style="text-decoration: none;">
-      <div class="action-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
-        🎁 Referral Program
-      </div>
-    </a>
-  </div>
-
-  <!-- ACCOUNT INFO -->
-  <div class="card">
-    <div class="row">
-      <span>Total Wagered</span>
-      <span>₹ <span id="wagered">0</span></span>
+    <div style="margin:15px 0;">
+      <button onclick="location.href='bonus-history.html'">Bonus History</button>
     </div>
 
-    <div class="row">
-      <span>Account</span>
-      <span id="mobile">--</span>
-    </div>
+    <button onclick="logout()">Logout</button>
   </div>
 
-</div>
-
-<!-- BOTTOM NAV -->
-<div class="bottom-nav">
-  <a href="home.html" class="active">Home</a>
-  <a href="game.html">Game</a>
-  <a href="wallet.html">Wallet</a>
-  <a href="profile.html">Profile</a>
-</div>
-
-<!-- SCRIPTS -->
-<script src="js/api.js"></script>
-<script src="js/auth.js"></script>
-<script>
-  async function loadHome() {
-    const res = await fetch(API + "/profile", {
-      headers: { Authorization: localStorage.getItem("token") }
-    });
-
-    const data = await res.json();
-
-    if (data.error) {
-      logout();
-      return;
-    }
-
-    document.getElementById("wallet").innerText = data.wallet;
-    document.getElementById("wagered").innerText = data.totalWagered;
-    document.getElementById("mobile").innerText = data.mobile;
-  }
-
-  loadHome();
-</script>
-
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
 </body>
 </html>
