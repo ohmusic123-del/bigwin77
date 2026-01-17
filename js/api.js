@@ -1,25 +1,53 @@
-async function apiRequest(endpoint, method = "GET", body = null, isAdmin = false) {
-  const tokenKey = isAdmin ? "adminToken" : "token";
-  const token = localStorage.getItem(tokenKey);
+// API Configuration
+const API = "https://color-game-backend1.onrender.com";
 
-  const options = {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token ? `Bearer ${token}` : "",
-    },
+// Helper function to get auth headers
+function getAuthHeaders() {
+  const token = localStorage.getItem('token');
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
   };
+}
 
-  if (body) {
-    options.body = JSON.stringify(body);
+// Helper function to handle API errors
+function handleApiError(error) {
+  console.error('API Error:', error);
+  
+  if (error.message === 'Invalid or expired token') {
+    localStorage.removeItem('token');
+    window.location.href = 'index.html';
   }
+  
+  return error.message || 'An error occurred';
+}
 
-  const res = await fetch(`${API_BASE}${endpoint}`, options);
-  const data = await res.json().catch(() => ({}));
-
-  if (!res.ok) {
-    throw new Error(data.error || "API request failed");
+// Helper function to make authenticated requests
+async function apiRequest(endpoint, options = {}) {
+  const token = localStorage.getItem('token');
+  
+  if (!token && !endpoint.includes('/login') && !endpoint.includes('/register')) {
+    window.location.href = 'index.html';
+    return;
   }
+  
+  const defaultOptions = {
+    headers: token ? getAuthHeaders() : { 'Content-Type': 'application/json' }
+  };
+  
+  const response = await fetch(`${API}${endpoint}`, {
+    ...defaultOptions,
+    ...options,
+    headers: {
+      ...defaultOptions.headers,
+      ...options.headers
+    }
+  });
+  
+  return response;
+}
 
-  return data;
+// Export for use in other files
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { API, getAuthHeaders, handleApiError, apiRequest };
 }
