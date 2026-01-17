@@ -1,21 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Profile</title>
-  <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - BIGWIN</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 28px;
+        }
+
+        .profile-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .profile-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 20px;
+        }
+
+        .profile-mobile {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .profile-code {
+            color: #22c55e;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 8px 20px;
+            background: rgba(34, 197, 94, 0.1);
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .copy-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-card h3 {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .info-value {
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .action-buttons {
+            display: grid;
+            gap: 15px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #22c55e;
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f172a;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #22c55e;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Profile</h2>
-    <button onclick="location.href='home.html'">⬅ Back</button>
+    <div class="container">
+        <div class="header">
+            <h1>👤 My Profile</h1>
+        </div>
 
-    <div class="card">
-      <p>This page is reserved for profile details.</p>
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="profile-icon">👤</div>
+            <div class="profile-mobile" id="userMobile">Loading...</div>
+            <div class="profile-code">
+                <span id="referralCode">Loading...</span>
+                <button class="copy-btn" onclick="copyReferralCode()">Copy</button>
+            </div>
+        </div>
+
+        <!-- Account Info -->
+        <div class="info-card">
+            <h3>💰 Account Information</h3>
+            <div class="info-row">
+                <span class="info-label">Wallet Balance</span>
+                <span class="info-value" id="walletBalance">₹0.00</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Bonus Balance</span>
+                <span class="info-value" id="bonusBalance">₹0.00</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Total Wagered</span>
+                <span class="info-value" id="totalWagered">₹0.00</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Account Status</span>
+                <span class="info-value" style="color: #22c55e">Active</span>
+            </div>
+        </div>
+
+        <!-- Referral Stats -->
+        <div class="info-card">
+            <h3>🎁 Referral Stats</h3>
+            <div class="info-row">
+                <span class="info-label">Total Referrals</span>
+                <span class="info-value" id="totalReferrals">0</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Referral Earnings</span>
+                <span class="info-value" id="referralEarnings">₹0.00</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Team Members</span>
+                <span class="info-value" id="teamMembers">0</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="referral.html" class="action-btn">
+                🎁 View Referral Dashboard
+            </a>
+            <a href="withdraw-method.html" class="action-btn">
+                💳 Withdrawal Method
+            </a>
+            <a href="wallet-history.html" class="action-btn">
+                📜 Transaction History
+            </a>
+            <button class="action-btn logout-btn" onclick="handleLogout()">
+                🚪 Logout
+            </button>
+        </div>
     </div>
-  </div>
 
-  <script src="js/config.js"></script>
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="home.html" class="nav-item">🏠<br>Home</a>
+        <a href="game.html" class="nav-item">🎮<br>Game</a>
+        <a href="wallet.html" class="nav-item">💰<br>Wallet</a>
+        <a href="profile.html" class="nav-item active">👤<br>Profile</a>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Check authentication
+        if (!localStorage.getItem('token')) {
+            window.location.href = 'index.html';
+        }
+
+        // Load profile data
+        async function loadProfile() {
+            try {
+                const token = localStorage.getItem('token');
+                
+                const res = await fetch(`${API}/profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    document.getElementById('userMobile').textContent = data.mobile;
+                    document.getElementById('referralCode').textContent = data.referralCode;
+                    document.getElementById('walletBalance').textContent = `₹${parseFloat(data.wallet || 0).toFixed(2)}`;
+                    document.getElementById('bonusBalance').textContent = `₹${parseFloat(data.bonus || 0).toFixed(2)}`;
+                    document.getElementById('totalWagered').textContent = `₹${parseFloat(data.totalWagered || 0).toFixed(2)}`;
+                }
+            } catch (err) {
+                console.error('Profile load error:', err);
+            }
+        }
+
+        // Load referral stats
+        async function loadReferralStats() {
+            try {
+                const token = localStorage.getItem('token');
+                
+                const res = await fetch(`${API}/referral/info`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    document.getElementById('totalReferrals').textContent = data.totalReferrals || 0;
+                    document.getElementById('referralEarnings').textContent = `₹${parseFloat(data.totalEarnings || 0).toFixed(2)}`;
+                    document.getElementById('teamMembers').textContent = data.allTeamMembers || 0;
+                }
+            } catch (err) {
+                console.error('Referral stats load error:', err);
+            }
+        }
+
+        // Copy referral code
+        function copyReferralCode() {
+            const code = document.getElementById('referralCode').textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                alert('✅ Referral code copied: ' + code);
+            }).catch(() => {
+                // Fallback for older browsers
+                const input = document.createElement('input');
+                input.value = code;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                alert('✅ Referral code copied: ' + code);
+            });
+        }
+
+        // Handle logout
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('token');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Load data
+        loadProfile();
+        loadReferralStats();
+    </script>
 </body>
-</html>
+  </html>
