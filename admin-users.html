@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Users</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Admin User Search</h2>
+    <button onclick="location.href='admin.html'">⬅ Back</button>
+    <button onclick="location.href='admin-user-details.html'">User Details</button>
+
+    <input id="q" placeholder="Search username..." />
+    <button onclick="search()">Search</button>
+
+    <div id="results"></div>
+
+    <h3 style="margin-top:20px;">Update Balance</h3>
+    <input id="userId" placeholder="User ID" />
+    <input id="walletDelta" placeholder="Wallet Delta (ex: 100 or -50)" />
+    <input id="bonusDelta" placeholder="Bonus Delta (ex: 10 or -5)" />
+    <button onclick="updateBalance()">Update</button>
+    <p id="status"></p>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/admin-users.js"></script>
+</body>
+</html>
