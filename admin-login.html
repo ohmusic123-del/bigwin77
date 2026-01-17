@@ -1,25 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Login | BIGWIN</title>
-  <link rel="stylesheet" href="css/admin.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <div class="container">
+    <h2>Admin Login</h2>
 
-  <div class="admin-login">
-    <h2>BIGWIN Admin</h2>
-
-    <input type="text" id="username" placeholder="Admin Username" />
-    <input type="password" id="password" placeholder="Admin Password" />
-
-    <button onclick="adminLogin()">Login</button>
-
-    <p id="error"></p>
+    <div class="card">
+      <input id="username" placeholder="Admin Username" />
+      <input id="password" placeholder="Admin Password" type="password" />
+      <button onclick="adminLogin()">Login</button>
+      <p id="status"></p>
+    </div>
   </div>
 
-  <script src="js/api.js"></script>
+  <script src="js/config.js"></script>
   <script src="js/admin-login.js"></script>
 </body>
 </html>
