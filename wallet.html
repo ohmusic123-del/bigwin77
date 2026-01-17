@@ -1,27 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wallet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Withdraw</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
   <div class="container">
-    <h2>Wallet</h2>
-    <button onclick="location.href='home.html'">⬅ Back</button>
+    <h2>Withdraw</h2>
+    <button onclick="location.href='wallet.html'">⬅ Back</button>
 
     <div class="card">
-      <button onclick="location.href='deposit.html'">Deposit</button>
-      <button onclick="location.href='deposit-history.html'">Deposit History</button>
+      <input type="number" id="amount" placeholder="Enter Amount" />
+      <input type="text" id="upiId" placeholder="Enter UPI ID" />
+      <select id="method">
+        <option value="UPI">UPI</option>
+      </select>
 
-      <button onclick="location.href='withdraw.html'">Withdraw</button>
-      <button onclick="location.href='withdraw-history.html'">Withdraw History</button>
-
-      <button onclick="location.href='wallet-history.html'">Wallet History</button>
+      <button onclick="withdraw()">Withdraw Request</button>
+      <p id="status"></p>
     </div>
   </div>
 
   <script src="js/config.js"></script>
+  <script src="js/withdraw.js"></script>
 </body>
 </html>
