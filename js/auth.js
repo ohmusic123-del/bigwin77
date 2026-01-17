@@ -1,105 +1,54 @@
-const API = "https://color-game-backend1.onrender.com";
+async function register() {
+  const username = document.getElementById("registerUsername").value;
+  const password = document.getElementById("registerPassword").value;
 
-// Check authentication on page load
-document.addEventListener('DOMContentLoaded', function() {
-    const token = localStorage.getItem('token');
-    const currentPage = window.location.pathname;
-    
-    // Pages that don't require authentication
-    const publicPages = ['index.html', 'admin-login.html'];
-    const isPublicPage = publicPages.some(page => currentPage.includes(page));
-    
-    // If no token and not on public page, redirect to login
-    if (!token && !isPublicPage) {
-        window.location.href = 'index.html';
-        return;
-    }
-    
-    // If has token and on login page, redirect to home
-    if (token && currentPage.includes('index.html')) {
-        window.location.href = 'home.html';
-    }
-});
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
 
-// Enhanced login function
-async function login(mobile, password) {
-    if (!mobile || !password) {
-        throw new Error('Mobile and password required');
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Registration failed");
+      return;
     }
-    
-    try {
-        const response = await fetch(`${API}/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mobile, password })
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-            throw new Error(data.error || 'Login failed');
-        }
-        
-        // Store token
-        localStorage.setItem('token', data.token);
-        
-        // Redirect to home
-        window.location.href = 'home.html';
-        
-        return data;
-        
-    } catch (error) {
-        console.error('Login error:', error);
-        throw error;
-    }
+
+    alert("Registered successfully ✅ Now login");
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
 }
 
-// Enhanced register function
-async function register(mobile, password, referralCode = '') {
-    if (!mobile || !password) {
-        throw new Error('Mobile and password required');
+async function login() {
+  const username = document.getElementById("loginUsername").value;
+  const password = document.getElementById("loginPassword").value;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Login failed");
+      return;
     }
-    
-    try {
-        const payload = { mobile, password };
-        if (referralCode) {
-            payload.referralCode = referralCode;
-        }
-        
-        const response = await fetch(`${API}/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        
-        const data = await response.json();
-        
-        if (!response.ok) {
-            throw new Error(data.error || 'Registration failed');
-        }
-        
-        return data;
-        
-    } catch (error) {
-        console.error('Register error:', error);
-        throw error;
-    }
+
+    localStorage.setItem("token", data.token);
+    alert("Login successful ✅");
+    window.location.href = "home.html";
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
 }
 
-// Logout function
 function logout() {
-    localStorage.removeItem('token');
-    window.location.href = 'index.html';
+  localStorage.removeItem("token");
+  window.location.href = "index.html";
 }
-
-// Admin logout
-function adminLogout() {
-    localStorage.removeItem('adminToken');
-    window.location.href = 'admin-login.html';
-}
-
-// Expose functions globally
-window.login = login;
-window.register = register;
-window.logout = logout;
-window.adminLogout = adminLogout;
