@@ -1,25 +1,409 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deposit</title>
-  <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit - BIGWIN</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bonus-banner {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .bonus-banner h3 {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .bonus-banner p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #22c55e;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .quick-amounts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .quick-btn {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #22c55e;
+        }
+
+        .upi-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .upi-section h4 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .upi-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .upi-icon {
+            font-size: 32px;
+        }
+
+        .upi-details {
+            flex: 1;
+        }
+
+        .upi-id {
+            color: #22c55e;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .upi-name {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+        }
+
+        .copy-upi-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-box ul {
+            margin: 10px 0;
+            padding-left: 20px;
+            color: #60a5fa;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f172a;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .nav-item.active {
+            color: #22c55e;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Deposit</h2>
-    <button onclick="location.href='wallet.html'">⬅ Back</button>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="window.location.href='wallet.html'">←</button>
+            <h1>Deposit Funds</h1>
+        </div>
 
-    <div class="card">
-      <input type="number" id="amount" placeholder="Enter Amount" />
-      <input type="text" id="referenceId" placeholder="Enter UTR / Reference ID" />
-      <button onclick="deposit()">Submit Deposit Request</button>
-      <p id="status"></p>
+        <!-- Bonus Banner -->
+        <div class="bonus-banner">
+            <h3>🎁 100% First Deposit Bonus!</h3>
+            <p>Deposit ₹100, Get ₹200 Total Balance</p>
+        </div>
+
+        <div class="card">
+            <!-- Amount Input -->
+            <form id="depositForm" onsubmit="handleDeposit(event)">
+                <div class="form-group">
+                    <label>Deposit Amount</label>
+                    <input 
+                        type="number" 
+                        id="depositAmount" 
+                        placeholder="Enter amount (Min: ₹100)"
+                        min="100"
+                        required
+                    >
+                    <div class="quick-amounts">
+                        <button type="button" class="quick-btn" onclick="setAmount(100)">₹100</button>
+                        <button type="button" class="quick-btn" onclick="setAmount(500)">₹500</button>
+                        <button type="button" class="quick-btn" onclick="setAmount(1000)">₹1000</button>
+                        <button type="button" class="quick-btn" onclick="setAmount(5000)">₹5000</button>
+                    </div>
+                </div>
+
+                <!-- UPI Section -->
+                <div class="upi-section">
+                    <h4>💳 Pay via UPI</h4>
+                    <div class="upi-info">
+                        <div class="upi-icon">📱</div>
+                        <div class="upi-details">
+                            <div class="upi-id">bigwin@paytm</div>
+                            <div class="upi-name">BIGWIN Games</div>
+                        </div>
+                        <button type="button" class="copy-upi-btn" onclick="copyUPI()">Copy</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label>UTR / Reference Number</label>
+                        <input 
+                            type="text" 
+                            id="referenceId" 
+                            placeholder="Enter 12-digit UTR number"
+                            maxlength="12"
+                        >
+                    </div>
+                </div>
+
+                <!-- Info Box -->
+                <div class="info-box">
+                    <ul>
+                        <li>Minimum deposit: ₹100</li>
+                        <li>Payment via UPI (Google Pay, PhonePe, Paytm)</li>
+                        <li>Instant credit after verification</li>
+                        <li>First deposit gets 100% bonus</li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="btn-primary" id="depositBtn">
+                    Submit Deposit
+                </button>
+            </form>
+        </div>
     </div>
-  </div>
 
-  <script src="js/config.js"></script>
-  <script src="js/deposit.js"></script>
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="home.html" class="nav-item">🏠<br>Home</a>
+        <a href="game.html" class="nav-item">🎮<br>Game</a>
+        <a href="wallet.html" class="nav-item active">💰<br>Wallet</a>
+        <a href="profile.html" class="nav-item">👤<br>Profile</a>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Check authentication
+        if (!localStorage.getItem('token')) {
+            window.location.href = 'index.html';
+        }
+
+        // Set amount
+        function setAmount(value) {
+            document.getElementById('depositAmount').value = value;
+        }
+
+        // Copy UPI
+        function copyUPI() {
+            const upiId = 'bigwin@paytm';
+            
+            navigator.clipboard.writeText(upiId).then(() => {
+                alert('✅ UPI ID copied: ' + upiId);
+            }).catch(() => {
+                // Fallback
+                const input = document.createElement('input');
+                input.value = upiId;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                alert('✅ UPI ID copied: ' + upiId);
+            });
+        }
+
+        // Handle deposit
+        async function handleDeposit(e) {
+            e.preventDefault();
+
+            const amount = parseInt(document.getElementById('depositAmount').value);
+            const referenceId = document.getElementById('referenceId').value.trim();
+
+            if (!amount || amount < 100) {
+                alert('❌ Minimum deposit is ₹100');
+                return;
+            }
+
+            const depositBtn = document.getElementById('depositBtn');
+            depositBtn.disabled = true;
+            depositBtn.textContent = 'Processing...';
+
+            try {
+                const token = localStorage.getItem('token');
+                
+                const res = await fetch(`${API}/deposit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ 
+                        amount,
+                        referenceId 
+                    })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert(`✅ Deposit successful!\n\nAmount: ₹${amount}\nNew Balance: ₹${data.newWallet}\n\nFunds added to your wallet!`);
+                    
+                    // Redirect to wallet
+                    setTimeout(() => {
+                        window.location.href = 'wallet.html';
+                    }, 1000);
+                } else {
+                    alert('❌ ' + data.error);
+                    depositBtn.disabled = false;
+                    depositBtn.textContent = 'Submit Deposit';
+                }
+
+            } catch (err) {
+                console.error('Deposit error:', err);
+                alert('❌ Network error. Please try again.');
+                depositBtn.disabled = false;
+                depositBtn.textContent = 'Submit Deposit';
+            }
+        }
+    </script>
 </body>
 </html>
