@@ -1,8 +1,12 @@
 async function register() {
-  const username = document.getElementById("registerUsername").value;
-  const password = document.getElementById("registerPassword").value;
-console.log("REGISTER URL =>", `${API_BASE}/api/auth/register`);
-alert(`${API_BASE}/api/auth/register`);
+  const username = document.getElementById("registerUsername").value.trim();
+  const password = document.getElementById("registerPassword").value.trim();
+
+  if (!username || !password) {
+    alert("Enter username and password");
+    return;
+  }
+
   try {
     const res = await fetch(`${API_BASE}/api/auth/register`, {
       method: "POST",
@@ -10,32 +14,30 @@ alert(`${API_BASE}/api/auth/register`);
       body: JSON.stringify({ username, password }),
     });
 
-    // ✅ Safe JSON parsing
-    const text = await res.text();
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      alert("❌ Backend not JSON (Register): " + text.substring(0, 120));
-      return;
-    }
+    const data = await res.json();
 
     if (!res.ok) {
       alert(data.error || "Registration failed");
       return;
     }
 
-    alert("✅ Registered successfully. Now login");
+    alert("✅ Registered successfully! Now login.");
+    document.getElementById("loginUsername").value = username;
+    document.getElementById("loginPassword").value = password;
   } catch (err) {
-    alert("Error: " + err.message);
+    alert("❌ Error: " + err.message);
   }
 }
 
 async function login() {
-  const username = document.getElementById("loginUsername").value;
-  const password = document.getElementById("loginPassword").value;
-console.log("LOGIN URL =>", `${API_BASE}/api/auth/login`);
-alert(`${API_BASE}/api/auth/login`);
+  const username = document.getElementById("loginUsername").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  if (!username || !password) {
+    alert("Enter username and password");
+    return;
+  }
+
   try {
     const res = await fetch(`${API_BASE}/api/auth/login`, {
       method: "POST",
@@ -43,15 +45,7 @@ alert(`${API_BASE}/api/auth/login`);
       body: JSON.stringify({ username, password }),
     });
 
-    // ✅ Safe JSON parsing
-    const text = await res.text();
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      alert("❌ Backend not JSON (Login): " + text.substring(0, 120));
-      return;
-    }
+    const data = await res.json();
 
     if (!res.ok) {
       alert(data.error || "Login failed");
@@ -62,7 +56,7 @@ alert(`${API_BASE}/api/auth/login`);
     alert("✅ Login successful!");
     window.location.href = "home.html";
   } catch (err) {
-    alert("Error: " + err.message);
+    alert("❌ Error: " + err.message);
   }
 }
 
