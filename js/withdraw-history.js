@@ -1,44 +1,42 @@
-const withdrawHistory = document.getElementById("withdrawHistory");
+const token = localStorage.getItem("token");
+if (!token) window.location.href = "index.html";
 
 async function loadWithdrawHistory() {
-  try {
-    const token = localStorage.getItem("token");
+  const div = document.getElementById("history");
+  div.innerHTML = "Loading...";
 
-    const res = await fetch(`${API}/wallet/withdraw-history`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  try {
+    const res = await fetch(`${API_BASE}/api/wallet/history`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     const data = await res.json();
 
-    if (!data || data.length === 0) {
-      withdrawHistory.innerHTML = "<p class='empty'>No withdrawals found</p>";
+    if (!res.ok) {
+      div.innerHTML = data.error || "Failed";
       return;
     }
 
-    withdrawHistory.innerHTML = "";
+    const withdraws = data.withdraws || [];
+    if (!withdraws.length) {
+      div.innerHTML = "<p>No withdraws found ✅</p>";
+      return;
+    }
 
-    data.forEach(item => {
-      const row = document.createElement("div");
-      row.className = "history-row";
-
-      row.innerHTML = `
-        <div>
-          <strong>WITHDRAW</strong>
-          <div class="date">${new Date(item.createdAt).toLocaleString()}</div>
-        </div>
-        <div class="withdraw">
-          ₹ ${item.amount}
-        </div>
-      `;
-
-      withdrawHistory.appendChild(row);
-    });
-
-  } catch (err) {
-    withdrawHistory.innerHTML =
-      "<p class='error'>Failed to load withdraw history</p>";
+    div.innerHTML = withdraws
+      .map(
+        (w) => `
+      <div class="card">
+        <p><b>Amount:</b> ₹${w.amount}</p>
+        <p><b>Status:</b> ${w.status}</p>
+        <p><b>Method:</b> ${w.method}</p>
+        <p><b>UPI:</b> ${w.upiId}</p>
+      </div>
+    `
+      )
+      .join("");
+  } catch (e) {
+    div.innerHTML = e.message;
   }
 }
 
