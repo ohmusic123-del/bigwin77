@@ -557,43 +557,60 @@
             document.getElementById('balanceDisplay').textContent = `₹${userBalance.toFixed(2)}`;
         }
 
-        // Load current round
-        async function loadCurrentRound() {
-            try {
-                const res = await fetch(`${API}/round/current`);
-                const data = await res.json();
-                
-                currentRound = data;
-                document.getElementById('roundId').textContent = data.id.slice(-6);
-            } catch (err) {
-                console.error('Round load error:', err);
-            }
+        // Load current round - FIXED
+async function loadCurrentRound() {
+  try {
+    const res = await fetch(`${API}/round/current`);
+    const data = await res.json();
+    
+    currentRound = data;
+    document.getElementById('roundId').textContent = data.id.slice(-6);
+    
+     // Enable betting if time remaining
+    if (data.remaining > 3) {
+      document.getElementById('redBtn').disabled = false;
+      document.getElementById('greenBtn').disabled = false;
+    }
+  } catch (err) {
+    console.error('Round load error:', err);
+    // Retry after 2 seconds
+    setTimeout(loadCurrentRound, 2000);
+  }
+        }  
+        
+        // Update timer - FIXED
+function updateTimer() {
+  if (!currentRound) {
+    loadCurrentRound();
+    return;
+  }
+  
+  const elapsed = Math.floor((Date.now() - currentRound.startTime) / 1000);
+  const remaining = Math.max(0, 60 - elapsed);
+  
+  document.getElementById('timerCircle').textContent = remaining;
+  document.getElementById('timeLeft').textContent = `${remaining}s`;
+  
+  // Disable betting in last 3 seconds
+  if (remaining <= 3 || hasBetThisRound) {
+    document.getElementById('redBtn').disabled = true;
+    document.getElementById('greenBtn').disabled = true;
+  }
+  
+  // Round ended - reset
+  if (remaining === 0 && !hasBetThisRound) {
+    setTimeout(() => {
+      resetForNewRound();
+    }, 3000);
+  }
         }
+        // Start timer
+setInterval(updateTimer, 1000);
 
-        // Update timer
-        function updateTimer() {
-            if (!currentRound) return;
-            
-            const elapsed = Math.floor((Date.now() - currentRound.startTime) / 1000);
-            const remaining = Math.max(0, 60 - elapsed);
-            
-            document.getElementById('timerCircle').textContent = remaining;
-            document.getElementById('timeLeft').textContent = `${remaining}s`;
-            
-            // Disable betting in last 3 seconds
-            if (remaining <= 3) {
-                document.getElementById('redBtn').disabled = true;
-                document.getElementById('greenBtn').disabled = true;
-            }
-            
-            // Round ended
-            if (remaining === 0) {
-                setTimeout(() => {
-                    resetForNewRound();
-                }, 2000);
-            }
-        }
-
+// Initialize
+loadCurrentRound();
+loadBalance();
+loadResults();
         // Reset for new round
         function resetForNewRound() {
             hasBetThisRound = false;
