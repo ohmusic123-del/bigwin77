@@ -238,7 +238,7 @@
   </div>
 
   <script>
-    const API = "https://color-game-backend1.onrender.com";
+    const API = "https://color-game-backend1-v0fz.onrender.com";
     const token = localStorage.getItem('token');
     
     if (!token) {
@@ -249,6 +249,7 @@
     let balance = 0;
     let hasBet = false;
     let currentTab = 'results';
+    let lastRoundId = null;
 
     function setAmount(val) {
       document.getElementById('betAmount').value = val;
@@ -316,7 +317,20 @@
       try {
         const res = await fetch(`${API}/round/current`);
         const data = await res.json();
+        
+        // Check if new round started
+        if (currentRound && data.id !== currentRound.id) {
+          console.log('New round started:', data.id);
+          hasBet = false;
+          
+          // Force refresh results when round changes
+          if (currentTab === 'results') {
+            loadResults();
+          }
+        }
+        
         currentRound = data;
+        lastRoundId = data.id;
         document.getElementById('roundId').textContent = data.id.toString().slice(-6);
       } catch (err) {
         console.error('Round error:', err);
@@ -341,12 +355,14 @@
         document.getElementById('greenBtn').disabled = false;
       }
       
+      // When round ends, refresh everything
       if (remaining === 0) {
         setTimeout(() => {
           hasBet = false;
           loadRound();
           loadBalance();
           if (currentTab === 'results') loadResults();
+          if (currentTab === 'mybets') loadMyBets();
         }, 3000);
       }
     }
@@ -355,13 +371,28 @@
       try {
         const res = await fetch(`${API}/rounds/history`);
         const data = await res.json();
-        document.getElementById('resultsList').innerHTML = data.map(r => `
-          <div class="result-item">
-            <span>Round ${r.roundId.slice(-6)}</span>
-            <span style="color:${r.winner==='red'?'#ef4444':'#22c55e'}">${r.winner?.toUpperCase()||'PENDING'}</span>
-          </div>
-        `).join('');
+        
+        console.log('Round history loaded:', data); // Debug log
+        
+        document.getElementById('resultsList').innerHTML = data.map(r => {
+          // Determine winner display
+          let winnerText = 'PENDING';
+          let winnerColor = '#fbbf24'; // Yellow for pending
+          
+          if (r.winner) {
+            winnerText = r.winner.toUpperCase();
+            winnerColor = r.winner === 'red' ? '#ef4444' : '#22c55e';
+          }
+          
+          return `
+            <div class="result-item">
+              <span>Round ${r.roundId.toString().slice(-6)}</span>
+              <span style="color:${winnerColor}; font-weight: bold;">${winnerText}</span>
+            </div>
+          `;
+        }).join('');
       } catch (err) {
+        console.error('Results error:', err);
         document.getElementById('resultsList').innerHTML = 'Failed to load';
       }
     }
@@ -372,13 +403,27 @@
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
-        document.getElementById('resultsList').innerHTML = data.length ? data.map(b => `
-          <div class="result-item">
-            <span>${b.color.toUpperCase()} • ₹${b.amount}</span>
-            <span style="color:${b.status==='WON'?'#22c55e':'#ef4444'}">${b.status}</span>
-          </div>
-        `).join('') : 'No bets yet';
+        
+        console.log('My bets loaded:', data); // Debug log
+        
+        document.getElementById('resultsList').innerHTML = data.length ? data.map(b => {
+          let statusColor = '#fbbf24'; // Yellow for pending
+          
+          if (b.status === 'WON') {
+            statusColor = '#22c55e';
+          } else if (b.status === 'LOST') {
+            statusColor = '#ef4444';
+          }
+          
+          return `
+            <div class="result-item">
+              <span>${b.color.toUpperCase()} • ₹${b.amount}</span>
+              <span style="color:${statusColor}; font-weight: bold;">${b.status}</span>
+            </div>
+          `;
+        }).join('') : '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">No bets yet</div>';
       } catch (err) {
+        console.error('My bets error:', err);
         document.getElementById('resultsList').innerHTML = 'Failed to load';
       }
     }
@@ -396,7 +441,21 @@
     loadBalance();
     loadRound();
     loadResults();
+    
+    // Update timer every second
     setInterval(updateTimer, 1000);
+    
+    // Auto-refresh results every 5 seconds to catch updates
+    setInterval(() => {
+      if (currentTab === 'results') {
+        loadResults();
+      } else if (currentTab === 'mybets') {
+        loadMyBets();
+      }
+    }, 5000);
+    
+    // Also refresh round data every 5 seconds to detect new rounds
+    setInterval(loadRound, 5000);
   </script>
 </body>
 </html>
