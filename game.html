@@ -238,10 +238,16 @@
   </div>
 
   <script>
+    // IMPORTANT: Update this to your actual backend URL
     const API = "https://color-game-backend1-v0fz.onrender.com";
     const token = localStorage.getItem('token');
     
+    console.log('🚀 Game page loaded');
+    console.log('📡 API URL:', API);
+    console.log('🔑 Token:', token ? 'Present' : 'Missing');
+    
     if (!token) {
+      console.error('❌ No token found, redirecting to login');
       window.location.href = 'index.html';
     }
 
@@ -315,12 +321,23 @@
 
     async function loadRound() {
       try {
+        console.log('🔄 Loading round data from:', `${API}/round/current`);
+        
         const res = await fetch(`${API}/round/current`);
+        
+        console.log('📥 Response status:', res.status);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+        }
+        
         const data = await res.json();
+        
+        console.log('✅ Round data received:', data);
         
         // Check if new round started
         if (currentRound && data.id !== currentRound.id) {
-          console.log('New round started:', data.id);
+          console.log('🆕 New round started:', data.id);
           hasBet = false;
           
           // Force refresh results when round changes
@@ -332,9 +349,16 @@
         currentRound = data;
         lastRoundId = data.id;
         document.getElementById('roundId').textContent = data.id.toString().slice(-6);
+        
+        console.log('✅ Round loaded successfully');
+        
       } catch (err) {
-        console.error('Round error:', err);
-        setTimeout(loadRound, 2000);
+        console.error('❌ Round loading error:', err);
+        document.getElementById('roundId').textContent = 'Error';
+        
+        // Retry after 5 seconds
+        console.log('⏳ Retrying in 5 seconds...');
+        setTimeout(loadRound, 5000);
       }
     }
 
