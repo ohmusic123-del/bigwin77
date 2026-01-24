@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Users Management - BIGWIN Admin</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
+            min-height: 100vh;
+            color: white;
+            padding-bottom: 80px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn-create {
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.4);
+        }
+
+        .monitor-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .monitor-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .monitor-card:hover {
+            transform: translateY(-5px);
+            border-color: #22c55e;
+        }
+
+        .monitor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .monitor-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .monitor-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .monitor-details h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .monitor-username {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        .monitor-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status-active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .monitor-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-disable {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-enable {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #22c55e;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .activity-log {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .activity-time {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="admin-header" style="background: #0f172a; padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div class="container">
+            <div class="header">
+                <h1>👥 Monitor Users Management</h1>
+                <a href="admin-dashboard.html" class="back-btn">← Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <button class="btn-create" onclick="openCreateModal()">
+                ➕ Create New Monitor User
+            </button>
+        </div>
+
+        <!-- Monitor Users Grid -->
+        <div class="monitor-grid" id="monitorUsersGrid">
+            <!-- Will be populated by JavaScript -->
+            <div style="text-align: center; padding: 40px; color: rgba(255,255,255,0.5);">
+                Loading monitor users...
+            </div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="activity-log">
+            <h3 style="margin-bottom: 20px;">📊 Recent Monitor Activity</h3>
+            <div id="activityLog">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Modal -->
+    <div class="modal" id="monitorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Create Monitor User</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <form id="monitorForm" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+                <div class="form-group">
+                    <label>Display Name</label>
+                    <input type="text" id="displayName" placeholder="Enter display name" required>
+                </div>
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    Create Monitor User
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API = "https://color-game-backend1.onrender.com";
+        let monitorUsers = [];
+        let editingId = null;
+
+        // Check admin auth
+        if (!localStorage.getItem('adminToken')) {
+            window.location.href = 'admin-login.html';
+        }
+
+        function getAdminHeaders() {
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('adminToken')
+            };
+        }
+
+        // Load monitor users
+        async function loadMonitorUsers() {
+            try {
+                const res = await fetch(`${API}/admin/monitor-users`, {
+                    headers: getAdminHeaders()
+                });
+                const data = await res.json();
+                monitorUsers = data;
+                displayMonitorUsers();
+            } catch (err) {
+                console.error('Load error:', err);
+                alert('Failed to load monitor users');
+            }
+        }
+
+        // Display monitor users
+        function displayMonitorUsers() {
+            const grid = document.getElementById('monitorUsersGrid');
+            
+            if (monitorUsers.length === 0) {
+                grid.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: rgba(255,255,255,0.5);">
+                        No monitor users yet. Create one to get started!
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = monitorUsers.map(user => `
+                <div class="monitor-card">
+                    <div class="monitor-header">
+                        <div class="monitor-info">
+                            <div class="monitor-icon">👁️</div>
+                            <div class="monitor-details">
+                                <h3>${user.displayName || user.username}</h3>
+                                <p class="monitor-username">@${user.username}</p>
+                            </div>
+                        </div>
+                        <span class="status-badge ${user.active ? 'status-active' : 'status-inactive'}">
+                            ${user.active ? 'Active' : 'Inactive'}
+                        </span>
+                    </div>
+
+                    <div class="monitor-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Total Logins</div>
+                            <div class="stat-value">${user.totalLogins || 0}</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Last Login</div>
+                            <div class="stat-value" style="font-size: 14px;">
+                                ${user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Never'}
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Created</div>
+                            <div class="stat-value" style="font-size: 14px;">
+                                ${new Date(user.createdAt).toLocaleDateString()}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="monitor-actions">
+                        <button class="btn-action btn-edit" onclick="editMonitorUser('${user._id}')">
+                            ✏️ Edit
+                        </button>
+                        ${user.active ? `
+                            <button class="btn-action btn-disable" onclick="toggleMonitorUser('${user._id}', false)">
+                                🚫 Disable
+                            </button>
+                        ` : `
+                            <button class="btn-action btn-enable" onclick="toggleMonitorUser('${user._id}', true)">
+                                ✅ Enable
+                            </button>
+                        `}
+                        <button class="btn-action btn-delete" onclick="deleteMonitorUser('${user._id}')">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load activity log
+        async function loadActivityLog() {
+            try {
+                const res = await fetch(`${API}/admin/monitor-activity`, {
+                    headers: getAdminHeaders()
+                });
+                const data = await res.json();
+                
+                const logDiv = document.getElementById('activityLog');
+                if (data.length === 0) {
+                    logDiv.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.5);">No activity yet</p>';
+                    return;
+                }
+
+                logDiv.innerHTML = data.slice(0, 10).map(activity => `
+                    <div class="activity-item">
+                        <div>
+                            <strong>${activity.username}</strong> ${activity.action}
+                        </div>
+                        <div class="activity-time">${new Date(activity.timestamp).toLocaleString()}</div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Activity log error:', err);
+            }
+        }
+
+        // Open create modal
+        function openCreateModal() {
+            editingId = null;
+            document.getElementById('modalTitle').textContent = 'Create Monitor User';
+            document.getElementById('submitBtn').textContent = 'Create Monitor User';
+            document.getElementById('monitorForm').reset();
+            document.getElementById('monitorModal').classList.add('active');
+        }
+
+        // Edit monitor user
+        function editMonitorUser(id) {
+            const user = monitorUsers.find(u => u._id === id);
+            if (!user) return;
+
+            editingId = id;
+            document.getElementById('modalTitle').textContent = 'Edit Monitor User';
+            document.getElementById('submitBtn').textContent = 'Update Monitor User';
+            document.getElementById('username').value = user.username;
+            document.getElementById('displayName').value = user.displayName || '';
+            document.getElementById('password').value = '';
+            document.getElementById('password').placeholder = 'Leave blank to keep current password';
+            document.getElementById('monitorModal').classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('monitorModal').classList.remove('active');
+        }
+
+        // Handle form submit
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const displayName = document.getElementById('displayName').value.trim();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+
+            try {
+                const url = editingId 
+                    ? `${API}/admin/monitor-user/${editingId}`
+                    : `${API}/admin/monitor-user`;
+                
+                const method = editingId ? 'PUT' : 'POST';
+
+                const body = { username, displayName };
+                if (password) body.password = password;
+
+                const res = await fetch(url, {
+                    method,
+                    headers: getAdminHeaders(),
+                    body: JSON.stringify(body)
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert('✅ ' + (editingId ? 'Updated' : 'Created') + ' successfully!');
+                    closeModal();
+                    loadMonitorUsers();
+                    loadActivityLog();
+                } else {
+                    alert('⚠️ ' + (data.error || 'Operation failed'));
+                }
+            } catch (err) {
+                console.error('Submit error:', err);
+                alert('⚠️ Network error');
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = editingId ? 'Update Monitor User' : 'Create Monitor User';
+        }
+
+        // Toggle monitor user active status
+        async function toggleMonitorUser(id, active) {
+            if (!confirm(`${active ? 'Enable' : 'Disable'} this monitor user?`)) return;
+
+            try {
+                const res = await fetch(`${API}/admin/monitor-user/${id}/toggle`, {
+                    method: 'POST',
+                    headers: getAdminHeaders(),
+                    body: JSON.stringify({ active })
+                });
+
+                if (res.ok) {
+                    alert('✅ Status updated!');
+                    loadMonitorUsers();
+                    loadActivityLog();
+                } else {
+                    alert('⚠️ Failed to update status');
+                }
+            } catch (err) {
+                console.error('Toggle error:', err);
+                alert('⚠️ Network error');
+            }
+        }
+
+        // Delete monitor user
+        async function deleteMonitorUser(id) {
+            if (!confirm('⚠️ Delete this monitor user? This action cannot be undone!')) return;
+
+            try {
+                const res = await fetch(`${API}/admin/monitor-user/${id}`, {
+                    method: 'DELETE',
+                    headers: getAdminHeaders()
+                });
+
+                if (res.ok) {
+                    alert('✅ Monitor user deleted!');
+                    loadMonitorUsers();
+                    loadActivityLog();
+                } else {
+                    alert('⚠️ Failed to delete');
+           
