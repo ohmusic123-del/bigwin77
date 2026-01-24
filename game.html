@@ -252,7 +252,7 @@
   </div>
 
   <script>
-    // 🔧 CRITICAL: UPDATE THIS TO YOUR ACTUAL BACKEND URL FROM RENDER
+    // UPDATE THIS TO YOUR RENDER URL
     const API = "https://color-game-backend1.onrender.com";
     
     const token = localStorage.getItem('token');
@@ -362,16 +362,14 @@
           hasBet = false;
           setTimeout(() => {
             if (currentTab === 'results') loadResults();
+            if (currentTab === 'mybets') loadMyBets();
           }, 2000);
         }
         
         currentRound = data;
         
-        // Display round ID (show last 6 digits for readability)
-        const roundIdDisplay = data.id.toString().length > 8 
-          ? data.id.toString().slice(-6) 
-          : data.id.toString();
-        document.getElementById('roundId').textContent = roundIdDisplay;
+        // Display the ACTUAL round ID from server
+        document.getElementById('roundId').textContent = data.id;
         
       } catch (err) {
         console.error('Round error:', err);
@@ -409,6 +407,7 @@
           loadRound();
           loadBalance();
           if (currentTab === 'results') loadResults();
+          if (currentTab === 'mybets') loadMyBets();
         }, 3000);
       }
     }
@@ -421,16 +420,13 @@
         
         const data = await res.json();
         
-        // Filter to only show completed rounds
-        const completedRounds = data.filter(r => r.winner !== null);
-        
-        if (completedRounds.length === 0) {
+        if (!data || data.length === 0) {
           document.getElementById('resultsList').innerHTML = 
             '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">No completed rounds yet</div>';
           return;
         }
         
-        document.getElementById('resultsList').innerHTML = completedRounds.map(r => {
+        document.getElementById('resultsList').innerHTML = data.map(r => {
           const winnerText = r.winner.toUpperCase();
           const winnerColor = r.winner === 'red' ? '#ef4444' : '#22c55e';
           
@@ -469,7 +465,10 @@
           
           return `
             <div class="result-item">
-              <span>${b.color.toUpperCase()} • ₹${b.amount}</span>
+              <div>
+                <div>${b.color.toUpperCase()} • ₹${b.amount}</div>
+                <div style="font-size: 12px; color: rgba(255,255,255,0.5);">Round ${b.roundId}</div>
+              </div>
               <span style="color:${statusColor}; font-weight: bold;">${b.status}</span>
             </div>
           `;
