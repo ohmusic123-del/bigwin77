@@ -281,51 +281,60 @@
       document.getElementById('betAmount').value = val;
     }
 
-    async function placeBet(color) {
-      const amount = parseInt(document.getElementById('betAmount').value);
-      
-      if (amount < 1) {
-        alert('Minimum bet is ₹1');
-        return;
-      }
-
-      if (hasBet) {
-        alert('Already placed bet this round');
-        return;
-      }
-
-      document.getElementById('redBtn').disabled = true;
-      document.getElementById('greenBtn').disabled = true;
-
-      try {
-        const res = await fetch(`${API}/bet`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ color, amount })
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-          alert(`✅ Bet placed!\n₹${amount} on ${color.toUpperCase()}`);
-          hasBet = true;
-          loadBalance();
-          if (currentTab === 'mybets') loadMyBets();
-        } else {
-          alert('❌ ' + data.error);
-          document.getElementById('redBtn').disabled = false;
-          document.getElementById('greenBtn').disabled = false;
+   async function placeBet(color) {
+  const amount = parseInt(document.getElementById('betAmount').value);
+  
+  if (amount < 1) {
+    alert('⚠️ Minimum bet is ₹1');
+    return;
+  }
+  
+  if (hasBet) {
+    alert('⚠️ Already placed bet this round');
+    return;
+  }
+  
+  document.getElementById('redBtn').disabled = true;
+  document.getElementById('greenBtn').disabled = true;
+  
+  try {
+    const res = await fetch(`${API}/bet`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ color, amount })
+    });
+    
+    const data = await res.json();
+    
+    if (res.ok) {
+      alert(`✅ Bet placed!\n₹${amount} on ${color.toUpperCase()}`);
+      hasBet = true;
+      loadBalance();
+      if (currentTab === 'mybets') loadMyBets();
+    } else {
+      // ✅ ADD THIS - Check if deposit required
+      if (data.requireDeposit) {
+        if (confirm('🔒 First Deposit Required!\n\nYou must deposit to start playing.\n\nGo to deposit page now?')) {
+          window.location.href = 'deposit.html';
         }
-      } catch (err) {
-        console.error('Bet error:', err);
-        alert('❌ Network error. Please try again.');
-        document.getElementById('redBtn').disabled = false;
-        document.getElementById('greenBtn').disabled = false;
+      } else {
+        alert('⚠️ ' + data.error);
       }
+      
+      document.getElementById('redBtn').disabled = false;
+      document.getElementById('greenBtn').disabled = false;
     }
+  } catch (err) {
+    console.error('Bet error:', err);
+    alert('❌ Network error. Please try again.');
+    document.getElementById('redBtn').disabled = false;
+    document.getElementById('greenBtn').disabled = false;
+  }
+}
+
 
     async function loadBalance() {
       try {
