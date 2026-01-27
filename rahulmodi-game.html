@@ -24,7 +24,7 @@
     .logo {
       font-size: 24px;
       font-weight: 900;
-      background: linear-gradient(135deg, #ff6b00 0%, #ff9500 100%);
+      background: linear-gradient(135deg, #3b82f6 0%, #ff6b00 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -63,14 +63,157 @@
       height: 120px;
       margin: 30px auto;
       border-radius: 50%;
-      background: linear-gradient(135deg, #ff6b00 0%, #ff9500 100%);
+      background: linear-gradient(135deg, #3b82f6 0%, #ff6b00 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 48px;
       font-weight: 900;
-      b
-      </label>
+      box-shadow: 0 10px 40px rgba(59, 130, 246, 0.5);
+    }
+    .option-selection { margin: 30px 0; }
+    .option-selection h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+    .option-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    .option-btn {
+      padding: 20px;
+      border: none;
+      border-radius: 15px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: white;
+    }
+    .option-btn.rahul {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    }
+    .option-btn.modi {
+      background: linear-gradient(135deg, #ff6b00 0%, #ff9500 100%);
+    }
+    .option-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .option-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+    }
+    .amount-input { margin: 20px 0; }
+    .amount-input label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .amount-input input {
+      width: 100%;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .quick-amounts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .quick-btn {
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .quick-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tab {
+      flex: 1;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      border-radius: 10px;
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .tab.active {
+      background: linear-gradient(135deg, #3b82f6 0%, #ff6b00 100%);
+      color: white;
+    }
+    .results-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .error-banner {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid #ef4444;
+      color: #ef4444;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0f172a;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      display: flex;
+      justify-content: space-around;
+    }
+    .nav-item {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 12px;
+    }
+    .nav-item.active { color: #3b82f6; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="error-banner" id="errorBanner">
+      Backend connection error. Retrying...
+    </div>
+
+    <div class="header">
+      <div class="logo">RAHUL vs MODI</div>
+      <div class="balance" id="balanceDisplay">₹0.00</div>
+    </div>
+
+    <div class="game-card">
+      <div class="round-info">
+        <div class="info-item">
+          <label>Round</label>
           <value id="roundId">Loading...</value>
         </div>
         <div class="info-item">
@@ -78,9 +221,9 @@
           <value id="timeLeft">60s</value>
         </div>
       </div>
-      
+
       <div class="timer-circle" id="timerCircle">60</div>
-      
+
       <div class="option-selection">
         <h3>Choose Your Side</h3>
         <div class="option-buttons">
@@ -92,7 +235,7 @@
           </button>
         </div>
       </div>
-      
+
       <div class="amount-input">
         <label>Bet Amount</label>
         <input type="number" id="betAmount" value="10" min="1">
@@ -104,15 +247,14 @@
         </div>
       </div>
     </div>
-    
+
     <div class="tabs">
       <button class="tab active" id="resultsTab" onclick="switchTab('results')">Round History</button>
       <button class="tab" id="betsTab" onclick="switchTab('mybets')">My Bets</button>
     </div>
-    
     <div class="results-list" id="resultsList">Loading...</div>
   </div>
-  
+
   <div class="bottom-nav">
     <a href="home.html" class="nav-item">🏠<br>Home</a>
     <a href="game.html" class="nav-item">🎲<br>Color</a>
@@ -120,22 +262,23 @@
     <a href="wallet.html" class="nav-item">💰<br>Wallet</a>
     <a href="profile.html" class="nav-item">👤<br>Profile</a>
   </div>
-  
+
   <script>
-    const API = "https://color-game-backend1.onrender.com";
+    // Update to your actual backend URL
+    const API = "https://color-game-backend1-v0fz.onrender.com";
     const token = localStorage.getItem('token');
     
     if (!token) {
       alert('Please login first');
       window.location.href = 'index.html';
     }
-    
+
     let currentRound = null;
     let balance = 0;
     let hasBet = false;
     let currentTab = 'results';
     let connectionAttempts = 0;
-    
+
     function showError(message) {
       const banner = document.getElementById('errorBanner');
       banner.textContent = message;
@@ -144,11 +287,11 @@
         banner.style.display = 'none';
       }, 5000);
     }
-    
+
     function setAmount(val) {
       document.getElementById('betAmount').value = val;
     }
-    
+
     async function placeBet(option) {
       const amount = parseInt(document.getElementById('betAmount').value);
       
@@ -156,40 +299,34 @@
         alert('Minimum bet is ₹1');
         return;
       }
-      
+
       if (hasBet) {
         alert('Already placed bet this round');
         return;
       }
-      
+
       document.getElementById('rahulBtn').disabled = true;
       document.getElementById('modiBtn').disabled = true;
-      
+
       try {
-        const res = await fetch(${API}/rahulmodi/bet, {
+        const res = await fetch(`${API}/rahulmodi/bet`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': Bearer ${token}
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({ option, amount })
         });
-        
+
         const data = await res.json();
-        
+
         if (res.ok) {
-          alert(✅ Bet placed!\n₹${amount} on ${option.toUpperCase()});
+          alert(`✅ Bet placed!\n₹${amount} on ${option.toUpperCase()}`);
           hasBet = true;
           loadBalance();
           if (currentTab === 'mybets') loadMyBets();
         } else {
-          if (data.requireDeposit) {
-            if (confirm('🔒 First Deposit Required!\n\nYou must deposit to start playing.\n\nGo to deposit page now?')) {
-              window.location.href = 'deposit.html';
-            }
-          } else {
-            alert('⚠️ ' + data.error);
-          }
+          alert('❌ ' + data.error);
           document.getElementById('rahulBtn').disabled = false;
           document.getElementById('modiBtn').disabled = false;
         }
@@ -200,29 +337,29 @@
         document.getElementById('modiBtn').disabled = false;
       }
     }
-    
+
     async function loadBalance() {
       try {
-        const res = await fetch(${API}/wallet, {
-          headers: { 'Authorization': Bearer ${token} }
+        const res = await fetch(`${API}/wallet`, {
+          headers: { 'Authorization': `Bearer ${token}` }
         });
         
         if (!res.ok) throw new Error('Failed to fetch balance');
         
         const data = await res.json();
         balance = parseFloat(data.wallet || 0) + parseFloat(data.bonus || 0);
-        document.getElementById('balanceDisplay').textContent = ₹${balance.toFixed(2)};
+        document.getElementById('balanceDisplay').textContent = `₹${balance.toFixed(2)}`;
       } catch (err) {
         console.error('Balance error:', err);
       }
     }
-    
+
     async function loadRound() {
       try {
-        const res = await fetch(${API}/rahulmodi/round/current);
+        const res = await fetch(`${API}/rahulmodi/round/current`);
         
         if (!res.ok) {
-          throw new Error(HTTP ${res.status});
+          throw new Error(`HTTP ${res.status}`);
         }
         
         const data = await res.json();
@@ -234,12 +371,15 @@
           hasBet = false;
           setTimeout(() => {
             if (currentTab === 'results') loadResults();
-            if (currentTab === 'mybets') loadMyBets();
           }, 2000);
         }
         
         currentRound = data;
-        document.getElementById('roundId').textContent = data.id;
+        
+        const roundIdDisplay = data.id.toString().length > 8 
+          ? data.id.toString().slice(-6) 
+          : data.id.toString();
+        document.getElementById('roundId').textContent = roundIdDisplay;
         
       } catch (err) {
         console.error('Round error:', err);
@@ -253,7 +393,7 @@
         setTimeout(loadRound, 5000);
       }
     }
-    
+
     function updateTimer() {
       if (!currentRound) return;
       
@@ -261,7 +401,7 @@
       const remaining = Math.max(0, 60 - elapsed);
       
       document.getElementById('timerCircle').textContent = remaining;
-      document.getElementById('timeLeft').textContent = ${remaining}s;
+      document.getElementById('timeLeft').textContent = `${remaining}s`;
       
       if (remaining <= 3 || hasBet) {
         document.getElementById('rahulBtn').disabled = true;
@@ -277,26 +417,27 @@
           loadRound();
           loadBalance();
           if (currentTab === 'results') loadResults();
-          if (currentTab === 'mybets') loadMyBets();
         }, 3000);
       }
     }
-    
+
     async function loadResults() {
       try {
-        const res = await fetch(${API}/rahulmodi/rounds/history);
+        const res = await fetch(`${API}/rahulmodi/rounds/history`);
         
         if (!res.ok) throw new Error('Failed to fetch');
         
         const data = await res.json();
         
-        if (!data || data.length === 0) {
+        const completedRounds = data.filter(r => r.winner !== null);
+        
+        if (completedRounds.length === 0) {
           document.getElementById('resultsList').innerHTML = 
             '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">No completed rounds yet</div>';
           return;
         }
         
-        document.getElementById('resultsList').innerHTML = data.map(r => {
+        document.getElementById('resultsList').innerHTML = completedRounds.map(r => {
           const winnerText = r.winner.toUpperCase();
           const winnerColor = r.winner === 'rahul' ? '#3b82f6' : '#ff6b00';
           
@@ -313,11 +454,11 @@
           '<div style="text-align: center; padding: 20px; color: #ef4444;">Failed to load results</div>';
       }
     }
-    
+
     async function loadMyBets() {
       try {
-        const res = await fetch(${API}/rahulmodi/bets, {
-          headers: { 'Authorization': Bearer ${token} }
+        const res = await fetch(`${API}/rahulmodi/bets`, {
+          headers: { 'Authorization': `Bearer ${token}` }
         });
         
         if (!res.ok) throw new Error('Failed to fetch');
@@ -335,10 +476,7 @@
           
           return `
             <div class="result-item">
-              <div>
-                <div>${b.option.toUpperCase()} • ₹${b.amount}</div>
-                <div style="font-size: 12px; color: rgba(255,255,255,0.5);">Round ${b.roundId}</div>
-              </div>
+              <span>${b.option.toUpperCase()} • ₹${b.amount}</span>
               <span style="color:${statusColor}; font-weight: bold;">${b.status}</span>
             </div>
           `;
@@ -349,7 +487,7 @@
           '<div style="text-align: center; padding: 20px; color: #ef4444;">Failed to load bets</div>';
       }
     }
-    
+
     function switchTab(tab) {
       currentTab = tab;
       
@@ -364,9 +502,10 @@
         loadMyBets();
       }
     }
-    
+
+    // Initialize
     console.log('🎮 Rahul Modi Game initializing...');
-    console.log('🎮 API:', API);
+    console.log('📡 API:', API);
     
     loadBalance();
     loadRound();
@@ -379,7 +518,7 @@
     }, 5000);
     setInterval(loadRound, 3000);
     
-    console.log('🎮 Rahul Modi Game initialized');
+    console.log('✅ Rahul Modi Game initialized');
   </script>
 </body>
 </html>
