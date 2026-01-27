@@ -1,1 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rahul Modi Game - BIGWIN</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
+      min-height: 100vh;
+      color: white;
+      padding-bottom: 80px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff6b00, #ff9500);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .balance {
+      background: rgba(255,255,255,0.1);
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: 700;
+    }
+
+    .game-card {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border-radius: 20px;
+      padding: 25px;
+      margin-top: 15px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .round-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .info-item {
+      text-align: center;
+    }
+
+    .info-item label {
+      font-size: 12px;
+      opacity: 0.6;
+    }
+
+    .info-item value {
+      display: block;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .timer-circle {
+      width: 120px;
+      height: 120px;
+      margin: 25px auto;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff6b00, #ff9500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      font-weight: 900;
+    }
+
+    .option-selection h3 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .option-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .option-btn {
+      flex: 1;
+      border: none;
+      border-radius: 16px;
+      padding: 15px;
+      font-size: 16px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .party-logo {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .option-btn.rahul {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    }
+
+    .option-btn.modi {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+    }
+
+    .option-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .amount-input {
+      margin-top: 20px;
+    }
+
+    .amount-input label {
+      font-size: 14px;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .amount-input input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .quick-amounts {
+      display: flex;
+      gap: 10px;
+    }
+
+    .quick-btn {
+      flex: 1;
+      padding: 8px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tabs {
+      display: flex;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 800;
+      cursor: pointer;
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    .tab.active {
+      background: #ff6b00;
+    }
+
+    .results-list {
+      margin-top: 15px;
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      margin-bottom: 10px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0f172a;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+
+    .nav-item {
+      color: white;
+      text-decoration: none;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .nav-item.active {
+      color: #ff6b00;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">BIGWIN</div>
+      <div class="balance" id="balanceDisplay">₹0.00</div>
+    </div>
+
+    <div class="game-card">
+      <div class="round-info">
+        <div class="info-item">
+          <label>Round ID</label>
+          <value id="roundId">Loading...</value>
+        </div>
+        <div class="info-item">
+          <label>Time Left</label>
+          <value id="timeLeft">60s</value>
+        </div>
+      </div>
+
+      <div class="timer-circle" id="timerCircle">60</div>
+
+      <div class="option-selection">
+        <h3>Choose Your Side</h3>
+        <div class="option-buttons">
+          <button class="option-btn rahul" id="rahulBtn" onclick="placeBet('rahul')">
+            <img src="assets/congress.png" class="party-logo" />
+            RAHUL
+          </button>
+
+          <button class="option-btn modi" id="modiBtn" onclick="placeBet('modi')">
+            <img src="assets/bjp.png" class="party-logo" />
+            MODI
+          </button>
+        </div>
+      </div>
+
+      <div class="amount-input">
+        <label>Bet Amount</label>
+        <input type="number" id="betAmount" value="10" min="1" />
+        <div class="quick-amounts">
+          <button class="quick-btn" onclick="setAmount(10)">₹10</button>
+          <button class="quick-btn" onclick="setAmount(50)">₹50</button>
+          <button class="quick-btn" onclick="setAmount(100)">₹100</button>
+          <button class="quick-btn" onclick="setAmount(500)">₹500</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('results')" id="resultsTab">Round History</button>
+      <button class="tab" onclick="switchTab('mybets')" id="betsTab">My Bets</button>
+    </div>
+
+    <div class="results-list" id="resultsList">Loading...</div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="home.html" class="nav-item">🏠<br>Home</a>
+    <a href="game.html" class="nav-item">🎲<br>Color</a>
+    <a href="rahulmodi-game.html" class="nav-item active">🎮<br>Rahul Modi</a>
+    <a href="wallet.html" class="nav-item">💰<br>Wallet</a>
+    <a href="profile.html" class="nav-item">👤<br>Profile</a>
+  </div>
+
+  <script>
+    const API = "https://color-game-backend1.onrender.com";
+    const token = localStorage.getItem("token");
+    if (!token) location.href = "index.html";
+
+    let currentRound = null;
+    let hasBet = false;
+
+    function setAmount(v){ betAmount.value = v; }
+
+    async function placeBet(option){
+      const amount = parseInt(betAmount.value);
+      if(amount < 1 || hasBet) return;
+
+      rahulBtn.disabled = modiBtn.disabled = true;
+
+      const res = await fetch(`${API}/rahulmodi/bet`,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "Authorization":`Bearer ${token}`
+        },
+        body:JSON.stringify({ option, amount })
+      });
+
+      if(res.ok){
+        alert("Bet placed!");
+        hasBet = true;
+      } else {
+        rahulBtn.disabled = modiBtn.disabled = false;
+      }
+    }
+
+    async function loadRound(){
+      const res = await fetch(`${API}/rahulmodi/round/current`);
+      const data = await res.json();
+      currentRound = data;
+      roundId.textContent = data.id;
+    }
+
+    function updateTimer(){
+      if(!currentRound) return;
+      const elapsed = Math.floor((Date.now() - currentRound.startTime)/1000);
+      const remaining = Math.max(0, 60 - elapsed);
+      timerCircle.textContent = remaining;
+      timeLeft.textContent = `${remaining}s`;
+    }
+
+    setInterval(updateTimer,1000);
+    loadRound();
+  </script>
+</body>
+</html>
 
