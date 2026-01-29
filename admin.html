@@ -420,51 +420,74 @@
             }
         }
 
-        // Load withdrawals
-        async function loadWithdrawals() {
-            try {
-                const res = await fetch(`${API}/admin/withdraws`, {
-                    headers: getAdminHeaders()
-                });
+        // ✅ FIX #5: Load withdrawals with user payment details
+async function loadWithdrawals() {
+    try {
+        const res = await fetch(`${API}/admin/withdraws`, {
+            headers: getAdminHeaders()
+        });
 
-                const withdrawals = await res.json();
+        const withdrawals = await res.json();
 
-                const content = document.getElementById('withdrawalsContent');
-                content.innerHTML = `
-                    <table>
-                        <thead>
+        const content = document.getElementById('withdrawalsContent');
+        content.innerHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mobile</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Payment Details</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${withdrawals.map(w => {
+                        // ✅ Extract payment details
+                        let detailsHtml = '';
+                        
+                        if (w.details) {
+                            if (w.method === 'upi') {
+                                detailsHtml = `<strong>UPI ID:</strong><br>${w.details.upiId || 'N/A'}`;
+                            } else if (w.method === 'bank') {
+                                detailsHtml = `
+                                    <strong>A/C:</strong> ${w.details.accountNumber || 'N/A'}<br>
+                                    <strong>IFSC:</strong> ${w.details.ifsc || 'N/A'}<br>
+                                    <strong>Name:</strong> ${w.details.accountHolder || 'N/A'}
+                                `;
+                            } else if (w.method === 'usdt') {
+                                detailsHtml = `<strong>Address:</strong><br>${w.details.walletAddress || 'N/A'}`;
+                            }
+                        } else {
+                            detailsHtml = 'No details available';
+                        }
+                        
+                        return `
                             <tr>
-                                <th>Mobile</th>
-                                <th>Amount</th>
-                                <th>Method</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Action</th>
+                                <td>${w.mobile}</td>
+                                <td>₹${w.amount.toFixed(2)}</td>
+                                <td>${w.method?.toUpperCase() || 'N/A'}</td>
+                                <td style="font-size: 11px; max-width: 200px;">${detailsHtml}</td>
+                                <td><span class="badge badge-${w.status === 'APPROVED' ? 'success' : w.status === 'PENDING' ? 'pending' : 'failed'}">${w.status}</span></td>
+                                <td>${new Date(w.createdAt).toLocaleString()}</td>
+                                <td>
+                                    ${w.status === 'PENDING' ? `
+                                        <button class="action-btn btn-approve" onclick="approveWithdrawal('${w._id}')">Approve</button>
+                                        <button class="action-btn btn-reject" onclick="rejectWithdrawal('${w._id}')">Reject</button>
+                                    ` : '-'}
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            ${withdrawals.map(w => `
-                                <tr>
-                                    <td>${w.mobile}</td>
-                                    <td>₹${w.amount.toFixed(2)}</td>
-                                    <td>${w.method?.toUpperCase() || 'N/A'}</td>
-                                    <td><span class="badge badge-${w.status === 'APPROVED' ? 'success' : w.status === 'PENDING' ? 'pending' : 'failed'}">${w.status}</span></td>
-                                    <td>${new Date(w.createdAt).toLocaleString()}</td>
-                                    <td>
-                                        ${w.status === 'PENDING' ? `
-                                            <button class="action-btn btn-approve" onclick="approveWithdrawal('${w._id}')">Approve</button>
-                                            <button class="action-btn btn-reject" onclick="rejectWithdrawal('${w._id}')">Reject</button>
-                                        ` : '-'}
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                `;
-            } catch (err) {
-                console.error('Withdrawals load error:', err);
-            }
-        }
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        `;
+    } catch (err) {
+        console.error('Withdrawals load error:', err);
+    }
+}
 
         // Approve deposit
         async function approveDeposit(id) {
