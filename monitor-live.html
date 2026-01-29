@@ -401,145 +401,190 @@
             </div>
         </div>
     </div>
+<!-- ✅ FIX #4: Monitor timer sync with backend -->
+<!-- Replace the timer section in monitor-live.html with this code -->
 
-    <script>
-        const API = "https://color-game-backend1.onrender.com";
+<script>
+    const API = "https://color-game-backend1.onrender.com";
+    
+    // Check authentication
+    if (!localStorage.getItem('monitorToken')) {
+        window.location.href = 'monitor-login.html';
+    }
+
+    let currentRound = null;
+    let liveBets = { red: [], green: [] };
+    let timeLeft = 60;
+
+    // ✅ FIX #4: Load current round with actual time from backend
+    async function loadCurrentRound() {
+        try {
+            const res = await fetch(`${API}/round/current`);
+            const data = await res.json();
+            currentRound = data;
+            
+            // ✅ FIX: Set time left from backend response
+            if (data.timeLeft !== undefined) {
+                timeLeft = data.timeLeft;
+            }
+            
+            document.getElementById('currentRound').textContent = data.id || 'Loading...';
+            document.getElementById('timeLeft').textContent = timeLeft + 's';
+        } catch (err) {
+            console.error('Round load error:', err);
+        }
+    }
+
+    // ✅ FIX #4: Timer countdown with backend sync
+    setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+            timeLeft = 60;
+            loadCurrentRound(); // Reload from backend
+        }
         
-        // Check authentication
-        if (!localStorage.getItem('monitorToken')) {
-            window.location.href = 'monitor-login.html';
+        const timerElement = document.getElementById('timeLeft');
+        timerElement.textContent = timeLeft + 's';
+        
+        if (timeLeft <= 10) {
+            timerElement.classList.add('pulse');
+        } else {
+            timerElement.classList.remove('pulse');
         }
+    }, 1000);
 
-        let currentRound = null;
-        let liveBets = { red: [], green: [] };
-        let timeLeft = 60;
+    // ✅ Sync with backend every 10 seconds to avoid drift
+    setInterval(() => {
+        loadCurrentRound();
+    }, 10000);
 
-        // Timer countdown
-        setInterval(() => {
-            timeLeft--;
-            if (timeLeft <= 0) {
-                timeLeft = 60;
-                loadCurrentRound();
-            }
-            
-            const timerElement = document.getElementById('timeLeft');
-            timerElement.textContent = timeLeft + 's';
-            
-            if (timeLeft <= 10) {
-                timerElement.classList.add('pulse');
-            } else {
-                timerElement.classList.remove('pulse');
-            }
-        }, 1000);
+    // Load live bets
+    async function loadLiveBets() {
+        if (!currentRound) return;
 
-        // Load current round
-        async function loadCurrentRound() {
-            try {
-                const res = await fetch(`${API}/round/current`);
-                const data = await res.json();
-                currentRound = data;
-                document.getElementById('currentRound').textContent = data.id || 'Loading...';
-            } catch (err) {
-                console.error('Round load error:', err);
+        try {
+            const token = localStorage.getItem('monitorToken');
+            const res = await fetch(`${API}/monitor/live-bets`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) {
+                if (res.status === 401) {
+                    alert('Session expired. Please login again.');
+                    localStorage.removeItem('monitorToken');
+                    window.location.href = 'monitor-login.html';
+                    return;
+                }
+                throw new Error('Failed to load bets');
             }
+
+            const data = await res.json();
+            liveBets = data;
+            updateBetsUI();
+        } catch (err) {
+            console.error('Live bets error:', err);
         }
+    }
 
-        // Load live bets
-        async function loadLiveBets() {
-            if (!currentRound) return;
+    // Load round stats
+    async function loadRoundStats() {
+        if (!currentRound) return;
 
-            try {
-                const token = localStorage.getItem('monitorToken');
-                const res = await fetch(`${API}/monitor/live-bets`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const data = await res.json();
-                
-                liveBets = data;
-                updateUI();
-            } catch (err) {
-                console.error('Bets load error:', err);
-            }
-        }
+        try {
+            const token = localStorage.getItem('monitorToken');
+            const res = await fetch(`${API}/monitor/round-stats`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
 
-        // Update UI
-        function updateUI() {
-            const redBets = liveBets.red || [];
-            const greenBets = liveBets.green || [];
-
-            // Calculate totals
-            const redTotal = redBets.reduce((sum, bet) => sum + bet.amount, 0);
-            const greenTotal = greenBets.reduce((sum, bet) => sum + bet.amount, 0);
-            const totalPool = redTotal + greenTotal;
-
-            // Calculate percentages
-            const redPercent = totalPool > 0 ? (redTotal / totalPool * 100).toFixed(1) : 50;
-            const greenPercent = totalPool > 0 ? (greenTotal / totalPool * 100).toFixed(1) : 50;
-
-            // Update stats
-            document.getElementById('totalPlayers').textContent = 
-                new Set([...redBets, ...greenBets].map(b => b.mobile)).size;
-            document.getElementById('totalPool').textContent = '₹' + totalPool.toLocaleString();
-            
-            // Update red stats
-            document.getElementById('redTotal').textContent = '₹' + redTotal.toLocaleString();
-            document.getElementById('redCount').textContent = redBets.length;
-            document.getElementById('redPayout').textContent = '₹' + (redTotal * 1.96).toLocaleString();
-            document.getElementById('redBetsCount').textContent = redBets.length + ' bets';
-            
-            // Update green stats
-            document.getElementById('greenTotal').textContent = '₹' + greenTotal.toLocaleString();
-            document.getElementById('greenCount').textContent = greenBets.length;
-            document.getElementById('greenPayout').textContent = '₹' + (greenTotal * 1.96).toLocaleString();
-            document.getElementById('greenBetsCount').textContent = greenBets.length + ' bets';
-
-            // Update progress bar
-            document.getElementById('redProgress').style.width = redPercent + '%';
-            document.getElementById('greenProgress').style.width = greenPercent + '%';
-            document.getElementById('redPercent').textContent = redPercent + '%';
-            document.getElementById('greenPercent').textContent = greenPercent + '%';
-
-            // Update bet lists
-            displayBets('red', redBets);
-            displayBets('green', greenBets);
-        }
-
-        // Display bets in list
-        function displayBets(color, bets) {
-            const listElement = document.getElementById(color + 'BetsList');
-            
-            if (bets.length === 0) {
-                listElement.innerHTML = `<div class="empty-state">No ${color} bets yet</div>`;
-                return;
+            if (!res.ok) {
+                throw new Error('Failed to load stats');
             }
 
-            listElement.innerHTML = bets.map(bet => `
+            const stats = await res.json();
+            updateStatsUI(stats);
+        } catch (err) {
+            console.error('Round stats error:', err);
+        }
+    }
+
+    // Update bets UI
+    function updateBetsUI() {
+        // Red bets
+        const redList = document.getElementById('redBetsList');
+        const redCount = document.getElementById('redBetsCount');
+        
+        if (liveBets.red.length === 0) {
+            redList.innerHTML = '<div class="empty-state">No red bets yet</div>';
+            redCount.textContent = '0 bets';
+        } else {
+            redList.innerHTML = liveBets.red.map(bet => `
                 <div class="bet-item">
-                    <div>
-                        <div class="bet-mobile">${bet.mobile.substring(0, 4)}****${bet.mobile.substring(8)}</div>
-                        <div class="bet-time">${new Date(bet.time).toLocaleTimeString()}</div>
-                    </div>
-                    <div class="bet-amount ${color}">₹${bet.amount.toLocaleString()}</div>
+                    <span class="bet-mobile">${bet.mobile.substring(0, 4)}****</span>
+                    <span class="bet-amount">₹${bet.amount}</span>
+                    <span class="bet-time">${new Date(bet.time).toLocaleTimeString()}</span>
                 </div>
             `).join('');
+            redCount.textContent = `${liveBets.red.length} bets`;
         }
 
-        // Logout
-        function handleLogout() {
-            if (confirm('Logout from monitor panel?')) {
-                localStorage.removeItem('monitorToken');
-                window.location.href = 'monitor-login.html';
-            }
+        // Green bets
+        const greenList = document.getElementById('greenBetsList');
+        const greenCount = document.getElementById('greenBetsCount');
+        
+        if (liveBets.green.length === 0) {
+            greenList.innerHTML = '<div class="empty-state">No green bets yet</div>';
+            greenCount.textContent = '0 bets';
+        } else {
+            greenList.innerHTML = liveBets.green.map(bet => `
+                <div class="bet-item">
+                    <span class="bet-mobile">${bet.mobile.substring(0, 4)}****</span>
+                    <span class="bet-amount">₹${bet.amount}</span>
+                    <span class="bet-time">${new Date(bet.time).toLocaleTimeString()}</span>
+                </div>
+            `).join('');
+            greenCount.textContent = `${liveBets.green.length} bets`;
         }
+    }
 
-        // Initialize
-        loadCurrentRound();
-        loadLiveBets();
+    // Update stats UI
+    function updateStatsUI(stats) {
+        document.getElementById('totalPlayers').textContent = stats.totalPlayers || 0;
+        document.getElementById('totalPool').textContent = `₹${(stats.redTotal + stats.greenTotal).toFixed(0)}`;
+        
+        // Update distribution
+        document.getElementById('redTotal').textContent = `₹${stats.redTotal.toFixed(0)}`;
+        document.getElementById('greenTotal').textContent = `₹${stats.greenTotal.toFixed(0)}`;
+        document.getElementById('redCount').textContent = stats.redBets;
+        document.getElementById('greenCount').textContent = stats.greenBets;
+        document.getElementById('redPayout').textContent = `₹${(stats.redTotal * 1.96).toFixed(0)}`;
+        document.getElementById('greenPayout').textContent = `₹${(stats.greenTotal * 1.96).toFixed(0)}`;
+        
+        // Update progress bar
+        const total = stats.redTotal + stats.greenTotal;
+        const redPercent = total > 0 ? (stats.redTotal / total * 100) : 50;
+        const greenPercent = 100 - redPercent;
+        
+        document.getElementById('redProgress').style.width = redPercent + '%';
+        document.getElementById('greenProgress').style.width = greenPercent + '%';
+        document.getElementById('redPercent').textContent = redPercent.toFixed(0) + '%';
+        document.getElementById('greenPercent').textContent = greenPercent.toFixed(0) + '%';
+    }
 
-        // Auto-refresh every 2 seconds
-        setInterval(loadLiveBets, 2000);
-    </script>
+    // Handle logout
+    function handleLogout() {
+        localStorage.removeItem('monitorToken');
+        window.location.href = 'monitor-login.html';
+    }
+
+    // Initialize
+    loadCurrentRound();
+    setInterval(loadLiveBets, 2000);  // Update bets every 2 seconds
+    setInterval(loadRoundStats, 2000); // Update stats every 2 seconds
+</script>
+
 </body>
   </html>
