@@ -6,137 +6,242 @@
     <title>Profile - BIGWIN</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             min-height: 100vh;
-            padding-bottom: 80px;
+            color: white;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 60% 60%, rgba(74, 144, 226, 0.3) 0%, transparent 50%);
+            animation: bgShift 12s ease infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-30px, -30px) rotate(180deg); }
         }
 
         .container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
+            position: relative;
+            z-index: 1;
         }
 
+        /* Header */
         .header {
             text-align: center;
             margin-bottom: 30px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header h1 {
-            color: white;
-            font-size: 28px;
+            font-size: 32px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
+        /* Profile Card with 3D effect */
         .profile-card {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 28px;
+            padding: 40px 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.8s ease-out;
+            animation-delay: 0.1s;
+            animation-fill-mode: both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .profile-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
+            font-size: 48px;
             margin: 0 auto 20px;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+            animation: profilePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes profilePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .profile-mobile {
             color: white;
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 10px;
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
         }
 
         .profile-code {
-            color: #22c55e;
+            color: #667eea;
             font-size: 16px;
-            font-weight: 600;
-            padding: 8px 20px;
-            background: rgba(34, 197, 94, 0.1);
-            border-radius: 20px;
-            display: inline-block;
+            font-weight: 700;
+            padding: 10px 24px;
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
         .copy-btn {
-            background: #22c55e;
+            background: #667eea;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 12px;
+            padding: 8px 18px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
-            margin-left: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
 
-        .info-card {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
         }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 28px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .info-card:nth-child(3) { animation-delay: 0.2s; }
+        .info-card:nth-child(4) { animation-delay: 0.3s; }
 
         .info-card h3 {
             color: white;
-            font-size: 18px;
-            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 25px;
         }
 
         .info-row {
             display: flex;
             justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .info-row:last-child {
             border-bottom: none;
+            padding-bottom: 0;
         }
 
         .info-label {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 500;
         }
 
         .info-value {
             color: white;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 16px;
         }
 
+        /* Action Buttons */
         .action-buttons {
             display: grid;
-            gap: 15px;
+            gap: 12px;
+            animation: fadeInUp 0.8s ease-out;
+            animation-delay: 0.4s;
+            animation-fill-mode: both;
         }
 
         .action-btn {
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
+            padding: 18px 24px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
             color: white;
-            font-size: 14px;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .action-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #22c55e;
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #667eea;
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
         }
 
         .logout-btn {
@@ -148,35 +253,50 @@
         .logout-btn:hover {
             background: rgba(239, 68, 68, 0.2);
             border-color: #ef4444;
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
         }
 
+        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: #0f172a;
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(20px);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px;
+            padding: 12px 0;
             display: flex;
             justify-content: space-around;
-            z-index: 100;
+            z-index: 1000;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
         }
 
         .nav-item {
             text-align: center;
             color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
-            font-size: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
         }
 
         .nav-item.active {
-            color: #22c55e;
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.15);
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
             <h1>👤 My Profile</h1>
         </div>
@@ -186,14 +306,18 @@
             <div class="profile-icon">👤</div>
             <div class="profile-mobile" id="userMobile">Loading...</div>
             <div class="profile-code">
-                <span id="referralCode">Loading...</span>
-                <button class="copy-btn" onclick="copyReferralCode()">Copy</button>
+                <span id="userCode">Loading...</span>
+                <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
             </div>
         </div>
 
         <!-- Account Info -->
         <div class="info-card">
-            <h3>💰 Account Information</h3>
+            <h3>💰 Account Summary</h3>
+            <div class="info-row">
+                <span class="info-label">Total Balance</span>
+                <span class="info-value" id="totalBalance">₹0.00</span>
+            </div>
             <div class="info-row">
                 <span class="info-label">Wallet Balance</span>
                 <span class="info-value" id="walletBalance">₹0.00</span>
@@ -202,19 +326,15 @@
                 <span class="info-label">Bonus Balance</span>
                 <span class="info-value" id="bonusBalance">₹0.00</span>
             </div>
+        </div>
+
+        <!-- Stats Info -->
+        <div class="info-card">
+            <h3>📊 Statistics</h3>
             <div class="info-row">
                 <span class="info-label">Total Wagered</span>
                 <span class="info-value" id="totalWagered">₹0.00</span>
             </div>
-            <div class="info-row">
-                <span class="info-label">Account Status</span>
-                <span class="info-value" style="color: #22c55e">Active</span>
-            </div>
-        </div>
-
-        <!-- Referral Stats -->
-        <div class="info-card">
-            <h3>🎁 Referral Stats</h3>
             <div class="info-row">
                 <span class="info-label">Total Referrals</span>
                 <span class="info-value" id="totalReferrals">0</span>
@@ -224,39 +344,55 @@
                 <span class="info-value" id="referralEarnings">₹0.00</span>
             </div>
             <div class="info-row">
-                <span class="info-label">Team Members</span>
-                <span class="info-value" id="teamMembers">0</span>
+                <span class="info-label">Member Since</span>
+                <span class="info-value" id="memberSince">Loading...</span>
             </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-            <a href="referral.html" class="action-btn">
-                🎁 View Referral Dashboard
-            </a>
             <a href="withdraw-method.html" class="action-btn">
-                💳 Withdrawal Method
+                <span>⚙️</span>
+                <span>Withdrawal Method</span>
             </a>
-            <a href="wallet-history.html" class="action-btn">
-                📜 Transaction History
+            <a href="referral.html" class="action-btn">
+                <span>🎁</span>
+                <span>Referral Program</span>
             </a>
-            <button class="action-btn logout-btn" onclick="handleLogout()">
-                🚪 Logout
+            <a href="deposit-history.html" class="action-btn">
+                <span>📜</span>
+                <span>Transaction History</span>
+            </a>
+            <button class="action-btn logout-btn" onclick="logout()">
+                <span>🚪</span>
+                <span>Logout</span>
             </button>
         </div>
     </div>
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <a href="home.html" class="nav-item">🏠<br>Home</a>
-        <a href="game.html" class="nav-item">🎮<br>Game</a>
-        <a href="wallet.html" class="nav-item">💰<br>Wallet</a>
-        <a href="profile.html" class="nav-item active">👤<br>Profile</a>
+        <a href="home.html" class="nav-item">
+            <span style="font-size: 20px;">🏠</span>
+            <span>Home</span>
+        </a>
+        <a href="game.html" class="nav-item">
+            <span style="font-size: 20px;">🎮</span>
+            <span>Game</span>
+        </a>
+        <a href="wallet.html" class="nav-item">
+            <span style="font-size: 20px;">💰</span>
+            <span>Wallet</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <span style="font-size: 20px;">👤</span>
+            <span>Profile</span>
+        </a>
     </div>
 
     <script src="js/api.js"></script>
     <script>
-        // Check authentication
+        // Auth check
         if (!localStorage.getItem('token')) {
             window.location.href = 'index.html';
         }
@@ -265,70 +401,58 @@
         async function loadProfile() {
             try {
                 const token = localStorage.getItem('token');
-                
-                const res = await fetch(`${API}/profile`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                const res = await fetch(`${API}/wallet`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
 
+                if (!res.ok) throw new Error('Failed');
                 const data = await res.json();
 
-                if (res.ok) {
-                    document.getElementById('userMobile').textContent = data.mobile;
-                    document.getElementById('referralCode').textContent = data.referralCode;
-                    document.getElementById('walletBalance').textContent = `₹${parseFloat(data.wallet || 0).toFixed(2)}`;
-                    document.getElementById('bonusBalance').textContent = `₹${parseFloat(data.bonus || 0).toFixed(2)}`;
-                    document.getElementById('totalWagered').textContent = `₹${parseFloat(data.totalWagered || 0).toFixed(2)}`;
-                }
+                // Update UI
+                document.getElementById('userMobile').textContent = data.mobile;
+                document.getElementById('userCode').textContent = data.userCode;
+                document.getElementById('totalBalance').textContent = `₹${(data.wallet + data.bonus).toFixed(2)}`;
+                document.getElementById('walletBalance').textContent = `₹${data.wallet.toFixed(2)}`;
+                document.getElementById('bonusBalance').textContent = `₹${data.bonus.toFixed(2)}`;
+                document.getElementById('totalWagered').textContent = `₹${data.totalWagered.toFixed(2)}`;
+                document.getElementById('totalReferrals').textContent = data.totalReferrals;
+                document.getElementById('referralEarnings').textContent = `₹${data.referralEarnings.toFixed(2)}`;
+                
+                // Format member since date
+                const joinDate = new Date(data.createdAt);
+                document.getElementById('memberSince').textContent = joinDate.toLocaleDateString('en-IN', {
+                    month: 'short',
+                    year: 'numeric'
+                });
+
             } catch (err) {
                 console.error('Profile load error:', err);
-            }
-        }
-
-        // Load referral stats
-        async function loadReferralStats() {
-            try {
-                const token = localStorage.getItem('token');
-                
-                const res = await fetch(`${API}/referral/info`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                const data = await res.json();
-
-                if (res.ok) {
-                    document.getElementById('totalReferrals').textContent = data.totalReferrals || 0;
-                    document.getElementById('referralEarnings').textContent = `₹${parseFloat(data.totalEarnings || 0).toFixed(2)}`;
-                    document.getElementById('teamMembers').textContent = data.allTeamMembers || 0;
+                if (err.message.includes('401')) {
+                    localStorage.removeItem('token');
+                    window.location.href = 'index.html';
                 }
-            } catch (err) {
-                console.error('Referral stats load error:', err);
             }
         }
 
         // Copy referral code
-        function copyReferralCode() {
-            const code = document.getElementById('referralCode').textContent;
-            
+        function copyCode() {
+            const code = document.getElementById('userCode').textContent;
             navigator.clipboard.writeText(code).then(() => {
-                alert('✅ Referral code copied: ' + code);
-            }).catch(() => {
-                // Fallback for older browsers
-                const input = document.createElement('input');
-                input.value = code;
-                document.body.appendChild(input);
-                input.select();
-                document.execCommand('copy');
-                document.body.removeChild(input);
-                alert('✅ Referral code copied: ' + code);
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                btn.style.background = '#4ade80';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#667eea';
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy code');
             });
         }
 
-        // Handle logout
-        function handleLogout() {
+        // Logout function
+        function logout() {
             if (confirm('Are you sure you want to logout?')) {
                 localStorage.removeItem('token');
                 window.location.href = 'index.html';
@@ -337,7 +461,6 @@
 
         // Load data
         loadProfile();
-        loadReferralStats();
     </script>
 </body>
-  </html>
+</html>
