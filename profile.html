@@ -426,9 +426,9 @@
 
                 // Safely update UI with fallbacks
                 document.getElementById('userMobile').textContent = data.mobile || 'Not Available';
-                // Generate userCode if not provided
-                const userCode = data.userCode || (data.mobile ? `USER${data.mobile.slice(-6)}` : 'N/A');
-                document.getElementById('userCode').textContent = userCode;
+                // Display referralCode (for sharing), not userCode
+                const referralCode = data.referralCode || 'N/A';
+                document.getElementById('userCode').textContent = referralCode;
                 
                 const wallet = Number(data.wallet) || 0;
                 const bonus = Number(data.bonus) || 0;
