@@ -410,6 +410,12 @@
                 console.log('Profile API response:', res.status);
 
                 if (!res.ok) {
+                    if (res.status === 401) {
+                        console.log('Unauthorized - redirecting to login');
+                        localStorage.removeItem('token');
+                        window.location.href = 'index.html';
+                        return;
+                    }
                     const errorData = await res.json().catch(() => ({ error: 'Unknown' }));
                     console.error('Profile API error:', errorData);
                     throw new Error(`API Error: ${res.status}`);
@@ -419,8 +425,10 @@
                 console.log('Profile data received:', data);
 
                 // Safely update UI with fallbacks
-                document.getElementById('userMobile').textContent = data.mobile || 'Unknown';
-                document.getElementById('userCode').textContent = data.userCode || 'N/A';
+                document.getElementById('userMobile').textContent = data.mobile || 'Not Available';
+                // Generate userCode if not provided
+                const userCode = data.userCode || (data.mobile ? `USER${data.mobile.slice(-6)}` : 'N/A');
+                document.getElementById('userCode').textContent = userCode;
                 
                 const wallet = Number(data.wallet) || 0;
                 const bonus = Number(data.bonus) || 0;
