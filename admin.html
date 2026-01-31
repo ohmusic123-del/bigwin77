@@ -877,11 +877,34 @@
             currentPage = page;
             try {
                 const token = localStorage.getItem('adminToken');
+                if (!token) {
+                    console.error('No admin token found');
+                    showToast('Session expired. Please login again.', 'error');
+                    setTimeout(() => window.location.href = 'admin-login.html', 2000);
+                    return;
+                }
+                
+                console.log('Loading users - page:', page, 'filter:', currentFilter);
+                
                 const res = await fetch(`${API}/admin/users/list?page=${page}&limit=20&filter=${currentFilter}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
+                console.log('Users API response status:', res.status);
+
+                if (!res.ok) {
+                    if (res.status === 401 || res.status === 403) {
+                        console.error('Admin authentication failed');
+                        showToast('Session expired. Please login again.', 'error');
+                        localStorage.removeItem('adminToken');
+                        setTimeout(() => window.location.href = 'admin-login.html', 2000);
+                        return;
+                    }
+                    throw new Error(`HTTP ${res.status}`);
+                }
+
                 const data = await res.json();
+                console.log('Users data received:', data);
 
                 if (res.ok) {
                     renderUsers(data.users, data.pagination);
@@ -895,6 +918,19 @@
                 }
             } catch (err) {
                 console.error('Load users error:', err);
+                document.getElementById('usersContent').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">❌</div>
+                        <div class="empty-text">Failed to load users</div>
+                        <div style="color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 10px;">
+                            ${err.message}
+                        </div>
+                        <div style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 10px;">
+                            Check console for details
+                        </div>
+                    </div>
+                `;
+                showToast('Failed to load users. Check console.', 'error');
             }
         }
 
