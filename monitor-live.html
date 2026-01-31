@@ -423,12 +423,13 @@
             const data = await res.json();
             currentRound = data;
             
-            // ✅ FIX: Set time left from backend response
-            if (data.timeLeft !== undefined) {
-                timeLeft = data.timeLeft;
-            }
+            // ✅ FIX: Calculate time left based on server startTime
+            const elapsed = Math.floor((Date.now() - data.startTime) / 1000);
+            timeLeft = Math.max(0, 60 - elapsed);
             
-            document.getElementById('currentRound').textContent = data.id || 'Loading...';
+            // Update UI with proper period display
+            const periodDisplay = data.roundId || data.id || 'Loading...';
+            document.getElementById('currentRound').textContent = periodDisplay;
             document.getElementById('timeLeft').textContent = timeLeft + 's';
         } catch (err) {
             console.error('Round load error:', err);
