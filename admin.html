@@ -654,14 +654,12 @@
 
         <!-- Tabs -->
         <div class="tabs">
-    <button class="tab active" onclick="switchTab('overview')">📊 Overview</button>
-    <button class="tab" onclick="switchTab('users')">👥 Users</button>
-    <button class="tab" onclick="switchTab('monitor-users')">🔍 Monitor Users</button>
-    <button class="tab" onclick="switchTab('giftcodes')">🎁 Gift Codes</button>
-    <button class="tab" onclick="switchTab('deposits')">💰 Deposits</button>
-    <button class="tab" onclick="switchTab('withdrawals')">💸 Withdrawals</button>
-    <button class="tab" onclick="switchTab('analytics')">📈 Analytics</button>
-</div>
+            <button class="tab active" onclick="switchTab('users')">👥 Users</button>
+            <button class="tab" onclick="switchTab('giftcodes')">🎁 Gift Codes</button>
+            <button class="tab" onclick="switchTab('deposits')">💳 Deposits</button>
+            <button class="tab" onclick="switchTab('withdrawals')">💸 Withdrawals</button>
+            <button class="tab" onclick="switchTab('analytics')">📊 Analytics</button>
+        </div>
 
         <!-- Users Tab -->
         <div id="usersTab" class="tab-content active">
@@ -688,50 +686,7 @@
                 </div>
             </div>
         </div>
-<!-- Monitor Users Tab -->
-<div id="monitor-usersTab" class="tab-content">
-    <div class="section-card">
-        <div class="section-header">
-            <h2 class="section-title">🔍 Monitor User Management</h2>
-            <p style="color: rgba(255,255,255,0.7); margin-top: 10px;">
-                Create and manage monitor-only access accounts for viewing live betting activity
-            </p>
-        </div>
-        
-        <div style="background: rgba(102,126,234,0.1); padding: 25px; border-radius: 15px; margin: 25px 0;">
-            <h3 style="margin-bottom: 20px; font-size: 18px;">➕ Create New Monitor User</h3>
-            <div style="display: grid; gap: 15px;">
-                <div>
-                    <label style="display: block; margin-bottom: 8px; color: rgba(255,255,255,0.8); font-size: 14px;">Username *</label>
-                    <input type="text" id="newMonitorUsername" placeholder="e.g., monitor1" 
-                        style="width: 100%; padding: 12px 15px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); 
-                        border-radius: 10px; color: white; font-size: 14px;">
-                </div>
-                <div>
-                    <label style="display: block; margin-bottom: 8px; color: rgba(255,255,255,0.8); font-size: 14px;">Password * (min 6 characters)</label>
-                    <input type="password" id="newMonitorPassword" placeholder="Enter secure password" 
-                        style="width: 100%; padding: 12px 15px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); 
-                        border-radius: 10px; color: white; font-size: 14px;">
-                </div>
-                <div>
-                    <label style="display: block; margin-bottom: 8px; color: rgba(255,255,255,0.8); font-size: 14px;">Display Name (optional)</label>
-                    <input type="text" id="newMonitorName" placeholder="e.g., John's Monitor Account" 
-                        style="width: 100%; padding: 12px 15px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); 
-                        border-radius: 10px; color: white; font-size: 14px;">
-                </div>
-                <button onclick="createMonitorUser()" 
-                    style="padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                    border: none; border-radius: 10px; color: white; font-weight: 700; font-size: 16px; cursor: pointer; 
-                    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3); transition: transform 0.2s;">
-                    ✅ Create Monitor User
-                </button>
-            </div>
-        </div>
-        
-        <h3 style="margin: 30px 0 20px; font-size: 18px;">👥 Existing Monitor Users</h3>
-        <div id="monitorUsersList"></div>
-    </div>
-</div>
+
         <!-- Gift Codes Tab -->
         <div id="giftcodesTab" class="tab-content">
             <div class="content-card">
@@ -841,33 +796,49 @@
         }
 
         // Switch tabs
-      function switchTab(tab) {
-    // Update tabs
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
+        function switchTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
 
-    // Update content
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.getElementById(`${tab}Tab`).classList.add('active');
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`${tab}Tab`).classList.add('active');
 
-    // Load data
-    if (tab === 'users') loadUsers();
-    else if (tab === 'monitor-users') loadMonitorUsers();  // ADD THIS LINE
-    else if (tab === 'giftcodes') loadGiftCodes();
-    else if (tab === 'deposits') loadDeposits();
-    else if (tab === 'withdrawals') loadWithdrawals();
-    else if (tab === 'analytics') loadAnalytics();
-}
+            // Load data
+            if (tab === 'users') loadUsers();
+            else if (tab === 'giftcodes') loadGiftCodes();
+            else if (tab === 'deposits') loadDeposits();
+            else if (tab === 'withdrawals') loadWithdrawals();
+            else if (tab === 'analytics') loadAnalytics();
+        }
 
         // Load dashboard stats
         async function loadDashboardStats() {
             try {
                 const token = localStorage.getItem('adminToken');
+                if (!token) {
+                    console.error('No admin token found');
+                    return;
+                }
+                
                 const res = await fetch(`${API}/admin/dashboard-stats`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
+                if (!res.ok) {
+                    if (res.status === 401 || res.status === 403) {
+                        console.error('Admin authentication failed');
+                        alert('Session expired. Please login again.');
+                        localStorage.removeItem('adminToken');
+                        window.location.href = 'admin-login.html';
+                        return;
+                    }
+                    throw new Error(`HTTP ${res.status}`);
+                }
+
                 const data = await res.json();
+                console.log('Dashboard stats loaded:', data);
 
                 if (res.ok) {
                     document.getElementById('totalUsers').textContent = data.totalUsers || 0;
@@ -885,6 +856,8 @@
                 }
             } catch (err) {
                 console.error('Dashboard stats error:', err);
+                // Show error but don't break the page
+                showToast('Failed to load dashboard stats. Check console.', 'error');
             }
         }
 
@@ -1458,221 +1431,6 @@
 
             document.getElementById('analyticsContent').innerHTML = html;
         }
-
-        // ====================================
-// MONITOR USERS MANAGEMENT
-// ====================================
-
-async function createMonitorUser() {
-    const username = document.getElementById('newMonitorUsername').value.trim();
-    const password = document.getElementById('newMonitorPassword').value;
-    const name = document.getElementById('newMonitorName').value.trim();
-    
-    // Validation
-    if (!username || !password) {
-        showToast('Username and password are required', 'error');
-        return;
-    }
-    
-    if (password.length < 6) {
-        showToast('Password must be at least 6 characters', 'error');
-        return;
-    }
-    
-    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-        showToast('Username can only contain letters, numbers, and underscores', 'error');
-        return;
-    }
-    
-    try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(`${API}/admin/monitor-users`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, password, name })
-        });
-        
-        const data = await res.json();
-        
-        if (res.ok) {
-            showToast('Monitor user created successfully!', 'success');
-            // Clear form
-            document.getElementById('newMonitorUsername').value = '';
-            document.getElementById('newMonitorPassword').value = '';
-            document.getElementById('newMonitorName').value = '';
-            // Reload list
-            loadMonitorUsers();
-        } else {
-            showToast(data.error || 'Failed to create monitor user', 'error');
-        }
-    } catch (err) {
-        console.error('Create monitor user error:', err);
-        showToast('Network error. Please try again.', 'error');
-    }
-}
-
-async function loadMonitorUsers() {
-    try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(`${API}/admin/monitor-users`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        
-        if (!res.ok) {
-            throw new Error('Failed to load monitor users');
-        }
-        
-        const users = await res.json();
-        const container = document.getElementById('monitorUsersList');
-        
-        if (!users || users.length === 0) {
-            container.innerHTML = `
-                <div style="text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.5);">
-                    <div style="font-size: 48px; margin-bottom: 15px;">👥</div>
-                    <div style="font-size: 18px; font-weight: 600;">No monitor users yet</div>
-                    <div style="font-size: 14px; margin-top: 8px;">Create your first monitor user above</div>
-                </div>
-            `;
-            return;
-        }
-        
-        container.innerHTML = users.map(user => `
-            <div style="background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1)); 
-                        padding: 25px; border-radius: 15px; margin-bottom: 15px; 
-                        border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;"
-                 onmouseover="this.style.transform='translateY(-3px)'; this.style.borderColor='rgba(102,126,234,0.5)';"
-                 onmouseout="this.style.transform='translateY(0)'; this.style.borderColor='rgba(255,255,255,0.1)';">
-                <div style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 15px;">
-                    <div style="flex: 1; min-width: 200px;">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-                            <div style="font-weight: 800; font-size: 20px; color: white;">${user.username}</div>
-                            <span style="padding: 4px 12px; background: ${user.active ? 'rgba(34,197,94,0.2)' : 'rgba(239,68,68,0.2)'}; 
-                                        color: ${user.active ? '#22c55e' : '#ef4444'}; border-radius: 20px; 
-                                        font-size: 12px; font-weight: 700; border: 1px solid ${user.active ? '#22c55e' : '#ef4444'};">
-                                ${user.active ? '● Active' : '○ Disabled'}
-                            </span>
-                        </div>
-                        <div style="color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.8;">
-                            <div><strong>Display Name:</strong> ${user.name || 'Not set'}</div>
-                            <div><strong>Created:</strong> ${new Date(user.createdAt).toLocaleDateString('en-IN', {
-                                day: 'numeric',
-                                month: 'short',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            })}</div>
-                            ${user.lastLogin ? `<div><strong>Last Login:</strong> ${new Date(user.lastLogin).toLocaleDateString('en-IN', {
-                                day: 'numeric',
-                                month: 'short',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            })}</div>` : ''}
-                            <div><strong>Login URL:</strong> <code style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px;">monitor-login.html</code></div>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button onclick="toggleMonitorUser('${user._id}', ${!user.active})" 
-                            style="padding: 12px 24px; background: ${user.active ? 'rgba(239,68,68,0.2)' : 'rgba(34,197,94,0.2)'}; 
-                            border: 1px solid ${user.active ? '#ef4444' : '#22c55e'}; 
-                            color: ${user.active ? '#ef4444' : '#22c55e'}; 
-                            border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 14px;
-                            transition: all 0.2s;"
-                            onmouseover="this.style.background='${user.active ? 'rgba(239,68,68,0.3)' : 'rgba(34,197,94,0.3)'}'"
-                            onmouseout="this.style.background='${user.active ? 'rgba(239,68,68,0.2)' : 'rgba(34,197,94,0.2)'}'">\n                            ${user.active ? '🔒 Disable' : '🔓 Enable'}
-                        </button>
-                        <button onclick="resetMonitorPassword('${user._id}', '${user.username}')" 
-                            style="padding: 12px 24px; background: rgba(102,126,234,0.2); 
-                            border: 1px solid rgba(102,126,234,0.5); color: #667eea; 
-                            border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 14px;
-                            transition: all 0.2s;"
-                            onmouseover="this.style.background='rgba(102,126,234,0.3)'"
-                            onmouseout="this.style.background='rgba(102,126,234,0.2)';">
-                            🔑 Reset Password
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `).join('');
-    } catch (err) {
-        console.error('Load monitor users error:', err);
-        document.getElementById('monitorUsersList').innerHTML = `
-            <div style="text-align: center; padding: 40px 20px; color: #ef4444;">
-                <div style="font-size: 48px; margin-bottom: 15px;">❌</div>
-                <div style="font-size: 18px; font-weight: 600;">Error loading monitor users</div>
-                <div style="font-size: 14px; margin-top: 8px;">${err.message}</div>
-            </div>
-        `;
-    }
-}
-
-async function toggleMonitorUser(userId, active) {
-    const action = active ? 'enable' : 'disable';
-    if (!confirm(`Are you sure you want to ${action} this monitor user?`)) {
-        return;
-    }
-    
-    try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(`${API}/admin/monitor-users/${userId}`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ active })
-        });
-        
-        const data = await res.json();
-        
-        if (res.ok) {
-            showToast(`Monitor user ${action}d successfully`, 'success');
-            loadMonitorUsers();
-        } else {
-            showToast(data.error || `Failed to ${action} monitor user`, 'error');
-        }
-    } catch (err) {
-        console.error('Toggle monitor user error:', err);
-        showToast('Network error. Please try again.', 'error');
-    }
-}
-
-async function resetMonitorPassword(userId, username) {
-    const newPassword = prompt(`Enter new password for monitor user "${username}":\n(Minimum 6 characters)`);
-    
-    if (!newPassword) return;
-    
-    if (newPassword.length < 6) {
-        showToast('Password must be at least 6 characters', 'error');
-        return;
-    }
-    
-    try {
-        const token = localStorage.getItem('adminToken');
-        const res = await fetch(`${API}/admin/monitor-users/${userId}/reset-password`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ newPassword })
-        });
-        
-        const data = await res.json();
-        
-        if (res.ok) {
-            showToast('Password reset successfully!', 'success');
-        } else {
-            showToast(data.error || 'Failed to reset password', 'error');
-        }
-    } catch (err) {
-        console.error('Reset password error:', err);
-        showToast('Network error. Please try again.', 'error');
-    }
-}
     </script>
 </body>
 </html>
