@@ -170,14 +170,112 @@
             color: white;
         }
 
+        /* NEW: Gift Code Quick Access Card */
+        .gift-code-quick {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(245, 87, 108, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gift-code-quick::before {
+            content: '🎁';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 120px;
+            opacity: 0.1;
+        }
+
+        .gift-code-quick h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gift-code-quick p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .gift-code-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .gift-code-input {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .gift-code-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .redeem-btn {
+            padding: 15px 30px;
+            background: white;
+            color: #f5576c;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .redeem-btn:active {
+            transform: scale(0.95);
+        }
+
+        .view-all-codes-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .view-all-codes-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         /* Promo banner with pulse animation */
         .promo-banner {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             border-radius: 20px;
             padding: 25px;
             margin-bottom: 25px;
             text-align: center;
-            box-shadow: 0 10px 40px rgba(245, 87, 108, 0.3);
+            box-shadow: 0 10px 40px rgba(34, 197, 94, 0.3);
             animation: promoPulse 2s ease-in-out infinite;
         }
 
@@ -232,9 +330,9 @@
         }
 
         .action-card:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+            transform: translateY(-5px) scale(1.02);
             border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
         }
 
         .action-card:hover::before {
@@ -242,132 +340,129 @@
         }
 
         .action-icon {
-            font-size: 42px;
-            margin-bottom: 12px;
-            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+            font-size: 48px;
+            margin-bottom: 15px;
             position: relative;
             z-index: 1;
         }
 
         .action-title {
             color: white;
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 18px;
+            font-weight: 800;
             margin-bottom: 6px;
             position: relative;
             z-index: 1;
         }
 
         .action-subtitle {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 13px;
             font-weight: 500;
             position: relative;
             z-index: 1;
         }
 
-        /* Stats card */
+        /* Stats Card */
         .stats-card {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px);
             border-radius: 24px;
-            padding: 28px;
+            padding: 30px;
             margin-bottom: 25px;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
         .stats-card h3 {
             font-size: 20px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-weight: 800;
             color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 15px;
         }
 
         .stat-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-row:last-child {
-            border-bottom: none;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .stat-label {
-            color: rgba(255, 255, 255, 0.75);
-            font-size: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
             font-weight: 500;
         }
 
         .stat-value {
             color: white;
-            font-weight: 800;
             font-size: 16px;
+            font-weight: 800;
         }
 
-        /* Features grid */
+        /* Features Grid */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin-bottom: 25px;
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(15px);
-            border-radius: 18px;
-            padding: 25px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 20px 15px;
             text-align: center;
             text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             transition: all 0.3s;
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: #667eea;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            transform: translateY(-3px);
+            border-color: rgba(102, 126, 234, 0.5);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .feature-icon {
             font-size: 32px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .feature-title {
             color: white;
-            font-size: 15px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
         }
 
-        /* Bottom navigation */
+        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(15, 12, 41, 0.95);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 0;
             display: flex;
             justify-content: space-around;
-            z-index: 1000;
-            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+            padding: 15px 0;
+            z-index: 100;
         }
 
         .nav-item {
-            text-align: center;
             color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
-            padding: 8px 20px;
-            border-radius: 12px;
             transition: all 0.3s;
             display: flex;
             flex-direction: column;
@@ -407,6 +502,44 @@
         .fade-in:nth-child(3) { animation-delay: 0.3s; }
         .fade-in:nth-child(4) { animation-delay: 0.4s; }
         .fade-in:nth-child(5) { animation-delay: 0.5s; }
+        .fade-in:nth-child(6) { animation-delay: 0.6s; }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .toast.success {
+            border-color: rgba(74, 222, 128, 0.5);
+            background: rgba(34, 197, 94, 0.2);
+        }
+
+        .toast.error {
+            border-color: rgba(239, 68, 68, 0.5);
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -436,10 +569,29 @@
             </div>
         </div>
 
+        <!-- NEW: Gift Code Quick Redeem -->
+        <div class="gift-code-quick fade-in">
+            <h3>🎁 Gift Codes</h3>
+            <p>Have a gift code? Redeem it here instantly!</p>
+            <div class="gift-code-input-group">
+                <input 
+                    type="text" 
+                    id="quickRedeemCode"
+                    class="gift-code-input" 
+                    placeholder="Enter code"
+                    maxlength="8"
+                />
+                <button class="redeem-btn" onclick="quickRedeem()">Redeem</button>
+            </div>
+            <a href="giftcodes.html" class="view-all-codes-btn">
+                View All Gift Codes & Create New
+            </a>
+        </div>
+
         <!-- Promo Banner -->
         <div class="promo-banner fade-in">
-            <h3>🎁 Referral Bonus!</h3>
-            <p>Earn 11% commission on 6 levels. Share your code now!</p>
+            <h3>🎯 First Deposit Bonus!</h3>
+            <p>Get 20% bonus on your first deposit. Start playing now!</p>
         </div>
 
         <!-- Quick Actions -->
@@ -458,6 +610,11 @@
                 <div class="action-icon">💸</div>
                 <div class="action-title">Withdraw</div>
                 <div class="action-subtitle">Cash out</div>
+            </a>
+            <a href="giftcodes.html" class="action-card">
+                <div class="action-icon">🎁</div>
+                <div class="action-title">Gift Codes</div>
+                <div class="action-subtitle">Create & Share</div>
             </a>
         </div>
 
@@ -487,7 +644,7 @@
         <!-- Features Grid -->
         <div class="features-grid fade-in">
             <a href="referral.html" class="feature-card">
-                <div class="feature-icon">🎁</div>
+                <div class="feature-icon">👥</div>
                 <div class="feature-title">Referrals</div>
             </a>
             <a href="deposit-history.html" class="feature-card">
@@ -531,6 +688,72 @@
         if (!localStorage.getItem('token')) {
             window.location.href = 'index.html';
         }
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Quick redeem function
+        async function quickRedeem() {
+            const code = document.getElementById('quickRedeemCode').value.trim().toUpperCase();
+            
+            if (!code) {
+                showToast('Please enter a gift code', 'error');
+                return;
+            }
+
+            if (code.length !== 8) {
+                showToast('Gift code must be 8 characters', 'error');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API}/giftcode/redeem`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ code })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    showToast(data.message, 'success');
+                    document.getElementById('quickRedeemCode').value = '';
+                    // Reload balance
+                    setTimeout(() => loadData(), 1000);
+                } else {
+                    showToast(data.error || 'Failed to redeem code', 'error');
+                }
+            } catch (err) {
+                console.error('Redeem error:', err);
+                showToast('Network error. Please try again.', 'error');
+            }
+        }
+
+        // Allow Enter key to redeem
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('quickRedeemCode');
+            if (input) {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        quickRedeem();
+                    }
+                });
+            }
+        });
 
         // Load user data with improved error handling
         async function loadData() {
@@ -598,4 +821,3 @@
     </script>
 </body>
 </html>
-       
