@@ -217,8 +217,11 @@
 
                 if (res.ok) {
                     // Store admin token
-                    localStorage.setItem('adminToken', data.token);
-                    
+                   // Store ONLY the token (without "Bearer " prefix)
+localStorage.setItem('adminToken', data.token);
+
+// Store login time for session management
+localStorage.setItem('adminLoginTime', Date.now().toString());   
                     // Redirect to admin panel
                     window.location.href = 'admin.html';
                 } else {
@@ -239,6 +242,22 @@
         if (localStorage.getItem('adminToken')) {
             window.location.href = 'admin.html';
         }
+        function checkExistingSession() {
+    const token = localStorage.getItem('adminToken');
+    const loginTime = localStorage.getItem('adminLoginTime');
+    
+    if (token && loginTime) {
+        const elapsed = Date.now() - parseInt(loginTime);
+        const twentyFourHours = 24 * 60 * 60 * 1000;
+        
+        if (elapsed < twentyFourHours) {
+            window.location.href = 'admin.html';
+        } else {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminLoginTime');
+        }
+    }
+}
     </script>
 </body>
                     </html>
