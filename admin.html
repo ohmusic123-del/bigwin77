@@ -483,14 +483,32 @@
     <script>
         const API_URL = 'https://color-game-backend1.onrender.com';
         let token = localStorage.getItem('adminToken');
-        if (!token) window.location.href = 'admin-login.html';
-
-        const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
-        if (adminData.username) {
-            document.getElementById('adminName').textContent = adminData.username;
-            document.getElementById('userAvatar').textContent = adminData.username.charAt(0).toUpperCase();
+        
+        // Check if token exists and is valid
+        if (!token) {
+            console.log('No token found, redirecting to login');
+            window.location.href = 'admin-login.html';
         }
 
+        // Check token expiry based on login time
+        const loginTime = localStorage.getItem('adminLoginTime');
+        if (loginTime) {
+            const elapsed = Date.now() - parseInt(loginTime);
+            const twentyFourHours = 24 * 60 * 60 * 1000;
+            
+            if (elapsed >= twentyFourHours) {
+                console.log('Token expired, redirecting to login');
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminLoginTime');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        // Set admin name from token or default
+        document.getElementById('adminName').textContent = 'Admin';
+        document.getElementById('userAvatar').textContent = 'A';
+
+        // Navigation
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', function() {
                 const section = this.dataset.section;
@@ -531,16 +549,28 @@
             
             try {
                 const response = await fetch(`${API_URL}${endpoint}`, options);
-                const data = await response.json();
+                
+                // Don't try to parse JSON if response is not ok and might not be JSON
                 if (!response.ok) {
                     if (response.status === 401) {
+                        console.log('401 Unauthorized - clearing session');
+                        localStorage.removeItem('adminToken');
+                        localStorage.removeItem('adminLoginTime');
                         alert('Session expired. Please login again.');
-                        logout();
+                        window.location.href = 'admin-login.html';
                         return null;
                     }
-                    throw new Error(data.error || 'Request failed');
+                    
+                    // Try to parse error message
+                    try {
+                        const data = await response.json();
+                        throw new Error(data.error || 'Request failed');
+                    } catch (e) {
+                        throw new Error(`Request failed with status ${response.status}`);
+                    }
                 }
-                return data;
+                
+                return await response.json();
             } catch (error) {
                 console.error('API Error:', error);
                 alert(error.message);
@@ -806,7 +836,7 @@
 
         function logout() {
             localStorage.removeItem('adminToken');
-            localStorage.removeItem('adminData');
+            localStorage.removeItem('adminLoginTime');
             window.location.href = 'admin-login.html';
         }
 
