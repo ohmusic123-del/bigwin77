@@ -866,26 +866,55 @@
         // Load users
         async function loadUsers(page = 1) {
             currentPage = page;
+            
+            // Show loading immediately
+            document.getElementById('usersContent').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading users data...</p>
+                </div>
+            `;
+            
             try {
                 const token = localStorage.getItem('adminToken');
                 if (!token) {
-                    console.error('No admin token found');
+                    console.error('❌ No admin token found');
+                    document.getElementById('usersContent').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🔒</div>
+                            <div class="empty-text">Session Expired</div>
+                            <div style="color: rgba(255,255,255,0.6); margin-top: 10px;">
+                                Redirecting to login...
+                            </div>
+                        </div>
+                    `;
                     showToast('Session expired. Please login again.', 'error');
                     setTimeout(() => window.location.href = 'admin-login.html', 2000);
                     return;
                 }
                 
-                console.log('Loading users - page:', page, 'filter:', currentFilter);
+                console.log('📡 Loading users - page:', page, 'filter:', currentFilter);
+                console.log('🔑 Token:', token.substring(0, 20) + '...');
+                console.log('🌐 API URL:', `${API}/admin/users/list?page=${page}&limit=20&filter=${currentFilter}`);
                 
                 const res = await fetch(`${API}/admin/users/list?page=${page}&limit=20&filter=${currentFilter}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
-                console.log('Users API response status:', res.status);
+                console.log('📊 Users API response status:', res.status);
 
                 if (!res.ok) {
                     if (res.status === 401 || res.status === 403) {
-                        console.error('Admin authentication failed');
+                        console.error('❌ Admin authentication failed');
+                        document.getElementById('usersContent').innerHTML = `
+                            <div class="empty-state">
+                                <div class="empty-icon">🔒</div>
+                                <div class="empty-text">Authentication Failed</div>
+                                <div style="color: rgba(255,255,255,0.6); margin-top: 10px;">
+                                    Session expired. Redirecting to login...
+                                </div>
+                            </div>
+                        `;
                         showToast('Session expired. Please login again.', 'error');
                         localStorage.removeItem('adminToken');
                         setTimeout(() => window.location.href = 'admin-login.html', 2000);
@@ -895,7 +924,8 @@
                 }
 
                 const data = await res.json();
-                console.log('Users data received:', data);
+                console.log('✅ Users data received:', data);
+                console.log('👥 Number of users:', data.users?.length || 0);
 
                 if (res.ok) {
                     renderUsers(data.users, data.pagination);
@@ -908,17 +938,28 @@
                     `;
                 }
             } catch (err) {
-                console.error('Load users error:', err);
+                console.error('❌ Load users error:', err);
+                console.error('Error details:', err.message, err.stack);
+                
+                let errorMessage = err.message;
+                if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+                    errorMessage = 'Cannot connect to server. Is the backend running?';
+                }
+                
                 document.getElementById('usersContent').innerHTML = `
                     <div class="empty-state">
                         <div class="empty-icon">❌</div>
                         <div class="empty-text">Failed to load users</div>
-                        <div style="color: rgba(255,255,255,0.5); font-size: 14px; margin-top: 10px;">
-                            ${err.message}
+                        <div style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 15px; padding: 15px; background: rgba(239,68,68,0.1); border-radius: 10px;">
+                            <div style="font-weight: 700; margin-bottom: 5px;">Error:</div>
+                            ${errorMessage}
                         </div>
                         <div style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 10px;">
-                            Check console for details
+                            Check console (F12) for detailed error
                         </div>
+                        <button onclick="loadUsers()" style="margin-top: 15px; padding: 10px 20px; background: #667eea; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: 600;">
+                            🔄 Retry
+                        </button>
                     </div>
                 `;
                 showToast('Failed to load users. Check console.', 'error');
