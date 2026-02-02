@@ -7,2187 +7,488 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #4F46E5;
-            --primary-dark: #4338CA;
-            --secondary: #10B981;
-            --danger: #EF4444;
-            --warning: #F59E0B;
-            --dark: #1F2937;
-            --light: #F9FAFB;
-            --border: #E5E7EB;
-            --text: #374151;
-            --text-light: #6B7280;
-            --success: #10B981;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--light);
-            color: var(--text);
-        }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 260px;
-            height: 100vh;
-            background: white;
-            border-right: 1px solid var(--border);
-            overflow-y: auto;
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-
-        .sidebar-header {
-            padding: 24px 20px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .sidebar-logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .sidebar-menu {
-            padding: 20px 0;
-        }
-
-        .menu-item {
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text);
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            border-left: 3px solid transparent;
-        }
-
-        .menu-item:hover {
-            background: var(--light);
-            color: var(--primary);
-        }
-
-        .menu-item.active {
-            background: #EEF2FF;
-            color: var(--primary);
-            border-left-color: var(--primary);
-            font-weight: 500;
-        }
-
-        .menu-item i {
-            width: 20px;
-            text-align: center;
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-left: 260px;
-            padding: 24px;
-            min-height: 100vh;
-        }
-
-        .top-bar {
-            background: white;
-            padding: 16px 24px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .page-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-        }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .stat-icon.primary {
-            background: #EEF2FF;
-            color: var(--primary);
-        }
-
-        .stat-icon.success {
-            background: #D1FAE5;
-            color: var(--success);
-        }
-
-        .stat-icon.warning {
-            background: #FEF3C7;
-            color: var(--warning);
-        }
-
-        .stat-icon.danger {
-            background: #FEE2E2;
-            color: var(--danger);
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 4px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: var(--text-light);
-        }
-
-        .stat-change {
-            font-size: 13px;
-            margin-top: 8px;
-            padding: 4px 8px;
-            border-radius: 6px;
-            display: inline-block;
-        }
-
-        .stat-change.positive {
-            background: #D1FAE5;
-            color: var(--success);
-        }
-
-        .stat-change.negative {
-            background: #FEE2E2;
-            color: var(--danger);
-        }
-
-        /* Content Section */
-        .content-section {
-            display: none;
-        }
-
-        .content-section.active {
-            display: block;
-        }
-
-        /* Card */
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 24px;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        /* Table */
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background: var(--light);
-        }
-
-        th {
-            padding: 12px 16px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        td {
-            padding: 16px;
-            border-bottom: 1px solid var(--border);
-            font-size: 14px;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tbody tr:hover {
-            background: var(--light);
-        }
-
-        /* Badge */
-        .badge {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            display: inline-block;
-        }
-
-        .badge.success {
-            background: #D1FAE5;
-            color: var(--success);
-        }
-
-        .badge.danger {
-            background: #FEE2E2;
-            color: var(--danger);
-        }
-
-        .badge.warning {
-            background: #FEF3C7;
-            color: var(--warning);
-        }
-
-        .badge.primary {
-            background: #EEF2FF;
-            color: var(--primary);
-        }
-
-        /* Button */
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-sm {
-            padding: 6px 12px;
-            font-size: 13px;
-        }
-
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Input */
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 14px;
-            color: var(--dark);
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.2s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            padding: 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .modal-close {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: var(--light);
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text);
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        .modal-footer {
-            padding: 24px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            gap: 12px;
-            justify-content: flex-end;
-        }
-
-        /* Alert */
-        .alert {
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .alert.success {
-            background: #D1FAE5;
-            color: var(--success);
-        }
-
-        .alert.danger {
-            background: #FEE2E2;
-            color: var(--danger);
-        }
-
-        .alert.warning {
-            background: #FEF3C7;
-            color: var(--warning);
-        }
-
-        /* Filters */
-        .filters {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
-
-        /* Loading */
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-light);
-        }
-
-        .spinner {
-            border: 3px solid var(--border);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Logout Button */
-        .logout-btn {
-            padding: 8px 16px;
-            background: #FEE2E2;
-            color: var(--danger);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .logout-btn:hover {
-            background: var(--danger);
-            color: white;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Additional utility classes */
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        .mt-2 { margin-top: 16px; }
-        .mb-2 { margin-bottom: 16px; }
-        .flex { display: flex; }
-        .gap-2 { gap: 16px; }
-        .items-center { align-items: center; }
-        .justify-between { justify-content: space-between; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --primary: #4F46E5; --primary-dark: #4338CA; --secondary: #10B981; --danger: #EF4444; --warning: #F59E0B; --dark: #1F2937; --light: #F9FAFB; --border: #E5E7EB; --text: #374151; --text-light: #6B7280; --success: #10B981; }
+body { font-family: 'Inter', sans-serif; background: var(--light); color: var(--text); }
+.sidebar { position: fixed; left: 0; top: 0; width: 260px; height: 100vh; background: white; border-right: 1px solid var(--border); overflow-y: auto; z-index: 1000; }
+.sidebar-header { padding: 24px 20px; border-bottom: 1px solid var(--border); }
+.sidebar-logo { font-size: 24px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+.sidebar-menu { padding: 20px 0; }
+.menu-item { padding: 12px 20px; display: flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; cursor: pointer; border-left: 3px solid transparent; }
+.menu-item:hover { background: var(--light); color: var(--primary); }
+.menu-item.active { background: #EEF2FF; color: var(--primary); border-left-color: var(--primary); font-weight: 500; }
+.menu-item i { width: 20px; text-align: center; }
+.main-content { margin-left: 260px; padding: 24px; min-height: 100vh; }
+.top-bar { background: white; padding: 16px 24px; border-radius: 12px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.page-title { font-size: 24px; font-weight: 600; color: var(--dark); }
+.user-info { display: flex; align-items: center; gap: 12px; }
+.user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 24px; }
+.stat-card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.stat-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.stat-icon.primary { background: #EEF2FF; color: var(--primary); }
+.stat-icon.success { background: #D1FAE5; color: var(--success); }
+.stat-icon.warning { background: #FEF3C7; color: var(--warning); }
+.stat-icon.danger { background: #FEE2E2; color: var(--danger); }
+.stat-value { font-size: 32px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.stat-label { font-size: 14px; color: var(--text-light); }
+.content-section { display: none; }
+.content-section.active { display: block; }
+.card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.card-title { font-size: 18px; font-weight: 600; color: var(--dark); }
+.table-container { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead { background: var(--light); }
+th { padding: 12px 16px; text-align: left; font-weight: 600; font-size: 13px; color: var(--text-light); text-transform: uppercase; }
+td { padding: 16px; border-bottom: 1px solid var(--border); font-size: 14px; }
+tbody tr:hover { background: var(--light); }
+.badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500; display: inline-block; }
+.badge.success { background: #D1FAE5; color: var(--success); }
+.badge.danger { background: #FEE2E2; color: var(--danger); }
+.badge.warning { background: #FEF3C7; color: var(--warning); }
+.badge.primary { background: #EEF2FF; color: var(--primary); }
+.btn { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-success { background: var(--success); color: white; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+.input-group { margin-bottom: 16px; }
+.input-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; color: var(--dark); }
+input, select, textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+.modal.active { display: flex; }
+.modal-content { background: white; border-radius: 16px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+.modal-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.modal-title { font-size: 20px; font-weight: 600; color: var(--dark); }
+.modal-close { width: 32px; height: 32px; border: none; background: var(--light); border-radius: 8px; cursor: pointer; }
+.modal-body { padding: 24px; }
+.modal-footer { padding: 24px; border-top: 1px solid var(--border); display: flex; gap: 12px; justify-content: flex-end; }
+.logout-btn { padding: 8px 16px; background: #FEE2E2; color: var(--danger); border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; }
+.logout-btn:hover { background: var(--danger); color: white; }
+.text-center { text-align: center; }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-logo">
-                <i class="fas fa-crown"></i>
-                <span>BigWin77</span>
-            </div>
+            <div class="sidebar-logo"><i class="fas fa-crown"></i><span>BigWin77</span></div>
         </div>
         <div class="sidebar-menu">
-            <a class="menu-item active" data-section="dashboard">
-                <i class="fas fa-chart-line"></i>
-                <span>Dashboard</span>
-            </a>
-            <a class="menu-item" data-section="users">
-                <i class="fas fa-users"></i>
-                <span>Users Management</span>
-            </a>
-            <a class="menu-item" data-section="gift-codes">
-                <i class="fas fa-gift"></i>
-                <span>Gift Codes</span>
-            </a>
-            <a class="menu-item" data-section="deposits">
-                <i class="fas fa-wallet"></i>
-                <span>Deposits</span>
-            </a>
-            <a class="menu-item" data-section="withdrawals">
-                <i class="fas fa-money-bill-wave"></i>
-                <span>Withdrawals</span>
-            </a>
-            <a class="menu-item" data-section="bets">
-                <i class="fas fa-dice"></i>
-                <span>Bets History</span>
-            </a>
-            <a class="menu-item" data-section="rounds">
-                <i class="fas fa-clock"></i>
-                <span>Game Rounds</span>
-            </a>
-            <a class="menu-item" data-section="monitor-users">
-                <i class="fas fa-user-shield"></i>
-                <span>Monitor Users</span>
-            </a>
-            <a class="menu-item" data-section="referrals">
-                <i class="fas fa-share-nodes"></i>
-                <span>Referral System</span>
-            </a>
-            <a class="menu-item" data-section="analytics">
-                <i class="fas fa-chart-pie"></i>
-                <span>Analytics</span>
-            </a>
-            <a class="menu-item" data-section="settings">
-                <i class="fas fa-cog"></i>
-                <span>Settings</span>
-            </a>
+            <a class="menu-item active" data-section="dashboard"><i class="fas fa-chart-line"></i><span>Dashboard</span></a>
+            <a class="menu-item" data-section="users"><i class="fas fa-users"></i><span>Users</span></a>
+            <a class="menu-item" data-section="deposits"><i class="fas fa-wallet"></i><span>Deposits</span></a>
+            <a class="menu-item" data-section="withdrawals"><i class="fas fa-money-bill-wave"></i><span>Withdrawals</span></a>
+            <a class="menu-item" data-section="giftcodes"><i class="fas fa-gift"></i><span>Gift Codes</span></a>
+            <a class="menu-item" data-section="monitors"><i class="fas fa-user-shield"></i><span>Monitors</span></a>
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="main-content">
-        <!-- Top Bar -->
         <div class="top-bar">
             <h1 class="page-title" id="pageTitle">Dashboard</h1>
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar">A</div>
                 <span id="adminName">Admin</span>
-                <button class="logout-btn" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
+                <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </div>
 
-        <!-- Dashboard Section -->
         <div class="content-section active" id="dashboard">
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalUsers">0</div>
-                            <div class="stat-label">Total Users</div>
-                        </div>
-                        <div class="stat-icon primary">
-                            <i class="fas fa-users"></i>
-                        </div>
+                        <div><div class="stat-value" id="totalUsers">0</div><div class="stat-label">Total Users</div></div>
+                        <div class="stat-icon primary"><i class="fas fa-users"></i></div>
                     </div>
-                    <div class="stat-change positive" id="usersChange">+0% from last month</div>
                 </div>
-
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalRevenue">₹0</div>
-                            <div class="stat-label">Total Revenue</div>
-                        </div>
-                        <div class="stat-icon success">
-                            <i class="fas fa-rupee-sign"></i>
-                        </div>
+                        <div><div class="stat-value" id="totalDeposits">₹0</div><div class="stat-label">Total Deposits</div></div>
+                        <div class="stat-icon success"><i class="fas fa-rupee-sign"></i></div>
                     </div>
-                    <div class="stat-change positive" id="revenueChange">+0% from last month</div>
                 </div>
-
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="pendingWithdrawals">0</div>
-                            <div class="stat-label">Pending Withdrawals</div>
-                        </div>
-                        <div class="stat-icon warning">
-                            <i class="fas fa-clock"></i>
-                        </div>
+                        <div><div class="stat-value" id="pendingWithdrawals">0</div><div class="stat-label">Pending Withdrawals</div></div>
+                        <div class="stat-icon warning"><i class="fas fa-clock"></i></div>
                     </div>
-                    <div class="stat-change" id="withdrawalsChange">Needs attention</div>
                 </div>
-
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="activeGiftCodes">0</div>
-                            <div class="stat-label">Active Gift Codes</div>
-                        </div>
-                        <div class="stat-icon danger">
-                            <i class="fas fa-gift"></i>
-                        </div>
+                        <div><div class="stat-value" id="totalGiftCodes">0</div><div class="stat-label">Gift Codes</div></div>
+                        <div class="stat-icon danger"><i class="fas fa-gift"></i></div>
                     </div>
-                    <div class="stat-change" id="giftCodesChange">Currently active</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Recent Activity</h3>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Action</th>
-                                <th>Amount</th>
-                                <th>Time</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recentActivity">
-                            <tr>
-                                <td colspan="5" class="text-center">Loading...</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
 
-        <!-- Users Section -->
         <div class="content-section" id="users">
-            <div class="filters">
-                <div class="input-group">
-                    <input type="text" id="userSearch" placeholder="Search users...">
-                </div>
-                <div class="input-group">
-                    <select id="userStatusFilter">
-                        <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="banned">Banned</option>
-                    </select>
-                </div>
-            </div>
-
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">All Users</h3>
-                    <button class="btn btn-primary" onclick="refreshUsers()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
+                    <h3 class="card-title">Users</h3>
+                    <button class="btn btn-primary" onclick="loadUsers()"><i class="fas fa-sync"></i> Refresh</button>
                 </div>
                 <div class="table-container">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Mobile</th>
-                                <th>Wallet</th>
-                                <th>Bonus</th>
-                                <th>Total Deposit</th>
-                                <th>Total Withdrawal</th>
-                                <th>Registered</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTable">
-                            <tr>
-                                <td colspan="7" class="text-center">Loading...</td>
-                            </tr>
-                        </tbody>
+                        <thead><tr><th>Mobile</th><th>Wallet</th><th>Bonus</th><th>Total Deposit</th><th>Total Withdraw</th><th>Registered</th><th>Actions</th></tr></thead>
+                        <tbody id="usersTable"><tr><td colspan="7" class="text-center">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- Gift Codes Section -->
-        <div class="content-section" id="gift-codes">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Gift Codes Management</h3>
-                    <button class="btn btn-primary" onclick="openCreateGiftCodeModal()">
-                        <i class="fas fa-plus"></i> Create Gift Code
-                    </button>
-                </div>
-                
-                <div class="filters">
-                    <div class="input-group">
-                        <input type="text" id="giftCodeSearch" placeholder="Search by code...">
-                    </div>
-                    <div class="input-group">
-                        <select id="giftCodeStatusFilter" onchange="filterGiftCodes()">
-                            <option value="">All Status</option>
-                            <option value="active">Active</option>
-                            <option value="expired">Expired</option>
-                            <option value="fully-redeemed">Fully Redeemed</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <select id="giftCodeTypeFilter" onchange="filterGiftCodes()">
-                            <option value="">All Types</option>
-                            <option value="one-to-one">One-to-One</option>
-                            <option value="one-to-many">One-to-Many</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Code</th>
-                                <th>Amount</th>
-                                <th>Type</th>
-                                <th>Created By</th>
-                                <th>Redemptions</th>
-                                <th>Expires</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="giftCodesTable">
-                            <tr>
-                                <td colspan="8" class="text-center">Loading...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Deposits Section -->
         <div class="content-section" id="deposits">
-            <div class="filters">
-                <div class="input-group">
-                    <input type="text" id="depositSearch" placeholder="Search by mobile or ID...">
-                </div>
-                <div class="input-group">
-                    <select id="depositStatusFilter" onchange="filterDeposits()">
-                        <option value="">All Status</option>
-                        <option value="SUCCESS">Success</option>
-                        <option value="PENDING">Pending</option>
-                        <option value="FAILED">Failed</option>
-                    </select>
-                </div>
-            </div>
-
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Deposit History</h3>
-                    <button class="btn btn-primary" onclick="refreshDeposits()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
+                    <h3 class="card-title">Deposits</h3>
+                    <button class="btn btn-primary" onclick="loadDeposits()"><i class="fas fa-sync"></i> Refresh</button>
                 </div>
                 <div class="table-container">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Mobile</th>
-                                <th>Amount</th>
-                                <th>Method</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="depositsTable">
-                            <tr>
-                                <td colspan="6" class="text-center">Loading...</td>
-                            </tr>
-                        </tbody>
+                        <thead><tr><th>ID</th><th>Mobile</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                        <tbody id="depositsTable"><tr><td colspan="5" class="text-center">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- Withdrawals Section -->
         <div class="content-section" id="withdrawals">
-            <div class="filters">
-                <div class="input-group">
-                    <input type="text" id="withdrawalSearch" placeholder="Search...">
-                </div>
-                <div class="input-group">
-                    <select id="withdrawalStatusFilter" onchange="filterWithdrawals()">
-                        <option value="">All Status</option>
-                        <option value="PENDING">Pending</option>
-                        <option value="APPROVED">Approved</option>
-                        <option value="REJECTED">Rejected</option>
-                    </select>
-                </div>
-            </div>
-
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Withdrawal Requests</h3>
-                    <button class="btn btn-primary" onclick="refreshWithdrawals()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
+                    <h3 class="card-title">Withdrawals</h3>
+                    <button class="btn btn-primary" onclick="loadWithdrawals()"><i class="fas fa-sync"></i> Refresh</button>
                 </div>
                 <div class="table-container">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Mobile</th>
-                                <th>Amount</th>
-                                <th>Method</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="withdrawalsTable">
-                            <tr>
-                                <td colspan="7" class="text-center">Loading...</td>
-                            </tr>
-                        </tbody>
+                        <thead><tr><th>ID</th><th>Mobile</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                        <tbody id="withdrawalsTable"><tr><td colspan="7" class="text-center">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- Bets Section -->
-        <div class="content-section" id="bets">
-            <div class="filters">
-                <div class="input-group">
-                    <input type="text" id="betSearch" placeholder="Search by mobile or round ID...">
-                </div>
-                <div class="input-group">
-                    <select id="betColorFilter" onchange="filterBets()">
-                        <option value="">All Colors</option>
-                        <option value="red">Red</option>
-                        <option value="green">Green</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <select id="betStatusFilter" onchange="filterBets()">
-                        <option value="">All Status</option>
-                        <option value="PENDING">Pending</option>
-                        <option value="WON">Won</option>
-                        <option value="LOST">Lost</option>
-                    </select>
-                </div>
-            </div>
-
+        <div class="content-section" id="giftcodes">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Betting History</h3>
-                    <button class="btn btn-primary" onclick="refreshBets()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
+                    <h3 class="card-title">Gift Codes</h3>
+                    <button class="btn btn-primary" onclick="openGiftModal()"><i class="fas fa-plus"></i> Create</button>
                 </div>
                 <div class="table-container">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Round ID</th>
-                                <th>Mobile</th>
-                                <th>Color</th>
-                                <th>Amount</th>
-                                <th>Payout</th>
-                                <th>Status</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="betsTable">
-                            <tr>
-                                <td colspan="7" class="text-center">Loading...</td>
-                            </tr>
-                        </tbody>
+                        <thead><tr><th>Code</th><th>Amount</th><th>Type</th><th>Created By</th><th>Redemptions</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead>
+                        <tbody id="giftcodesTable"><tr><td colspan="8" class="text-center">Loading...</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- Rounds Section -->
-        <div class="content-section" id="rounds">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Game Rounds History</h3>
-                    <button class="btn btn-primary" onclick="refreshRounds()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Round ID</th>
-                                <th>Result</th>
-                                <th>Total Bets</th>
-                                <th>Red Amount</th>
-                                <th>Green Amount</th>
-                                <th>House Profit</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="roundsTable">
-                            <tr>
-                                <td colspan="7" class="text-center">Loading...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Monitor Users Section -->
-        <div class="content-section" id="monitor-users">
+        <div class="content-section" id="monitors">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Monitor Users</h3>
-                    <button class="btn btn-primary" onclick="openCreateMonitorModal()">
-                        <i class="fas fa-plus"></i> Create Monitor User
-                    </button>
+                    <button class="btn btn-primary" onclick="openMonitorModal()"><i class="fas fa-plus"></i> Create</button>
                 </div>
                 <div class="table-container">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Username</th>
-                                <th>Display Name</th>
-                                <th>Total Logins</th>
-                                <th>Last Login</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="monitorUsersTable">
-                            <tr>
-                                <td colspan="6" class="text-center">Loading...</td>
-                            </tr>
-                        </tbody>
+                        <thead><tr><th>Username</th><th>Display Name</th><th>Logins</th><th>Last Login</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="monitorsTable"><tr><td colspan="6" class="text-center">Loading...</td></tr></tbody>
                     </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Referrals Section -->
-        <div class="content-section" id="referrals">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Referral System Overview</h3>
-                    <button class="btn btn-primary" onclick="refreshReferrals()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
-                </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>User Mobile</th>
-                                <th>Referrer</th>
-                                <th>Commission</th>
-                                <th>Level</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="referralsTable">
-                            <tr>
-                                <td colspan="5" class="text-center">Loading...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analytics Section -->
-        <div class="content-section" id="analytics">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalBetsCount">0</div>
-                            <div class="stat-label">Total Bets Placed</div>
-                        </div>
-                        <div class="stat-icon primary">
-                            <i class="fas fa-dice"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalBetsAmount">₹0</div>
-                            <div class="stat-label">Total Bet Amount</div>
-                        </div>
-                        <div class="stat-icon success">
-                            <i class="fas fa-money-bill"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalDeposits">₹0</div>
-                            <div class="stat-label">Total Deposits</div>
-                        </div>
-                        <div class="stat-icon warning">
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalWithdrawals">₹0</div>
-                            <div class="stat-label">Total Withdrawals</div>
-                        </div>
-                        <div class="stat-icon danger">
-                            <i class="fas fa-hand-holding-usd"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Platform Statistics</h3>
-                </div>
-                <div id="analyticsData">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Loading analytics data...</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Settings Section -->
-        <div class="content-section" id="settings">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Admin Settings</h3>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group">
-                        <label>Current Username</label>
-                        <input type="text" id="currentUsername" disabled>
-                    </div>
-                    <div class="input-group">
-                        <label>New Password</label>
-                        <input type="password" id="newPassword" placeholder="Enter new password">
-                    </div>
-                    <div class="input-group">
-                        <label>Confirm Password</label>
-                        <input type="password" id="confirmPassword" placeholder="Confirm password">
-                    </div>
-                    <button class="btn btn-primary" onclick="updatePassword()">
-                        <i class="fas fa-save"></i> Update Password
-                    </button>
-                </div>
-            </div>
-
-            <div class="card mt-2">
-                <div class="card-header">
-                    <h3 class="card-title">System Information</h3>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Platform:</strong> BigWin77 Admin Panel</p>
-                    <p><strong>Version:</strong> 2.0.0</p>
-                    <p><strong>Last Updated:</strong> <span id="lastUpdated">-</span></p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Create Gift Code Modal -->
-    <div class="modal" id="createGiftCodeModal">
+    <div class="modal" id="giftModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Create Gift Code</h3>
-                <button class="modal-close" onclick="closeCreateGiftCodeModal()">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button class="modal-close" onclick="closeGiftModal()"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
-                <div class="input-group">
-                    <label>Amount (₹)</label>
-                    <input type="number" id="giftAmount" min="10" max="10000" placeholder="Enter amount">
-                </div>
-                <div class="input-group">
-                    <label>Type</label>
-                    <select id="giftType">
-                        <option value="one-to-one">One-to-One (Single use)</option>
-                        <option value="one-to-many">One-to-Many (Multiple use)</option>
-                    </select>
-                </div>
-                <div class="input-group" id="maxRedemptionsGroup" style="display:none;">
-                    <label>Max Redemptions</label>
-                    <input type="number" id="maxRedemptions" min="1" value="999999">
-                </div>
-                <div class="input-group">
-                    <label>Validity (Days)</label>
-                    <input type="number" id="validityDays" value="30" min="1" max="365">
-                </div>
-                <div class="input-group">
-                    <label>Description (Optional)</label>
-                    <textarea id="giftDescription" rows="3" placeholder="Gift description"></textarea>
-                </div>
-                <div class="input-group">
-                    <label>For User Mobile (Admin Only)</label>
-                    <input type="text" id="forUserMobile" placeholder="Enter user mobile to gift from">
-                </div>
+                <div class="input-group"><label>Amount (₹)</label><input type="number" id="giftAmount" min="10" max="10000"></div>
+                <div class="input-group"><label>Type</label><select id="giftType"><option value="one-to-one">One-to-One</option><option value="one-to-many">One-to-Many</option></select></div>
+                <div class="input-group"><label>Validity (Days)</label><input type="number" id="validityDays" value="30"></div>
+                <div class="input-group"><label>Description</label><textarea id="giftDesc" rows="2"></textarea></div>
+                <div class="input-group"><label>User Mobile</label><input type="text" id="forUserMobile"></div>
             </div>
             <div class="modal-footer">
-                <button class="btn" onclick="closeCreateGiftCodeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="createGiftCode()">
-                    <i class="fas fa-gift"></i> Create Code
-                </button>
+                <button class="btn" onclick="closeGiftModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="createGift()">Create</button>
             </div>
         </div>
     </div>
 
-    <!-- View Gift Code Details Modal -->
-    <div class="modal" id="viewGiftCodeModal">
+    <div class="modal" id="monitorModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Gift Code Details</h3>
-                <button class="modal-close" onclick="closeViewGiftCodeModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body" id="giftCodeDetails">
-                <!-- Details will be loaded here -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn" onclick="closeViewGiftCodeModal()">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Create Monitor User Modal -->
-    <div class="modal" id="createMonitorModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Create Monitor User</h3>
-                <button class="modal-close" onclick="closeCreateMonitorModal()">
-                    <i class="fas fa-times"></i>
-                </button>
+                <h3 class="modal-title">Create Monitor</h3>
+                <button class="modal-close" onclick="closeMonitorModal()"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
-                <div class="input-group">
-                    <label>Username</label>
-                    <input type="text" id="monitorUsername" placeholder="Enter username">
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="monitorPassword" placeholder="Enter password">
-                </div>
-                <div class="input-group">
-                    <label>Display Name</label>
-                    <input type="text" id="monitorDisplayName" placeholder="Enter display name">
-                </div>
+                <div class="input-group"><label>Username</label><input type="text" id="monitorUsername"></div>
+                <div class="input-group"><label>Password</label><input type="password" id="monitorPassword"></div>
+                <div class="input-group"><label>Display Name</label><input type="text" id="monitorDisplayName"></div>
             </div>
             <div class="modal-footer">
-                <button class="btn" onclick="closeCreateMonitorModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="createMonitorUser()">
-                    <i class="fas fa-user-plus"></i> Create User
-                </button>
+                <button class="btn" onclick="closeMonitorModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="createMonitor()">Create</button>
             </div>
         </div>
     </div>
 
     <script>
-        // API Configuration
-        const API_URL = 'http://localhost:3000';
-        let token = localStorage.getItem('adminToken');
-        let allUsers = [];
-        let allGiftCodes = [];
-        let allDeposits = [];
-        let allWithdrawals = [];
-        let allBets = [];
+const API_URL = 'https://color-game-backend1.onrender.com';
+let token = localStorage.getItem('adminToken');
+if (!token) window.location.href = 'admin-login.html';
 
-        // Check authentication
-        if (!token) {
-            window.location.href = 'admin-login.html';
-        }
+document.querySelectorAll('.menu-item').forEach(item => {
+    item.addEventListener('click', function() {
+        const section = this.dataset.section;
+        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(section).classList.add('active');
+        const titles = { 'dashboard': 'Dashboard', 'users': 'Users', 'deposits': 'Deposits', 'withdrawals': 'Withdrawals', 'giftcodes': 'Gift Codes', 'monitors': 'Monitors' };
+        document.getElementById('pageTitle').textContent = titles[section] || 'Dashboard';
+        if (section === 'dashboard') loadDashboard();
+        else if (section === 'users') loadUsers();
+        else if (section === 'deposits') loadDeposits();
+        else if (section === 'withdrawals') loadWithdrawals();
+        else if (section === 'giftcodes') loadGiftcodes();
+        else if (section === 'monitors') loadMonitors();
+    });
+});
 
-        // Set admin name
-        const adminData = JSON.parse(localStorage.getItem('adminData') || '{}');
-        if (adminData.username) {
-            document.getElementById('adminName').textContent = adminData.username;
-            document.getElementById('userAvatar').textContent = adminData.username.charAt(0).toUpperCase();
-            document.getElementById('currentUsername').value = adminData.username;
-        }
-
-        // Navigation
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const section = this.dataset.section;
-                
-                // Update active menu item
-                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Update active section
-                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-                document.getElementById(section).classList.add('active');
-                
-                // Update page title
-                const titles = {
-                    'dashboard': 'Dashboard',
-                    'users': 'Users Management',
-                    'gift-codes': 'Gift Codes',
-                    'deposits': 'Deposits',
-                    'withdrawals': 'Withdrawals',
-                    'bets': 'Bets History',
-                    'rounds': 'Game Rounds',
-                    'monitor-users': 'Monitor Users',
-                    'referrals': 'Referral System',
-                    'analytics': 'Analytics',
-                    'settings': 'Settings'
-                };
-                document.getElementById('pageTitle').textContent = titles[section] || 'Dashboard';
-                
-                // Load section data
-                loadSectionData(section);
-            });
-        });
-
-        // Load section data
-        function loadSectionData(section) {
-            switch(section) {
-                case 'dashboard':
-                    loadDashboard();
-                    break;
-                case 'users':
-                    loadUsers();
-                    break;
-                case 'gift-codes':
-                    loadGiftCodes();
-                    break;
-                case 'deposits':
-                    loadDeposits();
-                    break;
-                case 'withdrawals':
-                    loadWithdrawals();
-                    break;
-                case 'bets':
-                    loadBets();
-                    break;
-                case 'rounds':
-                    loadRounds();
-                    break;
-                case 'monitor-users':
-                    loadMonitorUsers();
-                    break;
-                case 'referrals':
-                    loadReferrals();
-                    break;
-                case 'analytics':
-                    loadAnalytics();
-                    break;
-            }
-        }
-
-        // API Helper
-        async function apiCall(endpoint, method = 'GET', body = null) {
-            const options = {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            };
-            
-            if (body) {
-                options.body = JSON.stringify(body);
-            }
-            
-            try {
-                const response = await fetch(`${API_URL}${endpoint}`, options);
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    if (response.status === 401 && data.code === 'TOKEN_EXPIRED') {
-                        alert('Session expired. Please login again.');
-                        logout();
-                        return null;
-                    }
-                    throw new Error(data.error || 'Request failed');
-                }
-                
-                return data;
-            } catch (error) {
-                console.error('API Error:', error);
-                alert(error.message);
+async function apiCall(endpoint, method = 'GET', body = null) {
+    const options = { method, headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` } };
+    if (body) options.body = JSON.stringify(body);
+    try {
+        const response = await fetch(`${API_URL}${endpoint}`, options);
+        if (!response.ok) {
+            if (response.status === 401) {
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminLoginTime');
+                window.location.href = 'admin-login.html';
                 return null;
             }
+            const data = await response.json().catch(() => ({}));
+            throw new Error(data.error || 'Request failed');
         }
-
-        // Load Dashboard
-        async function loadDashboard() {
-            try {
-                const [users, deposits, withdrawals, giftCodes, bets] = await Promise.all([
-                    apiCall('/admin/users'),
-                    apiCall('/admin/deposits'),
-                    apiCall('/admin/withdrawals'),
-                    apiCall('/admin/gift-codes'),
-                    apiCall('/admin/bets')
-                ]);
-
-                if (users) {
-                    document.getElementById('totalUsers').textContent = users.length;
-                }
-
-                if (deposits) {
-                    const totalRevenue = deposits
-                        .filter(d => d.status === 'SUCCESS')
-                        .reduce((sum, d) => sum + d.amount, 0);
-                    document.getElementById('totalRevenue').textContent = `₹${totalRevenue.toFixed(2)}`;
-                }
-
-                if (withdrawals) {
-                    const pending = withdrawals.filter(w => w.status === 'PENDING').length;
-                    document.getElementById('pendingWithdrawals').textContent = pending;
-                }
-
-                if (giftCodes) {
-                    const active = giftCodes.filter(g => g.status === 'active').length;
-                    document.getElementById('activeGiftCodes').textContent = active;
-                }
-
-                // Load recent activity
-                loadRecentActivity();
-            } catch (error) {
-                console.error('Dashboard load error:', error);
-            }
-        }
-
-        // Load Recent Activity
-        async function loadRecentActivity() {
-            const tbody = document.getElementById('recentActivity');
-            try {
-                const [deposits, withdrawals, bets] = await Promise.all([
-                    apiCall('/admin/deposits'),
-                    apiCall('/admin/withdrawals'),
-                    apiCall('/admin/bets')
-                ]);
-
-                let activities = [];
-
-                if (deposits) {
-                    deposits.slice(0, 5).forEach(d => {
-                        activities.push({
-                            user: d.mobile,
-                            action: 'Deposit',
-                            amount: `₹${d.amount}`,
-                            time: new Date(d.createdAt).toLocaleString(),
-                            status: d.status
-                        });
-                    });
-                }
-
-                if (withdrawals) {
-                    withdrawals.slice(0, 5).forEach(w => {
-                        activities.push({
-                            user: w.mobile,
-                            action: 'Withdrawal',
-                            amount: `₹${w.amount}`,
-                            time: new Date(w.createdAt).toLocaleString(),
-                            status: w.status
-                        });
-                    });
-                }
-
-                activities.sort((a, b) => new Date(b.time) - new Date(a.time));
-                activities = activities.slice(0, 10);
-
-                tbody.innerHTML = activities.length ? activities.map(a => `
-                    <tr>
-                        <td>${a.user}</td>
-                        <td>${a.action}</td>
-                        <td>${a.amount}</td>
-                        <td>${a.time}</td>
-                        <td><span class="badge ${getBadgeClass(a.status)}">${a.status}</span></td>
-                    </tr>
-                `).join('') : '<tr><td colspan="5" class="text-center">No recent activity</td></tr>';
-            } catch (error) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center">Error loading activity</td></tr>';
-            }
-        }
-
-        // Load Users
-        async function loadUsers() {
-            const tbody = document.getElementById('usersTable');
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading...</td></tr>';
-            
-            const users = await apiCall('/admin/users');
-            if (users) {
-                allUsers = users;
-                displayUsers(users);
-            }
-        }
-
-        function displayUsers(users) {
-            const tbody = document.getElementById('usersTable');
-            tbody.innerHTML = users.length ? users.map(user => `
-                <tr>
-                    <td>${user.mobile}</td>
-                    <td>₹${user.wallet?.toFixed(2) || '0.00'}</td>
-                    <td>₹${user.bonus?.toFixed(2) || '0.00'}</td>
-                    <td>₹${user.totalDeposit?.toFixed(2) || '0.00'}</td>
-                    <td>₹${user.totalWithdraw?.toFixed(2) || '0.00'}</td>
-                    <td>${new Date(user.createdAt).toLocaleDateString()}</td>
-                    <td>
-                        <button class="btn btn-sm btn-primary" onclick="viewUser('${user.mobile}')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        ${user.isBanned ? 
-                            `<button class="btn btn-sm btn-success" onclick="unbanUser('${user.mobile}')">
-                                <i class="fas fa-unlock"></i> Unban
-                            </button>` :
-                            `<button class="btn btn-sm btn-danger" onclick="banUser('${user.mobile}')">
-                                <i class="fas fa-ban"></i> Ban
-                            </button>`
-                        }
-                    </td>
-                </tr>
-            `).join('') : '<tr><td colspan="7" class="text-center">No users found</td></tr>';
-        }
-
-        function refreshUsers() {
-            loadUsers();
-        }
-
-        // User search
-        document.getElementById('userSearch')?.addEventListener('input', function() {
-            const search = this.value.toLowerCase();
-            const filtered = allUsers.filter(u => 
-                u.mobile.toLowerCase().includes(search)
-            );
-            displayUsers(filtered);
-        });
-
-        // Load Gift Codes
-        async function loadGiftCodes() {
-            const tbody = document.getElementById('giftCodesTable');
-            tbody.innerHTML = '<tr><td colspan="8" class="text-center">Loading...</td></tr>';
-            
-            const giftCodes = await apiCall('/admin/gift-codes');
-            if (giftCodes) {
-                allGiftCodes = giftCodes;
-                displayGiftCodes(giftCodes);
-            }
-        }
-
-        function displayGiftCodes(codes) {
-            const tbody = document.getElementById('giftCodesTable');
-            tbody.innerHTML = codes.length ? codes.map(gc => `
-                <tr>
-                    <td><strong>${gc.code}</strong></td>
-                    <td>₹${gc.amount}</td>
-                    <td><span class="badge primary">${gc.type}</span></td>
-                    <td>${gc.createdBy}</td>
-                    <td>${gc.redemptionCount} / ${gc.maxRedemptions}</td>
-                    <td>${new Date(gc.expiresAt).toLocaleDateString()}</td>
-                    <td><span class="badge ${getBadgeClass(gc.status)}">${gc.status}</span></td>
-                    <td>
-                        <button class="btn btn-sm btn-primary" onclick="viewGiftCode('${gc.code}')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteGiftCode('${gc._id}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `).join('') : '<tr><td colspan="8" class="text-center">No gift codes found</td></tr>';
-        }
-
-        function filterGiftCodes() {
-            const status = document.getElementById('giftCodeStatusFilter').value;
-            const type = document.getElementById('giftCodeTypeFilter').value;
-            const search = document.getElementById('giftCodeSearch').value.toLowerCase();
-            
-            let filtered = allGiftCodes;
-            
-            if (status) {
-                filtered = filtered.filter(gc => gc.status === status);
-            }
-            
-            if (type) {
-                filtered = filtered.filter(gc => gc.type === type);
-            }
-            
-            if (search) {
-                filtered = filtered.filter(gc => gc.code.toLowerCase().includes(search));
-            }
-            
-            displayGiftCodes(filtered);
-        }
-
-        // Gift code search
-        document.getElementById('giftCodeSearch')?.addEventListener('input', filterGiftCodes);
-
-        // Create Gift Code Modal
-        function openCreateGiftCodeModal() {
-            document.getElementById('createGiftCodeModal').classList.add('active');
-        }
-
-        function closeCreateGiftCodeModal() {
-            document.getElementById('createGiftCodeModal').classList.remove('active');
-            // Reset form
-            document.getElementById('giftAmount').value = '';
-            document.getElementById('giftType').value = 'one-to-one';
-            document.getElementById('validityDays').value = '30';
-            document.getElementById('giftDescription').value = '';
-            document.getElementById('forUserMobile').value = '';
-        }
-
-        // Show/hide max redemptions based on type
-        document.getElementById('giftType')?.addEventListener('change', function() {
-            const maxRedGroup = document.getElementById('maxRedemptionsGroup');
-            if (this.value === 'one-to-many') {
-                maxRedGroup.style.display = 'block';
-            } else {
-                maxRedGroup.style.display = 'none';
-            }
-        });
-
-        // Create Gift Code
-        async function createGiftCode() {
-            const amount = parseFloat(document.getElementById('giftAmount').value);
-            const type = document.getElementById('giftType').value;
-            const validityDays = parseInt(document.getElementById('validityDays').value);
-            const description = document.getElementById('giftDescription').value;
-            const forUserMobile = document.getElementById('forUserMobile').value;
-            const maxRedemptions = type === 'one-to-many' ? 
-                parseInt(document.getElementById('maxRedemptions').value) : 1;
-
-            if (!amount || amount < 10 || amount > 10000) {
-                alert('Please enter a valid amount between ₹10 and ₹10,000');
-                return;
-            }
-
-            if (!forUserMobile) {
-                alert('Please enter user mobile number to create gift from');
-                return;
-            }
-
-            const result = await apiCall('/admin/gift-code/create', 'POST', {
-                amount,
-                type,
-                validityDays,
-                description,
-                maxRedemptions,
-                forUserMobile
-            });
-
-            if (result) {
-                alert(`Gift code created successfully!\nCode: ${result.giftCode.code}`);
-                closeCreateGiftCodeModal();
-                loadGiftCodes();
-            }
-        }
-
-        // View Gift Code Details
-        async function viewGiftCode(code) {
-            const giftCode = allGiftCodes.find(gc => gc.code === code);
-            if (!giftCode) return;
-
-            const details = document.getElementById('giftCodeDetails');
-            details.innerHTML = `
-                <div class="input-group">
-                    <label>Code</label>
-                    <input type="text" value="${giftCode.code}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Amount</label>
-                    <input type="text" value="₹${giftCode.amount}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Type</label>
-                    <input type="text" value="${giftCode.type}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Created By</label>
-                    <input type="text" value="${giftCode.createdBy}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Redemptions</label>
-                    <input type="text" value="${giftCode.redemptionCount} / ${giftCode.maxRedemptions}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Status</label>
-                    <input type="text" value="${giftCode.status}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Expires At</label>
-                    <input type="text" value="${new Date(giftCode.expiresAt).toLocaleString()}" disabled>
-                </div>
-                ${giftCode.description ? `
-                    <div class="input-group">
-                        <label>Description</label>
-                        <textarea disabled rows="2">${giftCode.description}</textarea>
-                    </div>
-                ` : ''}
-                ${giftCode.redeemedBy && giftCode.redeemedBy.length > 0 ? `
-                    <div class="input-group">
-                        <label>Redeemed By</label>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Mobile</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${giftCode.redeemedBy.map(r => `
-                                    <tr>
-                                        <td>${r.mobile}</td>
-                                        <td>${new Date(r.redeemedAt).toLocaleString()}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                ` : ''}
-            `;
-
-            document.getElementById('viewGiftCodeModal').classList.add('active');
-        }
-
-        function closeViewGiftCodeModal() {
-            document.getElementById('viewGiftCodeModal').classList.remove('active');
-        }
-
-        // Delete Gift Code
-        async function deleteGiftCode(id) {
-            if (!confirm('Are you sure you want to delete this gift code?')) return;
-
-            const result = await apiCall(`/admin/gift-code/${id}`, 'DELETE');
-            if (result) {
-                alert('Gift code deleted successfully');
-                loadGiftCodes();
-            }
-        }
-
-        // Load Deposits
-        async function loadDeposits() {
-            const tbody = document.getElementById('depositsTable');
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center">Loading...</td></tr>';
-            
-            const deposits = await apiCall('/admin/deposits');
-            if (deposits) {
-                allDeposits = deposits;
-                displayDeposits(deposits);
-            }
-        }
-
-        function displayDeposits(deposits) {
-            const tbody = document.getElementById('depositsTable');
-            tbody.innerHTML = deposits.length ? deposits.map(d => `
-                <tr>
-                    <td>${d.orderId || d._id}</td>
-                    <td>${d.mobile}</td>
-                    <td>₹${d.amount}</td>
-                    <td>${d.method || 'UPI'}</td>
-                    <td><span class="badge ${getBadgeClass(d.status)}">${d.status}</span></td>
-                    <td>${new Date(d.createdAt).toLocaleString()}</td>
-                </tr>
-            `).join('') : '<tr><td colspan="6" class="text-center">No deposits found</td></tr>';
-        }
-
-        function filterDeposits() {
-            const status = document.getElementById('depositStatusFilter').value;
-            const search = document.getElementById('depositSearch').value.toLowerCase();
-            
-            let filtered = allDeposits;
-            
-            if (status) {
-                filtered = filtered.filter(d => d.status === status);
-            }
-            
-            if (search) {
-                filtered = filtered.filter(d => 
-                    d.mobile.includes(search) || 
-                    (d.orderId && d.orderId.toLowerCase().includes(search))
-                );
-            }
-            
-            displayDeposits(filtered);
-        }
-
-        document.getElementById('depositSearch')?.addEventListener('input', filterDeposits);
-
-        function refreshDeposits() {
-            loadDeposits();
-        }
-
-        // Load Withdrawals
-        async function loadWithdrawals() {
-            const tbody = document.getElementById('withdrawalsTable');
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading...</td></tr>';
-            
-            const withdrawals = await apiCall('/admin/withdrawals');
-            if (withdrawals) {
-                allWithdrawals = withdrawals;
-                displayWithdrawals(withdrawals);
-            }
-        }
-
-        function displayWithdrawals(withdrawals) {
-            const tbody = document.getElementById('withdrawalsTable');
-            tbody.innerHTML = withdrawals.length ? withdrawals.map(w => `
-                <tr>
-                    <td>${w._id.substring(0, 8)}</td>
-                    <td>${w.mobile}</td>
-                    <td>₹${w.amount}</td>
-                    <td>${w.method}</td>
-                    <td><span class="badge ${getBadgeClass(w.status)}">${w.status}</span></td>
-                    <td>${new Date(w.createdAt).toLocaleString()}</td>
-                    <td>
-                        ${w.status === 'PENDING' ? `
-                            <button class="btn btn-sm btn-success" onclick="approveWithdrawal('${w._id}')">
-                                <i class="fas fa-check"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="rejectWithdrawal('${w._id}')">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        ` : '-'}
-                    </td>
-                </tr>
-            `).join('') : '<tr><td colspan="7" class="text-center">No withdrawals found</td></tr>';
-        }
-
-        function filterWithdrawals() {
-            const status = document.getElementById('withdrawalStatusFilter').value;
-            const search = document.getElementById('withdrawalSearch').value.toLowerCase();
-            
-            let filtered = allWithdrawals;
-            
-            if (status) {
-                filtered = filtered.filter(w => w.status === status);
-            }
-            
-            if (search) {
-                filtered = filtered.filter(w => w.mobile.includes(search));
-            }
-            
-            displayWithdrawals(filtered);
-        }
-
-        document.getElementById('withdrawalSearch')?.addEventListener('input', filterWithdrawals);
-
-        function refreshWithdrawals() {
-            loadWithdrawals();
-        }
-
-        async function approveWithdrawal(id) {
-            if (!confirm('Are you sure you want to approve this withdrawal?')) return;
-
-            const result = await apiCall(`/admin/withdraw/${id}/approve`, 'POST');
-            if (result) {
-                alert('Withdrawal approved successfully');
-                loadWithdrawals();
-            }
-        }
-
-        async function rejectWithdrawal(id) {
-            if (!confirm('Are you sure you want to reject this withdrawal?')) return;
-
-            const result = await apiCall(`/admin/withdraw/${id}/reject`, 'POST');
-            if (result) {
-                alert('Withdrawal rejected successfully');
-                loadWithdrawals();
-            }
-        }
-
-        // Load Bets
-        async function loadBets() {
-            const tbody = document.getElementById('betsTable');
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading...</td></tr>';
-            
-            const bets = await apiCall('/admin/bets');
-            if (bets) {
-                allBets = bets;
-                displayBets(bets);
-            }
-        }
-
-        function displayBets(bets) {
-            const tbody = document.getElementById('betsTable');
-            tbody.innerHTML = bets.length ? bets.map(b => `
-                <tr>
-                    <td>${b.roundId}</td>
-                    <td>${b.mobile}</td>
-                    <td><span class="badge ${b.color === 'red' ? 'danger' : 'success'}">${b.color}</span></td>
-                    <td>₹${b.amount}</td>
-                    <td>₹${b.payout || '0.00'}</td>
-                    <td><span class="badge ${getBadgeClass(b.status)}">${b.status}</span></td>
-                    <td>${new Date(b.createdAt).toLocaleString()}</td>
-                </tr>
-            `).join('') : '<tr><td colspan="7" class="text-center">No bets found</td></tr>';
-        }
-
-        function filterBets() {
-            const color = document.getElementById('betColorFilter').value;
-            const status = document.getElementById('betStatusFilter').value;
-            const search = document.getElementById('betSearch').value.toLowerCase();
-            
-            let filtered = allBets;
-            
-            if (color) {
-                filtered = filtered.filter(b => b.color === color);
-            }
-            
-            if (status) {
-                filtered = filtered.filter(b => b.status === status);
-            }
-            
-            if (search) {
-                filtered = filtered.filter(b => 
-                    b.mobile.includes(search) || 
-                    String(b.roundId).includes(search)
-                );
-            }
-            
-            displayBets(filtered);
-        }
-
-        document.getElementById('betSearch')?.addEventListener('input', filterBets);
-
-        function refreshBets() {
-            loadBets();
-        }
-
-        // Load Rounds
-        async function loadRounds() {
-            const tbody = document.getElementById('roundsTable');
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading...</td></tr>';
-            
-            const rounds = await apiCall('/admin/rounds');
-            if (rounds) {
-                displayRounds(rounds);
-            }
-        }
-
-        function displayRounds(rounds) {
-            const tbody = document.getElementById('roundsTable');
-            tbody.innerHTML = rounds.length ? rounds.map(r => `
-                <tr>
-                    <td>${r.id}</td>
-                    <td><span class="badge ${r.result === 'red' ? 'danger' : 'success'}">${r.result || 'Pending'}</span></td>
-                    <td>${r.totalBets || 0}</td>
-                    <td>₹${r.redTotal?.toFixed(2) || '0.00'}</td>
-                    <td>₹${r.greenTotal?.toFixed(2) || '0.00'}</td>
-                    <td>₹${r.houseProfit?.toFixed(2) || '0.00'}</td>
-                    <td>${new Date(r.createdAt).toLocaleString()}</td>
-                </tr>
-            `).join('') : '<tr><td colspan="7" class="text-center">No rounds found</td></tr>';
-        }
-
-        function refreshRounds() {
-            loadRounds();
-        }
-
-        // Load Monitor Users
-        async function loadMonitorUsers() {
-            const tbody = document.getElementById('monitorUsersTable');
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center">Loading...</td></tr>';
-            
-            const monitors = await apiCall('/admin/monitor-users');
-            if (monitors) {
-                displayMonitorUsers(monitors);
-            }
-        }
-
-        function displayMonitorUsers(monitors) {
-            const tbody = document.getElementById('monitorUsersTable');
-            tbody.innerHTML = monitors.length ? monitors.map(m => `
-                <tr>
-                    <td>${m.username}</td>
-                    <td>${m.displayName}</td>
-                    <td>${m.totalLogins || 0}</td>
-                    <td>${m.lastLogin ? new Date(m.lastLogin).toLocaleString() : 'Never'}</td>
-                    <td><span class="badge ${m.active ? 'success' : 'danger'}">${m.active ? 'Active' : 'Inactive'}</span></td>
-                    <td>
-                        <button class="btn btn-sm ${m.active ? 'btn-danger' : 'btn-success'}" 
-                                onclick="toggleMonitor('${m._id}', ${!m.active})">
-                            ${m.active ? '<i class="fas fa-ban"></i> Disable' : '<i class="fas fa-check"></i> Enable'}
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteMonitor('${m._id}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `).join('') : '<tr><td colspan="6" class="text-center">No monitor users found</td></tr>';
-        }
-
-        // Create Monitor User Modal
-        function openCreateMonitorModal() {
-            document.getElementById('createMonitorModal').classList.add('active');
-        }
-
-        function closeCreateMonitorModal() {
-            document.getElementById('createMonitorModal').classList.remove('active');
-            document.getElementById('monitorUsername').value = '';
-            document.getElementById('monitorPassword').value = '';
-            document.getElementById('monitorDisplayName').value = '';
-        }
-
-        async function createMonitorUser() {
-            const username = document.getElementById('monitorUsername').value;
-            const password = document.getElementById('monitorPassword').value;
-            const displayName = document.getElementById('monitorDisplayName').value;
-
-            if (!username || !password) {
-                alert('Username and password are required');
-                return;
-            }
-
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters');
-                return;
-            }
-
-            const result = await apiCall('/admin/monitor-user', 'POST', {
-                username,
-                password,
-                displayName: displayName || username
-            });
-
-            if (result) {
-                alert('Monitor user created successfully');
-                closeCreateMonitorModal();
-                loadMonitorUsers();
-            }
-        }
-
-        async function toggleMonitor(id, active) {
-            const result = await apiCall(`/admin/monitor-user/${id}/toggle`, 'POST', { active });
-            if (result) {
-                alert(`Monitor user ${active ? 'enabled' : 'disabled'} successfully`);
-                loadMonitorUsers();
-            }
-        }
-
-        async function deleteMonitor(id) {
-            if (!confirm('Are you sure you want to delete this monitor user?')) return;
-
-            const result = await apiCall(`/admin/monitor-user/${id}`, 'DELETE');
-            if (result) {
-                alert('Monitor user deleted successfully');
-                loadMonitorUsers();
-            }
-        }
-
-        // Load Referrals
-        async function loadReferrals() {
-            const tbody = document.getElementById('referralsTable');
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center">Loading...</td></tr>';
-            
-            const referrals = await apiCall('/admin/referrals');
-            if (referrals) {
-                displayReferrals(referrals);
-            }
-        }
-
-        function displayReferrals(referrals) {
-            const tbody = document.getElementById('referralsTable');
-            tbody.innerHTML = referrals.length ? referrals.map(r => `
-                <tr>
-                    <td>${r.mobile}</td>
-                    <td>${r.referrerMobile}</td>
-                    <td>₹${r.commission?.toFixed(2) || '0.00'}</td>
-                    <td>Level ${r.level || 1}</td>
-                    <td>${new Date(r.createdAt).toLocaleString()}</td>
-                </tr>
-            `).join('') : '<tr><td colspan="5" class="text-center">No referrals found</td></tr>';
-        }
-
-        function refreshReferrals() {
-            loadReferrals();
-        }
-
-        // Load Analytics
-        async function loadAnalytics() {
-            try {
-                const [bets, deposits, withdrawals] = await Promise.all([
-                    apiCall('/admin/bets'),
-                    apiCall('/admin/deposits'),
-                    apiCall('/admin/withdrawals')
-                ]);
-
-                if (bets) {
-                    document.getElementById('totalBetsCount').textContent = bets.length;
-                    const totalAmount = bets.reduce((sum, b) => sum + b.amount, 0);
-                    document.getElementById('totalBetsAmount').textContent = `₹${totalAmount.toFixed(2)}`;
-                }
-
-                if (deposits) {
-                    const successDeposits = deposits.filter(d => d.status === 'SUCCESS');
-                    const totalDeposits = successDeposits.reduce((sum, d) => sum + d.amount, 0);
-                    document.getElementById('totalDeposits').textContent = `₹${totalDeposits.toFixed(2)}`;
-                }
-
-                if (withdrawals) {
-                    const approvedWithdrawals = withdrawals.filter(w => w.status === 'APPROVED');
-                    const totalWithdrawals = approvedWithdrawals.reduce((sum, w) => sum + w.amount, 0);
-                    document.getElementById('totalWithdrawals').textContent = `₹${totalWithdrawals.toFixed(2)}`;
-                }
-
-                document.getElementById('analyticsData').innerHTML = '<p class="text-center">Analytics data loaded successfully</p>';
-            } catch (error) {
-                document.getElementById('analyticsData').innerHTML = '<p class="text-center">Error loading analytics</p>';
-            }
-        }
-
-        // Helper Functions
-        function getBadgeClass(status) {
-            const statusMap = {
-                'SUCCESS': 'success',
-                'APPROVED': 'success',
-                'WON': 'success',
-                'active': 'success',
-                'PENDING': 'warning',
-                'FAILED': 'danger',
-                'REJECTED': 'danger',
-                'LOST': 'danger',
-                'expired': 'danger',
-                'fully-redeemed': 'primary'
-            };
-            return statusMap[status] || 'primary';
-        }
-
-        async function viewUser(mobile) {
-            alert(`Viewing user: ${mobile}\n\nFull user details modal would be implemented here.`);
-        }
-
-        async function banUser(mobile) {
-            if (!confirm(`Are you sure you want to ban user ${mobile}?`)) return;
-            
-            const result = await apiCall(`/admin/user/${mobile}/ban`, 'POST');
-            if (result) {
-                alert('User banned successfully');
-                loadUsers();
-            }
-        }
-
-        async function unbanUser(mobile) {
-            if (!confirm(`Are you sure you want to unban user ${mobile}?`)) return;
-            
-            const result = await apiCall(`/admin/user/${mobile}/unban`, 'POST');
-            if (result) {
-                alert('User unbanned successfully');
-                loadUsers();
-            }
-        }
-
-        async function updatePassword() {
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-
-            if (!newPassword || !confirmPassword) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            if (newPassword !== confirmPassword) {
-                alert('Passwords do not match');
-                return;
-            }
-
-            if (newPassword.length < 6) {
-                alert('Password must be at least 6 characters');
-                return;
-            }
-
-            const result = await apiCall('/admin/change-password', 'POST', {
-                newPassword
-            });
-
-            if (result) {
-                alert('Password updated successfully');
-                document.getElementById('newPassword').value = '';
-                document.getElementById('confirmPassword').value = '';
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('adminToken');
-            localStorage.removeItem('adminData');
-            window.location.href = 'admin-login.html';
-        }
-
-        // Load initial data
-        loadDashboard();
-        
-        // Set last updated time
-        document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+        return await response.json();
+    } catch (error) {
+        console.error('API Error:', error);
+        return null;
+    }
+}
+
+async function loadDashboard() {
+    const stats = await apiCall('/admin/dashboard-stats');
+    if (stats) {
+        document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+        document.getElementById('totalDeposits').textContent = `₹${(stats.totalDeposits || 0).toFixed(2)}`;
+        document.getElementById('pendingWithdrawals').textContent = stats.pendingWithdraws || 0;
+    }
+    const giftCodes = await apiCall('/admin/giftcodes');
+    if (giftCodes) document.getElementById('totalGiftCodes').textContent = giftCodes.length;
+}
+
+async function loadUsers() {
+    const tbody = document.getElementById('usersTable');
+    tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading...</td></tr>';
+    const users = await apiCall('/admin/users');
+    if (users && users.length) {
+        tbody.innerHTML = users.map(u => `
+            <tr>
+                <td>${u.mobile}</td>
+                <td>₹${(u.wallet || 0).toFixed(2)}</td>
+                <td>₹${(u.bonus || 0).toFixed(2)}</td>
+                <td>₹${(u.totalDeposit || 0).toFixed(2)}</td>
+                <td>₹${(u.totalWithdraw || 0).toFixed(2)}</td>
+                <td>${new Date(u.createdAt).toLocaleDateString()}</td>
+                <td>
+                    <button class="btn btn-sm ${u.isBanned ? 'btn-success' : 'btn-danger'}" onclick="toggleBan('${u.mobile}', ${!u.isBanned})">
+                        ${u.isBanned ? 'Unban' : 'Ban'}
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    } else {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No users</td></tr>';
+    }
+}
+
+async function toggleBan(mobile, ban) {
+    const endpoint = ban ? `/admin/user/${mobile}/ban` : `/admin/user/${mobile}/unban`;
+    const result = await apiCall(endpoint, 'POST');
+    if (result) {
+        alert(ban ? 'User banned' : 'User unbanned');
+        loadUsers();
+    }
+}
+
+async function loadDeposits() {
+    const tbody = document.getElementById('depositsTable');
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center">Loading...</td></tr>';
+    const deposits = await apiCall('/admin/deposits');
+    if (deposits && deposits.length) {
+        tbody.innerHTML = deposits.map(d => `
+            <tr>
+                <td>${d._id.substring(0,8)}</td>
+                <td>${d.mobile}</td>
+                <td>₹${d.amount}</td>
+                <td><span class="badge ${d.status === 'SUCCESS' ? 'success' : d.status === 'PENDING' ? 'warning' : 'danger'}">${d.status}</span></td>
+                <td>${new Date(d.createdAt).toLocaleString()}</td>
+            </tr>
+        `).join('');
+    } else {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center">No deposits</td></tr>';
+    }
+}
+
+async function loadWithdrawals() {
+    const tbody = document.getElementById('withdrawalsTable');
+    tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading...</td></tr>';
+    const withdrawals = await apiCall('/admin/withdraws');
+    if (withdrawals && withdrawals.length) {
+        tbody.innerHTML = withdrawals.map(w => `
+            <tr>
+                <td>${w._id.substring(0,8)}</td>
+                <td>${w.mobile}</td>
+                <td>₹${w.amount}</td>
+                <td>${w.method}</td>
+                <td><span class="badge ${w.status === 'APPROVED' ? 'success' : w.status === 'PENDING' ? 'warning' : 'danger'}">${w.status}</span></td>
+                <td>${new Date(w.createdAt).toLocaleString()}</td>
+                <td>
+                    ${w.status === 'PENDING' ? `
+                        <button class="btn btn-sm btn-success" onclick="handleWithdraw('${w._id}', 'approve')">Approve</button>
+                        <button class="btn btn-sm btn-danger" onclick="handleWithdraw('${w._id}', 'reject')">Reject</button>
+                    ` : '-'}
+                </td>
+            </tr>
+        `).join('');
+    } else {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No withdrawals</td></tr>';
+    }
+}
+
+async function handleWithdraw(id, action) {
+    if (!confirm(`${action} this withdrawal?`)) return;
+    const result = await apiCall(`/admin/withdraw/${id}`, 'POST', { status: action === 'approve' ? 'APPROVED' : 'REJECTED' });
+    if (result) {
+        alert(`Withdrawal ${action}d`);
+        loadWithdrawals();
+    }
+}
+
+async function loadGiftcodes() {
+    const tbody = document.getElementById('giftcodesTable');
+    tbody.innerHTML = '<tr><td colspan="8" class="text-center">Loading...</td></tr>';
+    const giftCodes = await apiCall('/admin/giftcodes');
+    if (giftCodes && giftCodes.length) {
+        tbody.innerHTML = giftCodes.map(gc => `
+            <tr>
+                <td><strong>${gc.code}</strong></td>
+                <td>₹${gc.amount}</td>
+                <td>${gc.type}</td>
+                <td>${gc.createdBy}</td>
+                <td>${gc.redemptionCount}/${gc.maxRedemptions}</td>
+                <td><span class="badge ${gc.status === 'active' ? 'success' : gc.status === 'expired' ? 'danger' : 'primary'}">${gc.status}</span></td>
+                <td>${new Date(gc.expiresAt).toLocaleDateString()}</td>
+                <td>
+                    <button class="btn btn-sm btn-danger" onclick="deleteGift('${gc.code}')"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `).join('');
+    } else {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center">No gift codes</td></tr>';
+    }
+}
+
+function openGiftModal() { document.getElementById('giftModal').classList.add('active'); }
+function closeGiftModal() { document.getElementById('giftModal').classList.remove('active'); }
+
+async function createGift() {
+    const amount = parseFloat(document.getElementById('giftAmount').value);
+    const type = document.getElementById('giftType').value;
+    const validityDays = parseInt(document.getElementById('validityDays').value);
+    const description = document.getElementById('giftDesc').value;
+    const forUserMobile = document.getElementById('forUserMobile').value;
+    if (!amount || !forUserMobile) { alert('Fill amount and user mobile'); return; }
+    const result = await apiCall('/admin/create-giftcode', 'POST', { amount, type, validityDays, description, forUserMobile });
+    if (result) {
+        alert(`Gift code created: ${result.giftCode.code}`);
+        closeGiftModal();
+        loadGiftcodes();
+    }
+}
+
+async function deleteGift(code) {
+    if (!confirm('Delete this gift code?')) return;
+    const result = await apiCall(`/admin/giftcode/${code}`, 'DELETE');
+    if (result) {
+        alert('Gift code deleted');
+        loadGiftcodes();
+    }
+}
+
+async function loadMonitors() {
+    const tbody = document.getElementById('monitorsTable');
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center">Loading...</td></tr>';
+    const monitors = await apiCall('/admin/monitor-users');
+    if (monitors && monitors.length) {
+        tbody.innerHTML = monitors.map(m => `
+            <tr>
+                <td>${m.username}</td>
+                <td>${m.displayName}</td>
+                <td>${m.totalLogins || 0}</td>
+                <td>${m.lastLogin ? new Date(m.lastLogin).toLocaleString() : 'Never'}</td>
+                <td><span class="badge ${m.active ? 'success' : 'danger'}">${m.active ? 'Active' : 'Inactive'}</span></td>
+                <td>
+                    <button class="btn btn-sm ${m.active ? 'btn-danger' : 'btn-success'}" onclick="toggleMonitor('${m._id}', ${!m.active})">
+                        ${m.active ? 'Disable' : 'Enable'}
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    } else {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center">No monitors</td></tr>';
+    }
+}
+
+function openMonitorModal() { document.getElementById('monitorModal').classList.add('active'); }
+function closeMonitorModal() { document.getElementById('monitorModal').classList.remove('active'); }
+
+async function createMonitor() {
+    const username = document.getElementById('monitorUsername').value;
+    const password = document.getElementById('monitorPassword').value;
+    const displayName = document.getElementById('monitorDisplayName').value;
+    if (!username || !password) { alert('Username and password required'); return; }
+    const result = await apiCall('/admin/monitor-user', 'POST', { username, password, displayName: displayName || username });
+    if (result) {
+        alert('Monitor user created');
+        closeMonitorModal();
+        loadMonitors();
+    }
+}
+
+async function toggleMonitor(id, active) {
+    const result = await apiCall(`/admin/monitor-user/${id}/toggle`, 'POST', { active });
+    if (result) {
+        alert(`Monitor ${active ? 'enabled' : 'disabled'}`);
+        loadMonitors();
+    }
+}
+
+function logout() {
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminLoginTime');
+    window.location.href = 'admin-login.html';
+}
+
+loadDashboard();
     </script>
 </body>
 </html>
