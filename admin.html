@@ -267,66 +267,29 @@
             border-collapse: collapse;
         }
 
-        thead {
-            background: var(--light);
-        }
-
         th {
-            padding: 12px 16px;
+            background: var(--light);
+            padding: 12px;
             text-align: left;
             font-weight: 600;
             font-size: 13px;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            color: var(--text);
+            border-bottom: 2px solid var(--border);
         }
 
         td {
-            padding: 16px;
+            padding: 12px;
             border-bottom: 1px solid var(--border);
             font-size: 14px;
         }
 
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tbody tr:hover {
+        tr:hover {
             background: var(--light);
         }
 
-        /* Badge */
-        .badge {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-            display: inline-block;
-        }
-
-        .badge.success {
-            background: #D1FAE5;
-            color: var(--success);
-        }
-
-        .badge.danger {
-            background: #FEE2E2;
-            color: var(--danger);
-        }
-
-        .badge.warning {
-            background: #FEF3C7;
-            color: var(--warning);
-        }
-
-        .badge.primary {
-            background: #EEF2FF;
-            color: var(--primary);
-        }
-
-        /* Button */
+        /* Buttons */
         .btn {
-            padding: 10px 20px;
+            padding: 8px 16px;
             border: none;
             border-radius: 8px;
             font-size: 14px;
@@ -335,7 +298,7 @@
             transition: all 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn-primary {
@@ -362,41 +325,50 @@
             font-size: 13px;
         }
 
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+        /* Badge */
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
         }
 
-        /* Input */
-        .input-group {
-            margin-bottom: 16px;
+        .badge.success {
+            background: #D1FAE5;
+            color: var(--success);
         }
 
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-size: 14px;
-            color: var(--dark);
+        .badge.danger {
+            background: #FEE2E2;
+            color: var(--danger);
         }
 
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 16px;
+        .badge.warning {
+            background: #FEF3C7;
+            color: var(--warning);
+        }
+
+        .badge.primary {
+            background: #EEF2FF;
+            color: var(--primary);
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar input,
+        .filter-bar select {
+            padding: 10px 14px;
             border: 1px solid var(--border);
             border-radius: 8px;
             font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.2s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
+            min-width: 200px;
         }
 
         /* Modal */
@@ -407,7 +379,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 2000;
             align-items: center;
             justify-content: center;
@@ -419,15 +391,15 @@
 
         .modal-content {
             background: white;
-            border-radius: 16px;
+            border-radius: 12px;
             width: 90%;
-            max-width: 600px;
+            max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
         }
 
         .modal-header {
-            padding: 24px;
+            padding: 20px 24px;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
@@ -435,22 +407,8 @@
         }
 
         .modal-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            color: var(--dark);
-        }
-
-        .modal-close {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: var(--light);
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text);
         }
 
         .modal-body {
@@ -458,173 +416,125 @@
         }
 
         .modal-footer {
-            padding: 24px;
+            padding: 16px 24px;
             border-top: 1px solid var(--border);
             display: flex;
             gap: 12px;
             justify-content: flex-end;
         }
 
-        /* Alert */
-        .alert {
-            padding: 16px;
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            font-size: 14px;
         }
 
-        .alert.success {
-            background: #D1FAE5;
-            color: var(--success);
-        }
-
-        .alert.danger {
-            background: #FEE2E2;
-            color: var(--danger);
-        }
-
-        .alert.warning {
-            background: #FEF3C7;
-            color: var(--warning);
-        }
-
-        /* Filters */
-        .filters {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
-
-        /* Loading */
-        .loading {
+        .text-center {
             text-align: center;
-            padding: 40px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
             color: var(--text-light);
         }
 
-        .spinner {
-            border: 3px solid var(--border);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Logout Button */
-        .logout-btn {
-            padding: 8px 16px;
-            background: #FEE2E2;
+        .close-btn:hover {
             color: var(--danger);
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            padding: 8px 16px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
             font-weight: 500;
-            transition: all 0.2s;
         }
 
         .logout-btn:hover {
-            background: var(--danger);
-            color: white;
+            opacity: 0.9;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
+        .last-updated {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 16px;
         }
-
-        /* Additional utility classes */
-        .text-center { text-align: center; }
-        .text-right { text-align: right; }
-        .mt-2 { margin-top: 16px; }
-        .mb-2 { margin-bottom: 16px; }
-        .flex { display: flex; }
-        .gap-2 { gap: 16px; }
-        .items-center { align-items: center; }
-        .justify-between { justify-content: space-between; }
     </style>
 </head>
 <body>
     <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">
-                <i class="fas fa-crown"></i>
-                <span>BigWin77</span>
+                <i class="fas fa-shield-alt"></i>
+                BigWin77 Admin
             </div>
         </div>
         <div class="sidebar-menu">
-            <a class="menu-item active" data-section="dashboard">
-                <i class="fas fa-chart-line"></i>
+            <div class="menu-item active" data-section="dashboard">
+                <i class="fas fa-home"></i>
                 <span>Dashboard</span>
-            </a>
-            <a class="menu-item" data-section="users">
+            </div>
+            <div class="menu-item" data-section="users">
                 <i class="fas fa-users"></i>
-                <span>Users Management</span>
-            </a>
-            <a class="menu-item" data-section="gift-codes">
+                <span>Users</span>
+            </div>
+            <div class="menu-item" data-section="gift-codes">
                 <i class="fas fa-gift"></i>
                 <span>Gift Codes</span>
-            </a>
-            <a class="menu-item" data-section="deposits">
-                <i class="fas fa-wallet"></i>
+            </div>
+            <div class="menu-item" data-section="deposits">
+                <i class="fas fa-download"></i>
                 <span>Deposits</span>
-            </a>
-            <a class="menu-item" data-section="withdrawals">
-                <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <div class="menu-item" data-section="withdrawals">
+                <i class="fas fa-upload"></i>
                 <span>Withdrawals</span>
-            </a>
-            <a class="menu-item" data-section="bets">
+            </div>
+            <div class="menu-item" data-section="bets">
                 <i class="fas fa-dice"></i>
                 <span>Bets History</span>
-            </a>
-            <a class="menu-item" data-section="rounds">
-                <i class="fas fa-clock"></i>
+            </div>
+            <div class="menu-item" data-section="rounds">
+                <i class="fas fa-sync"></i>
                 <span>Game Rounds</span>
-            </a>
-            <a class="menu-item" data-section="monitor-users">
+            </div>
+            <div class="menu-item" data-section="monitor-users">
                 <i class="fas fa-user-shield"></i>
                 <span>Monitor Users</span>
-            </a>
-            <a class="menu-item" data-section="referrals">
+            </div>
+            <div class="menu-item" data-section="referrals">
                 <i class="fas fa-share-nodes"></i>
-                <span>Referral System</span>
-            </a>
-            <a class="menu-item" data-section="analytics">
-                <i class="fas fa-chart-pie"></i>
+                <span>Referrals</span>
+            </div>
+            <div class="menu-item" data-section="analytics">
+                <i class="fas fa-chart-line"></i>
                 <span>Analytics</span>
-            </a>
-            <a class="menu-item" data-section="settings">
+            </div>
+            <div class="menu-item" data-section="settings">
                 <i class="fas fa-cog"></i>
                 <span>Settings</span>
-            </a>
+            </div>
         </div>
     </div>
 
@@ -632,69 +542,61 @@
     <div class="main-content">
         <!-- Top Bar -->
         <div class="top-bar">
-            <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            <div>
+                <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            </div>
             <div class="user-info">
                 <div class="user-avatar" id="userAvatar">A</div>
-                <span id="adminName">Admin</span>
-                <button class="logout-btn" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
+                <div>
+                    <div style="font-weight: 600;" id="adminName">Admin</div>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Dashboard Section -->
-        <div class="content-section active" id="dashboard">
+        <div id="dashboard" class="content-section active">
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalUsers">0</div>
-                            <div class="stat-label">Total Users</div>
-                        </div>
                         <div class="stat-icon primary">
                             <i class="fas fa-users"></i>
                         </div>
                     </div>
-                    <div class="stat-change positive" id="usersChange">+0% from last month</div>
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Total Users</div>
                 </div>
 
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalRevenue">₹0</div>
-                            <div class="stat-label">Total Revenue</div>
-                        </div>
                         <div class="stat-icon success">
                             <i class="fas fa-rupee-sign"></i>
                         </div>
                     </div>
-                    <div class="stat-change positive" id="revenueChange">+0% from last month</div>
+                    <div class="stat-value" id="totalRevenue">₹0</div>
+                    <div class="stat-label">Total Revenue</div>
                 </div>
 
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="pendingWithdrawals">0</div>
-                            <div class="stat-label">Pending Withdrawals</div>
-                        </div>
                         <div class="stat-icon warning">
                             <i class="fas fa-clock"></i>
                         </div>
                     </div>
-                    <div class="stat-change" id="withdrawalsChange">Needs attention</div>
+                    <div class="stat-value" id="pendingWithdrawals">0</div>
+                    <div class="stat-label">Pending Withdrawals</div>
                 </div>
 
                 <div class="stat-card">
                     <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="activeGiftCodes">0</div>
-                            <div class="stat-label">Active Gift Codes</div>
-                        </div>
                         <div class="stat-icon danger">
                             <i class="fas fa-gift"></i>
                         </div>
                     </div>
-                    <div class="stat-change" id="giftCodesChange">Currently active</div>
+                    <div class="stat-value" id="activeGiftCodes">0</div>
+                    <div class="stat-label">Active Gift Codes</div>
                 </div>
             </div>
 
@@ -702,48 +604,31 @@
                 <div class="card-header">
                     <h3 class="card-title">Recent Activity</h3>
                 </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Action</th>
-                                <th>Amount</th>
-                                <th>Time</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="recentActivity">
-                            <tr>
-                                <td colspan="5" class="text-center">Loading...</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div id="recentActivity">
+                    <p class="text-center">Loading...</p>
+                </div>
+                <div class="last-updated">
+                    Last updated: <span id="lastUpdated">--</span>
                 </div>
             </div>
         </div>
 
         <!-- Users Section -->
-        <div class="content-section" id="users">
-            <div class="filters">
-                <div class="input-group">
-                    <input type="text" id="userSearch" placeholder="Search users..." onkeyup="filterUsers()">
+        <div id="users" class="content-section">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Users Management</h3>
+                    <button class="btn btn-primary" onclick="loadUsers()">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
                 </div>
-                <div class="input-group">
+                <div class="filter-bar">
+                    <input type="text" id="userSearch" placeholder="Search by mobile..." onkeyup="filterUsers()">
                     <select id="userStatusFilter" onchange="filterUsers()">
                         <option value="">All Status</option>
                         <option value="active">Active</option>
                         <option value="banned">Banned</option>
                     </select>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">All Users</h3>
-                    <button class="btn btn-primary" onclick="refreshUsers()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
                 </div>
                 <div class="table-container">
                     <table>
@@ -753,15 +638,14 @@
                                 <th>Wallet</th>
                                 <th>Bonus</th>
                                 <th>Total Deposit</th>
-                                <th>Total Withdrawal</th>
-                                <th>Registered</th>
+                                <th>Total Withdraw</th>
+                                <th>Status</th>
+                                <th>Joined</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="usersTable">
-                            <tr>
-                                <td colspan="7" class="text-center">Loading...</td>
-                            </tr>
+                            <tr><td colspan="8" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -769,54 +653,44 @@
         </div>
 
         <!-- Gift Codes Section -->
-        <div class="content-section" id="gift-codes">
+        <div id="gift-codes" class="content-section">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Gift Codes Management</h3>
-                    <button class="btn btn-primary" onclick="openCreateGiftCodeModal()">
-                        <i class="fas fa-plus"></i> Create Gift Code
-                    </button>
-                </div>
-                
-                <div class="filters">
-                    <div class="input-group">
-                        <input type="text" id="giftCodeSearch" placeholder="Search by code..." onkeyup="filterGiftCodes()">
-                    </div>
-                    <div class="input-group">
-                        <select id="giftCodeStatusFilter" onchange="filterGiftCodes()">
-                            <option value="">All Status</option>
-                            <option value="active">Active</option>
-                            <option value="expired">Expired</option>
-                            <option value="fully-redeemed">Fully Redeemed</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <select id="giftCodeTypeFilter" onchange="filterGiftCodes()">
-                            <option value="">All Types</option>
-                            <option value="one-to-one">One-to-One</option>
-                            <option value="one-to-many">One-to-Many</option>
-                        </select>
+                    <h3 class="card-title">Gift Codes</h3>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-primary" onclick="openCreateGiftCodeModal()">
+                            <i class="fas fa-plus"></i> Create Gift Code
+                        </button>
+                        <button class="btn btn-primary" onclick="loadGiftCodes()">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
                     </div>
                 </div>
-
+                <div class="filter-bar">
+                    <input type="text" id="giftCodeSearch" placeholder="Search by code..." onkeyup="filterGiftCodes()">
+                    <select id="giftCodeStatusFilter" onchange="filterGiftCodes()">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="expired">Expired</option>
+                        <option value="fully-redeemed">Fully Redeemed</option>
+                    </select>
+                </div>
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
                                 <th>Code</th>
                                 <th>Amount</th>
-                                <th>Type</th>
-                                <th>Created By</th>
-                                <th>Redemptions</th>
+                                <th>Max Uses</th>
+                                <th>Used</th>
                                 <th>Expires</th>
                                 <th>Status</th>
+                                <th>Created</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="giftCodesTable">
-                            <tr>
-                                <td colspan="8" class="text-center">Loading...</td>
-                            </tr>
+                            <tr><td colspan="8" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -824,27 +698,22 @@
         </div>
 
         <!-- Deposits Section -->
-        <div class="content-section" id="deposits">
-            <div class="filters">
-                <div class="input-group">
-                    <input type="text" id="depositSearch" placeholder="Search by mobile or ID..." onkeyup="filterDeposits()">
+        <div id="deposits" class="content-section">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Deposits</h3>
+                    <button class="btn btn-primary" onclick="loadDeposits()">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
                 </div>
-                <div class="input-group">
+                <div class="filter-bar">
+                    <input type="text" id="depositSearch" placeholder="Search by mobile..." onkeyup="filterDeposits()">
                     <select id="depositStatusFilter" onchange="filterDeposits()">
                         <option value="">All Status</option>
                         <option value="SUCCESS">Success</option>
                         <option value="PENDING">Pending</option>
                         <option value="FAILED">Failed</option>
                     </select>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Deposit History</h3>
-                    <button class="btn btn-primary" onclick="refreshDeposits()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
                 </div>
                 <div class="table-container">
                     <table>
@@ -853,15 +722,14 @@
                                 <th>Order ID</th>
                                 <th>Mobile</th>
                                 <th>Amount</th>
-                                <th>Method</th>
                                 <th>Status</th>
+                                <th>Method</th>
                                 <th>Date</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="depositsTable">
-                            <tr>
-                                <td colspan="6" class="text-center">Loading...</td>
-                            </tr>
+                            <tr><td colspan="7" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -869,46 +737,38 @@
         </div>
 
         <!-- Withdrawals Section -->
-        <div class="content-section" id="withdrawals">
-            <div class="filters">
-                <div class="input-group">
-                    <input type="text" id="withdrawalSearch" placeholder="Search..." onkeyup="filterWithdrawals()">
-                </div>
-                <div class="input-group">
-                    <select id="withdrawalStatusFilter" onchange="filterWithdrawals()">
-                        <option value="">All Status</option>
-                        <option value="PENDING">Pending</option>
-                        <option value="APPROVED">Approved</option>
-                        <option value="REJECTED">Rejected</option>
-                    </select>
-                </div>
-            </div>
-
+        <div id="withdrawals" class="content-section">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Withdrawal Requests</h3>
-                    <button class="btn btn-primary" onclick="refreshWithdrawals()">
+                    <h3 class="card-title">Withdrawals</h3>
+                    <button class="btn btn-primary" onclick="loadWithdrawals()">
                         <i class="fas fa-sync"></i> Refresh
                     </button>
+                </div>
+                <div class="filter-bar">
+                    <input type="text" id="withdrawalSearch" placeholder="Search by mobile..." onkeyup="filterWithdrawals()">
+                    <select id="withdrawalStatusFilter" onchange="filterWithdrawals()">
+                        <option value="">All Status</option>
+                        <option value="APPROVED">Approved</option>
+                        <option value="PENDING">Pending</option>
+                        <option value="REJECTED">Rejected</option>
+                    </select>
                 </div>
                 <div class="table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Mobile</th>
                                 <th>Amount</th>
-                                <th>Method</th>
-                                <th>Account Details</th>
+                                <th>Account</th>
+                                <th>IFSC</th>
                                 <th>Status</th>
                                 <th>Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="withdrawalsTable">
-                            <tr>
-                                <td colspan="8" class="text-center">Loading...</td>
-                            </tr>
+                            <tr><td colspan="7" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -916,32 +776,11 @@
         </div>
 
         <!-- Bets Section -->
-        <div class="content-section" id="bets">
-            <div class="filters">
-                <div class="input-group">
-                    <input type="text" id="betSearch" placeholder="Search by mobile or round ID..." onkeyup="filterBets()">
-                </div>
-                <div class="input-group">
-                    <select id="betColorFilter" onchange="filterBets()">
-                        <option value="">All Colors</option>
-                        <option value="red">Red</option>
-                        <option value="green">Green</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <select id="betStatusFilter" onchange="filterBets()">
-                        <option value="">All Status</option>
-                        <option value="PENDING">Pending</option>
-                        <option value="WON">Won</option>
-                        <option value="LOST">Lost</option>
-                    </select>
-                </div>
-            </div>
-
+        <div id="bets" class="content-section">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Betting History</h3>
-                    <button class="btn btn-primary" onclick="refreshBets()">
+                    <h3 class="card-title">Bets History</h3>
+                    <button class="btn btn-primary" onclick="loadBets()">
                         <i class="fas fa-sync"></i> Refresh
                     </button>
                 </div>
@@ -949,19 +788,17 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Round ID</th>
-                                <th>Mobile</th>
-                                <th>Color</th>
+                                <th>User</th>
+                                <th>Round</th>
                                 <th>Amount</th>
-                                <th>Payout</th>
-                                <th>Status</th>
+                                <th>Type</th>
+                                <th>Result</th>
+                                <th>Win Amount</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
                         <tbody id="betsTable">
-                            <tr>
-                                <td colspan="7" class="text-center">Loading...</td>
-                            </tr>
+                            <tr><td colspan="7" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -969,11 +806,11 @@
         </div>
 
         <!-- Rounds Section -->
-        <div class="content-section" id="rounds">
+        <div id="rounds" class="content-section">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Game Rounds History</h3>
-                    <button class="btn btn-primary" onclick="refreshRounds()">
+                    <h3 class="card-title">Game Rounds</h3>
+                    <button class="btn btn-primary" onclick="loadRounds()">
                         <i class="fas fa-sync"></i> Refresh
                     </button>
                 </div>
@@ -984,16 +821,14 @@
                                 <th>Round ID</th>
                                 <th>Result</th>
                                 <th>Total Bets</th>
-                                <th>Red Amount</th>
-                                <th>Green Amount</th>
-                                <th>House Profit</th>
+                                <th>Total Amount</th>
+                                <th>Winner Count</th>
+                                <th>Status</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
                         <tbody id="roundsTable">
-                            <tr>
-                                <td colspan="7" class="text-center">Loading...</td>
-                            </tr>
+                            <tr><td colspan="7" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1001,13 +836,18 @@
         </div>
 
         <!-- Monitor Users Section -->
-        <div class="content-section" id="monitor-users">
+        <div id="monitor-users" class="content-section">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Monitor Users</h3>
-                    <button class="btn btn-primary" onclick="openCreateMonitorModal()">
-                        <i class="fas fa-plus"></i> Create Monitor User
-                    </button>
+                    <div style="display: flex; gap: 12px;">
+                        <button class="btn btn-primary" onclick="openCreateMonitorModal()">
+                            <i class="fas fa-plus"></i> Create Monitor
+                        </button>
+                        <button class="btn btn-primary" onclick="loadMonitorUsers()">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
                 </div>
                 <div class="table-container">
                     <table>
@@ -1022,9 +862,7 @@
                             </tr>
                         </thead>
                         <tbody id="monitorUsersTable">
-                            <tr>
-                                <td colspan="6" class="text-center">Loading...</td>
-                            </tr>
+                            <tr><td colspan="6" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1032,11 +870,11 @@
         </div>
 
         <!-- Referrals Section -->
-        <div class="content-section" id="referrals">
+        <div id="referrals" class="content-section">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Referral System Overview</h3>
-                    <button class="btn btn-primary" onclick="refreshReferrals()">
+                    <h3 class="card-title">Referral System</h3>
+                    <button class="btn btn-primary" onclick="loadReferrals()">
                         <i class="fas fa-sync"></i> Refresh
                     </button>
                 </div>
@@ -1044,17 +882,15 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>User Mobile</th>
                                 <th>Referrer</th>
-                                <th>Commission</th>
-                                <th>Level</th>
+                                <th>Referred User</th>
+                                <th>Bonus Amount</th>
+                                <th>Status</th>
                                 <th>Date</th>
                             </tr>
                         </thead>
                         <tbody id="referralsTable">
-                            <tr>
-                                <td colspan="5" class="text-center">Loading...</td>
-                            </tr>
+                            <tr><td colspan="5" class="text-center">Loading...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1062,80 +898,47 @@
         </div>
 
         <!-- Analytics Section -->
-        <div class="content-section" id="analytics">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalBetsCount">0</div>
-                            <div class="stat-label">Total Bets Placed</div>
-                        </div>
-                        <div class="stat-icon primary">
-                            <i class="fas fa-dice"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalBetsAmount">₹0</div>
-                            <div class="stat-label">Total Bet Amount</div>
-                        </div>
-                        <div class="stat-icon success">
-                            <i class="fas fa-money-bill"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalDepositsAmount">₹0</div>
-                            <div class="stat-label">Total Deposits</div>
-                        </div>
-                        <div class="stat-icon warning">
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div>
-                            <div class="stat-value" id="totalWithdrawalsAmount">₹0</div>
-                            <div class="stat-label">Total Withdrawals</div>
-                        </div>
-                        <div class="stat-icon danger">
-                            <i class="fas fa-hand-holding-usd"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+        <div id="analytics" class="content-section">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Platform Statistics</h3>
+                    <h3 class="card-title">Analytics</h3>
+                    <button class="btn btn-primary" onclick="loadAnalytics()">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
                 </div>
-                <div id="analyticsData">
-                    <div class="loading">
-                        <div class="spinner"></div>
-                        <p>Loading analytics data...</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Bets</div>
+                        <div class="stat-value" id="totalBetsCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total Bet Amount</div>
+                        <div class="stat-value" id="totalBetsAmount">₹0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total Deposits</div>
+                        <div class="stat-value" id="totalDepositsAmount">₹0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Total Withdrawals</div>
+                        <div class="stat-value" id="totalWithdrawalsAmount">₹0</div>
                     </div>
                 </div>
+                <div id="analyticsData"></div>
             </div>
         </div>
 
         <!-- Settings Section -->
-        <div class="content-section" id="settings">
+        <div id="settings" class="content-section">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Admin Settings</h3>
+                    <h3 class="card-title">Settings</h3>
                 </div>
-                <div class="modal-body">
+                <div style="max-width: 500px;">
+                    <h4 style="margin-bottom: 20px;">Account Settings</h4>
                     <div class="input-group">
                         <label>Current Username</label>
-                        <input type="text" id="currentUsername" disabled>
+                        <input type="text" id="currentUsername" value="admin" disabled>
                     </div>
                     <div class="input-group">
                         <label>New Password</label>
@@ -1143,98 +946,56 @@
                     </div>
                     <div class="input-group">
                         <label>Confirm Password</label>
-                        <input type="password" id="confirmPassword" placeholder="Confirm password">
+                        <input type="password" id="confirmPassword" placeholder="Confirm new password">
                     </div>
                     <button class="btn btn-primary" onclick="updatePassword()">
                         <i class="fas fa-save"></i> Update Password
                     </button>
                 </div>
             </div>
-
-            <div class="card mt-2">
-                <div class="card-header">
-                    <h3 class="card-title">System Information</h3>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Platform:</strong> BigWin77 Admin Panel</p>
-                    <p><strong>Version:</strong> 2.0.0</p>
-                    <p><strong>Last Updated:</strong> <span id="lastUpdated">-</span></p>
-                </div>
-            </div>
         </div>
     </div>
 
     <!-- Create Gift Code Modal -->
-    <div class="modal" id="createGiftCodeModal">
+    <div id="createGiftCodeModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Create Gift Code</h3>
-                <button class="modal-close" onclick="closeCreateGiftCodeModal()">
+                <button class="close-btn" onclick="closeCreateGiftCodeModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="input-group">
+                    <label>Code</label>
+                    <input type="text" id="giftCodeCode" placeholder="Enter code">
+                </div>
+                <div class="input-group">
                     <label>Amount (₹)</label>
-                    <input type="number" id="giftAmount" min="10" max="10000" placeholder="Enter amount">
+                    <input type="number" id="giftCodeAmount" placeholder="Enter amount" min="1">
                 </div>
                 <div class="input-group">
-                    <label>Type</label>
-                    <select id="giftType">
-                        <option value="one-to-one">One-to-One (Single use)</option>
-                        <option value="one-to-many">One-to-Many (Multiple use)</option>
-                    </select>
-                </div>
-                <div class="input-group" id="maxRedemptionsGroup" style="display:none;">
-                    <label>Max Redemptions</label>
-                    <input type="number" id="maxRedemptions" min="1" value="999999">
+                    <label>Max Uses</label>
+                    <input type="number" id="giftCodeMaxUses" placeholder="Enter max uses" min="1">
                 </div>
                 <div class="input-group">
-                    <label>Validity (Days)</label>
-                    <input type="number" id="validityDays" value="30" min="1" max="365">
-                </div>
-                <div class="input-group">
-                    <label>Description (Optional)</label>
-                    <textarea id="giftDescription" rows="3" placeholder="Gift description"></textarea>
-                </div>
-                <div class="input-group">
-                    <label>For User Mobile (Admin Only)</label>
-                    <input type="text" id="forUserMobile" placeholder="Enter user mobile to gift from">
+                    <label>Expiry Date</label>
+                    <input type="date" id="giftCodeExpiry">
                 </div>
             </div>
             <div class="modal-footer">
                 <button class="btn" onclick="closeCreateGiftCodeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="createGiftCode()">
-                    <i class="fas fa-gift"></i> Create Code
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- View Gift Code Details Modal -->
-    <div class="modal" id="viewGiftCodeModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Gift Code Details</h3>
-                <button class="modal-close" onclick="closeViewGiftCodeModal()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body" id="giftCodeDetails">
-                <!-- Details will be loaded here -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn" onclick="closeViewGiftCodeModal()">Close</button>
+                <button class="btn btn-primary" onclick="createGiftCode()">Create</button>
             </div>
         </div>
     </div>
 
     <!-- Create Monitor User Modal -->
-    <div class="modal" id="createMonitorModal">
+    <div id="createMonitorModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Create Monitor User</h3>
-                <button class="modal-close" onclick="closeCreateMonitorModal()">
+                <button class="close-btn" onclick="closeCreateMonitorModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -1254,19 +1015,17 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" onclick="closeCreateMonitorModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="createMonitorUser()">
-                    <i class="fas fa-user-plus"></i> Create User
-                </button>
+                <button class="btn btn-primary" onclick="createMonitorUser()">Create</button>
             </div>
         </div>
     </div>
 
-    <!-- View User Details Modal -->
-    <div class="modal" id="viewUserModal">
+    <!-- View User Modal -->
+    <div id="viewUserModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">User Details</h3>
-                <button class="modal-close" onclick="closeViewUserModal()">
+                <button class="close-btn" onclick="closeViewUserModal()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -1383,13 +1142,13 @@
             }
         }
 
-        // API Helper
+        // API Helper - FIXED: Now properly handles Bearer token
         async function apiCall(endpoint, method = 'GET', body = null) {
             const options = {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': token  // Token already has "Bearer " prefix
                 }
             };
             
@@ -1402,6 +1161,7 @@
                 
                 if (!response.ok) {
                     if (response.status === 401) {
+                        console.error('Authentication failed - redirecting to login');
                         localStorage.removeItem('adminToken');
                         localStorage.removeItem('adminLoginTime');
                         window.location.href = 'admin-login.html';
@@ -1420,6 +1180,7 @@
                 return await response.json();
             } catch (error) {
                 console.error('API Error:', error);
+                alert('Error: ' + error.message);
                 return null;
             }
         }
@@ -1449,14 +1210,65 @@
 
         // Load Recent Activity
         async function loadRecentActivity() {
-            const tbody = document.getElementById('recentActivity');
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center">No recent activity</td></tr>';
+            const activity = document.getElementById('recentActivity');
+            activity.innerHTML = '<p class="text-center">Loading recent activity...</p>';
+            
+            try {
+                const deposits = await apiCall('/admin/deposits');
+                const withdrawals = await apiCall('/admin/withdraws');
+                
+                let recentItems = [];
+                
+                if (deposits && deposits.length > 0) {
+                    recentItems = recentItems.concat(deposits.slice(0, 5).map(d => ({
+                        type: 'Deposit',
+                        user: d.mobile,
+                        amount: d.amount,
+                        status: d.status,
+                        time: new Date(d.createdAt)
+                    })));
+                }
+                
+                if (withdrawals && withdrawals.length > 0) {
+                    recentItems = recentItems.concat(withdrawals.slice(0, 5).map(w => ({
+                        type: 'Withdrawal',
+                        user: w.mobile,
+                        amount: w.amount,
+                        status: w.status,
+                        time: new Date(w.createdAt)
+                    })));
+                }
+                
+                recentItems.sort((a, b) => b.time - a.time);
+                recentItems = recentItems.slice(0, 10);
+                
+                if (recentItems.length > 0) {
+                    activity.innerHTML = recentItems.map(item => `
+                        <div style="padding: 12px 0; border-bottom: 1px solid var(--border);">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong>${item.type}</strong> - ${item.user}
+                                    <span class="badge ${getBadgeClass(item.status)}" style="margin-left: 10px;">${item.status}</span>
+                                </div>
+                                <div>
+                                    <strong>₹${item.amount}</strong>
+                                    <div style="font-size: 12px; color: var(--text-light);">${item.time.toLocaleString()}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    activity.innerHTML = '<p class="text-center">No recent activity</p>';
+                }
+            } catch (error) {
+                activity.innerHTML = '<p class="text-center">Error loading activity</p>';
+            }
         }
 
         // Load Users
         async function loadUsers() {
             const tbody = document.getElementById('usersTable');
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center">Loading...</td></tr>';
             
             const users = await apiCall('/admin/users');
             if (users) {
@@ -1474,6 +1286,7 @@
                     <td>₹${user.bonus?.toFixed(2) || '0.00'}</td>
                     <td>₹${user.totalDeposit?.toFixed(2) || '0.00'}</td>
                     <td>₹${user.totalWithdraw?.toFixed(2) || '0.00'}</td>
+                    <td><span class="badge ${user.isBanned ? 'danger' : 'success'}">${user.isBanned ? 'Banned' : 'Active'}</span></td>
                     <td>${new Date(user.createdAt).toLocaleDateString()}</td>
                     <td>
                         <button class="btn btn-sm btn-primary" onclick="viewUser('${user.mobile}')">
@@ -1481,35 +1294,33 @@
                         </button>
                         ${user.isBanned ? 
                             `<button class="btn btn-sm btn-success" onclick="unbanUser('${user.mobile}')">
-                                <i class="fas fa-unlock"></i>
+                                <i class="fas fa-check"></i> Unban
                             </button>` :
                             `<button class="btn btn-sm btn-danger" onclick="banUser('${user.mobile}')">
-                                <i class="fas fa-ban"></i>
+                                <i class="fas fa-ban"></i> Ban
                             </button>`
                         }
                     </td>
                 </tr>
-            `).join('') : '<tr><td colspan="7" class="text-center">No users found</td></tr>';
-        }
-
-        function refreshUsers() {
-            loadUsers();
+            `).join('') : '<tr><td colspan="8" class="text-center">No users found</td></tr>';
         }
 
         function filterUsers() {
-            const search = document.getElementById('userSearch').value.toLowerCase();
             const status = document.getElementById('userStatusFilter').value;
+            const search = document.getElementById('userSearch').value.toLowerCase();
             
             let filtered = allUsers;
             
-            if (search) {
-                filtered = filtered.filter(u => u.mobile.toLowerCase().includes(search));
+            if (status) {
+                filtered = filtered.filter(u => {
+                    if (status === 'active') return !u.isBanned;
+                    if (status === 'banned') return u.isBanned;
+                    return true;
+                });
             }
             
-            if (status === 'banned') {
-                filtered = filtered.filter(u => u.isBanned);
-            } else if (status === 'active') {
-                filtered = filtered.filter(u => !u.isBanned);
+            if (search) {
+                filtered = filtered.filter(u => u.mobile.includes(search));
             }
             
             displayUsers(filtered);
@@ -1600,18 +1411,18 @@
                 <tr>
                     <td><strong>${gc.code}</strong></td>
                     <td>₹${gc.amount}</td>
-                    <td><span class="badge primary">${gc.type}</span></td>
-                    <td>${gc.createdBy}</td>
-                    <td>${gc.redemptionCount} / ${gc.maxRedemptions}</td>
-                    <td>${new Date(gc.expiresAt).toLocaleDateString()}</td>
+                    <td>${gc.maxUses}</td>
+                    <td>${gc.usedCount || 0}</td>
+                    <td>${new Date(gc.expiryDate).toLocaleDateString()}</td>
                     <td><span class="badge ${getBadgeClass(gc.status)}">${gc.status}</span></td>
+                    <td>${new Date(gc.createdAt).toLocaleDateString()}</td>
                     <td>
-                        <button class="btn btn-sm btn-primary" onclick="viewGiftCode('${gc.code}')">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteGiftCode('${gc.code}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                        ${gc.status === 'active' ? 
+                            `<button class="btn btn-sm btn-danger" onclick="deactivateGiftCode('${gc._id}')">
+                                <i class="fas fa-ban"></i> Deactivate
+                            </button>` : 
+                            '<span style="color: var(--text-light);">-</span>'
+                        }
                     </td>
                 </tr>
             `).join('') : '<tr><td colspan="8" class="text-center">No gift codes found</td></tr>';
@@ -1619,21 +1430,16 @@
 
         function filterGiftCodes() {
             const status = document.getElementById('giftCodeStatusFilter').value;
-            const type = document.getElementById('giftCodeTypeFilter').value;
             const search = document.getElementById('giftCodeSearch').value.toLowerCase();
             
             let filtered = allGiftCodes;
             
             if (status) {
-                filtered = filtered.filter(gc => gc.status === status);
-            }
-            
-            if (type) {
-                filtered = filtered.filter(gc => gc.type === type);
+                filtered = filtered.filter(g => g.status === status);
             }
             
             if (search) {
-                filtered = filtered.filter(gc => gc.code.toLowerCase().includes(search));
+                filtered = filtered.filter(g => g.code.toLowerCase().includes(search));
             }
             
             displayGiftCodes(filtered);
@@ -1645,133 +1451,43 @@
 
         function closeCreateGiftCodeModal() {
             document.getElementById('createGiftCodeModal').classList.remove('active');
-            document.getElementById('giftAmount').value = '';
-            document.getElementById('giftType').value = 'one-to-one';
-            document.getElementById('validityDays').value = '30';
-            document.getElementById('giftDescription').value = '';
-            document.getElementById('forUserMobile').value = '';
+            document.getElementById('giftCodeCode').value = '';
+            document.getElementById('giftCodeAmount').value = '';
+            document.getElementById('giftCodeMaxUses').value = '';
+            document.getElementById('giftCodeExpiry').value = '';
         }
 
-        document.getElementById('giftType')?.addEventListener('change', function() {
-            const maxRedGroup = document.getElementById('maxRedemptionsGroup');
-            if (this.value === 'one-to-many') {
-                maxRedGroup.style.display = 'block';
-            } else {
-                maxRedGroup.style.display = 'none';
-            }
-        });
-
         async function createGiftCode() {
-            const amount = parseFloat(document.getElementById('giftAmount').value);
-            const type = document.getElementById('giftType').value;
-            const validityDays = parseInt(document.getElementById('validityDays').value);
-            const description = document.getElementById('giftDescription').value;
-            const forUserMobile = document.getElementById('forUserMobile').value;
-            const maxRedemptions = type === 'one-to-many' ? 
-                parseInt(document.getElementById('maxRedemptions').value) : 1;
+            const code = document.getElementById('giftCodeCode').value.toUpperCase();
+            const amount = parseFloat(document.getElementById('giftCodeAmount').value);
+            const maxUses = parseInt(document.getElementById('giftCodeMaxUses').value);
+            const expiryDate = document.getElementById('giftCodeExpiry').value;
 
-            if (!amount || amount < 10 || amount > 10000) {
-                alert('Please enter a valid amount between ₹10 and ₹10,000');
+            if (!code || !amount || !maxUses || !expiryDate) {
+                alert('All fields are required');
                 return;
             }
 
-            if (!forUserMobile) {
-                alert('Please enter user mobile number');
-                return;
-            }
-
-            const result = await apiCall('/admin/create-giftcode', 'POST', {
+            const result = await apiCall('/admin/giftcode', 'POST', {
+                code,
                 amount,
-                type,
-                validityDays,
-                description,
-                maxRedemptions,
-                forUserMobile
+                maxUses,
+                expiryDate
             });
 
             if (result) {
-                alert(`Gift code created successfully!\nCode: ${result.giftCode.code}`);
+                alert('Gift code created successfully');
                 closeCreateGiftCodeModal();
                 loadGiftCodes();
             }
         }
 
-        async function viewGiftCode(code) {
-            const giftCode = allGiftCodes.find(gc => gc.code === code);
-            if (!giftCode) return;
+        async function deactivateGiftCode(id) {
+            if (!confirm('Deactivate this gift code?')) return;
 
-            const details = document.getElementById('giftCodeDetails');
-            details.innerHTML = `
-                <div class="input-group">
-                    <label>Code</label>
-                    <input type="text" value="${giftCode.code}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Amount</label>
-                    <input type="text" value="₹${giftCode.amount}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Type</label>
-                    <input type="text" value="${giftCode.type}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Created By</label>
-                    <input type="text" value="${giftCode.createdBy}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Redemptions</label>
-                    <input type="text" value="${giftCode.redemptionCount} / ${giftCode.maxRedemptions}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Status</label>
-                    <input type="text" value="${giftCode.status}" disabled>
-                </div>
-                <div class="input-group">
-                    <label>Expires At</label>
-                    <input type="text" value="${new Date(giftCode.expiresAt).toLocaleString()}" disabled>
-                </div>
-                ${giftCode.description ? `
-                    <div class="input-group">
-                        <label>Description</label>
-                        <textarea disabled rows="2">${giftCode.description}</textarea>
-                    </div>
-                ` : ''}
-                ${giftCode.redeemedBy && giftCode.redeemedBy.length > 0 ? `
-                    <div class="input-group">
-                        <label>Redeemed By</label>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Mobile</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${giftCode.redeemedBy.map(r => `
-                                    <tr>
-                                        <td>${r.mobile}</td>
-                                        <td>${new Date(r.redeemedAt).toLocaleString()}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                ` : ''}
-            `;
-
-            document.getElementById('viewGiftCodeModal').classList.add('active');
-        }
-
-        function closeViewGiftCodeModal() {
-            document.getElementById('viewGiftCodeModal').classList.remove('active');
-        }
-
-        async function deleteGiftCode(code) {
-            if (!confirm('Delete this gift code?')) return;
-
-            const result = await apiCall(`/admin/giftcode/${code}`, 'DELETE');
+            const result = await apiCall(`/admin/giftcode/${id}/deactivate`, 'POST');
             if (result) {
-                alert('Gift code deleted successfully');
+                alert('Gift code deactivated successfully');
                 loadGiftCodes();
             }
         }
@@ -1779,7 +1495,7 @@
         // Load Deposits
         async function loadDeposits() {
             const tbody = document.getElementById('depositsTable');
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center">Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading...</td></tr>';
             
             const deposits = await apiCall('/admin/deposits');
             if (deposits) {
@@ -1792,14 +1508,22 @@
             const tbody = document.getElementById('depositsTable');
             tbody.innerHTML = deposits.length ? deposits.map(d => `
                 <tr>
-                    <td>${d.orderId || d._id.substring(0, 8)}</td>
+                    <td>${d.orderId}</td>
                     <td>${d.mobile}</td>
                     <td>₹${d.amount}</td>
-                    <td>${d.method || 'UPI'}</td>
                     <td><span class="badge ${getBadgeClass(d.status)}">${d.status}</span></td>
+                    <td>${d.method || 'UPI'}</td>
                     <td>${new Date(d.createdAt).toLocaleString()}</td>
+                    <td>
+                        ${d.status === 'PENDING' ? 
+                            `<button class="btn btn-sm btn-success" onclick="approveDeposit('${d._id}')">
+                                <i class="fas fa-check"></i> Approve
+                            </button>` : 
+                            '-'
+                        }
+                    </td>
                 </tr>
-            `).join('') : '<tr><td colspan="6" class="text-center">No deposits found</td></tr>';
+            `).join('') : '<tr><td colspan="7" class="text-center">No deposits found</td></tr>';
         }
 
         function filterDeposits() {
@@ -1813,23 +1537,26 @@
             }
             
             if (search) {
-                filtered = filtered.filter(d => 
-                    d.mobile.includes(search) || 
-                    (d.orderId && d.orderId.toLowerCase().includes(search))
-                );
+                filtered = filtered.filter(d => d.mobile.includes(search));
             }
             
             displayDeposits(filtered);
         }
 
-        function refreshDeposits() {
-            loadDeposits();
+        async function approveDeposit(id) {
+            if (!confirm('Approve this deposit?')) return;
+
+            const result = await apiCall(`/admin/deposit/${id}`, 'POST');
+            if (result) {
+                alert('Deposit approved successfully');
+                loadDeposits();
+            }
         }
 
         // Load Withdrawals
         async function loadWithdrawals() {
             const tbody = document.getElementById('withdrawalsTable');
-            tbody.innerHTML = '<tr><td colspan="8" class="text-center">Loading...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading...</td></tr>';
             
             const withdrawals = await apiCall('/admin/withdraws');
             if (withdrawals) {
@@ -1842,11 +1569,10 @@
             const tbody = document.getElementById('withdrawalsTable');
             tbody.innerHTML = withdrawals.length ? withdrawals.map(w => `
                 <tr>
-                    <td>${w._id.substring(0, 8)}</td>
                     <td>${w.mobile}</td>
                     <td>₹${w.amount}</td>
-                    <td>${w.method}</td>
-                    <td>${w.accountNumber || w.upiId || 'N/A'}</td>
+                    <td>${w.accountNumber}</td>
+                    <td>${w.ifscCode}</td>
                     <td><span class="badge ${getBadgeClass(w.status)}">${w.status}</span></td>
                     <td>${new Date(w.createdAt).toLocaleString()}</td>
                     <td>
@@ -1860,7 +1586,7 @@
                         ` : '-'}
                     </td>
                 </tr>
-            `).join('') : '<tr><td colspan="8" class="text-center">No withdrawals found</td></tr>';
+            `).join('') : '<tr><td colspan="7" class="text-center">No withdrawals found</td></tr>';
         }
 
         function filterWithdrawals() {
@@ -1880,14 +1606,10 @@
             displayWithdrawals(filtered);
         }
 
-        function refreshWithdrawals() {
-            loadWithdrawals();
-        }
-
         async function approveWithdrawal(id) {
             if (!confirm('Approve this withdrawal?')) return;
 
-            const result = await apiCall(`/admin/withdraw/${id}/approve`, 'POST');
+            const result = await apiCall(`/admin/withdraw/${id}`, 'POST', { action: 'approve' });
             if (result) {
                 alert('Withdrawal approved successfully');
                 loadWithdrawals();
@@ -1897,7 +1619,7 @@
         async function rejectWithdrawal(id) {
             if (!confirm('Reject this withdrawal?')) return;
 
-            const result = await apiCall(`/admin/withdraw/${id}/reject`, 'POST');
+            const result = await apiCall(`/admin/withdraw/${id}`, 'POST', { action: 'reject' });
             if (result) {
                 alert('Withdrawal rejected successfully');
                 loadWithdrawals();
@@ -1907,31 +1629,13 @@
         // Load Bets
         async function loadBets() {
             const tbody = document.getElementById('betsTable');
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading...</td></tr>';
-            
-            // Since /admin/bets doesn't exist, show message
             tbody.innerHTML = '<tr><td colspan="7" class="text-center">Bets history not available in current API</td></tr>';
-        }
-
-        function filterBets() {
-            // Filter logic here
-        }
-
-        function refreshBets() {
-            loadBets();
         }
 
         // Load Rounds
         async function loadRounds() {
             const tbody = document.getElementById('roundsTable');
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center">Loading...</td></tr>';
-            
-            // Since /admin/rounds doesn't exist, show message
             tbody.innerHTML = '<tr><td colspan="7" class="text-center">Rounds history not available in current API</td></tr>';
-        }
-
-        function refreshRounds() {
-            loadRounds();
         }
 
         // Load Monitor Users
@@ -2027,14 +1731,7 @@
         // Load Referrals
         async function loadReferrals() {
             const tbody = document.getElementById('referralsTable');
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center">Loading...</td></tr>';
-            
-            // Since /admin/referrals doesn't exist, show message
             tbody.innerHTML = '<tr><td colspan="5" class="text-center">Referrals data not available in current API</td></tr>';
-        }
-
-        function refreshReferrals() {
-            loadReferrals();
         }
 
         // Load Analytics
