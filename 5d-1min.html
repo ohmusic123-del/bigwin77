@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5D Lottery 1 Min - BigWin</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Use same styles as wingo-1min.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            min-height: 100vh;
+        }
+        
+        .game-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .game-header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .game-header h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        /* ... rest same as wingo ... */
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1>🎲 5D Lottery 1 Minute</h1>
+            <div class="round-info">
+                <div class="round-id" id="roundId">Loading...</div>
+                <div class="timer" id="timer">60</div>
+            </div>
+        </div>
+
+        <div class="balance-display">
+            <div style="font-size: 14px;">Your Balance</div>
+            <div class="amount" id="balance">₹0.00</div>
+        </div>
+
+        <div class="betting-section">
+            <h3>Select Number</h3>
+            <div class="number-options">
+                <button class="bet-btn" onclick="selectBet('number', '0')">0</button>
+                <button class="bet-btn" onclick="selectBet('number', '1')">1</button>
+                <button class="bet-btn" onclick="selectBet('number', '2')">2</button>
+                <button class="bet-btn" onclick="selectBet('number', '3')">3</button>
+                <button class="bet-btn" onclick="selectBet('number', '4')">4</button>
+                <button class="bet-btn" onclick="selectBet('number', '5')">5</button>
+                <button class="bet-btn" onclick="selectBet('number', '6')">6</button>
+                <button class="bet-btn" onclick="selectBet('number', '7')">7</button>
+                <button class="bet-btn" onclick="selectBet('number', '8')">8</button>
+                <button class="bet-btn" onclick="selectBet('number', '9')">9</button>
+            </div>
+
+            <h3>Bet Amount</h3>
+            <div class="quick-amounts">
+                <button class="quick-amount-btn" onclick="setAmount(10)">₹10</button>
+                <button class="quick-amount-btn" onclick="setAmount(50)">₹50</button>
+                <button class="quick-amount-btn" onclick="setAmount(100)">₹100</button>
+                <button class="quick-amount-btn" onclick="setAmount(500)">₹500</button>
+            </div>
+            <input type="number" class="amount-input" id="betAmount" placeholder="Enter amount" min="10" value="10">
+
+            <button class="place-bet-btn" id="placeBetBtn" onclick="placeBet()">
+                Place Bet
+            </button>
+        </div>
+
+        <div class="results-section">
+            <h3>Recent Results</h3>
+            <div id="results">Loading...</div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="window.location.href='home.html'">🏠 Home</button>
+            <button class="nav-btn" onclick="window.location.href='wallet.html'">💰 Wallet</button>
+            <button class="nav-btn" onclick="window.location.href='profile.html'">👤 Profile</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = localStorage.getItem('apiUrl') || 'http://localhost:5000';
+        const token = localStorage.getItem('token');
+        
+        if (!token) {
+            window.location.href = 'index.html';
+        }
+
+        let selectedBetType = null;
+        let selectedValue = null;
+
+        async function init() {
+            await loadBalance();
+            await loadCurrentRound();
+            await loadResults();
+        }
+
+        async function loadBalance() {
+            try {
+                const response = await fetch(`${API_URL}/user`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                document.getElementById('balance').textContent = `₹${data.balance.toFixed(2)}`;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function loadCurrentRound() {
+            try {
+                const response = await fetch(`${API_URL}/5d/current/5d1min`);
+                const data = await response.json();
+                if (data.success) {
+                    document.getElementById('roundId').textContent = `Round: ${data.round.roundId}`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function loadResults() {
+            document.getElementById('results').innerHTML = '<div style="text-align: center; color: #999;">No results yet</div>';
+        }
+
+        function selectBet(type, value) {
+            document.querySelectorAll('.bet-btn').forEach(btn => btn.classList.remove('selected'));
+            selectedBetType = type;
+            selectedValue = value;
+            event.target.classList.add('selected');
+        }
+
+        function setAmount(amount) {
+            document.getElementById('betAmount').value = amount;
+        }
+
+        async function placeBet() {
+            if (!selectedBetType || !selectedValue) {
+                alert('Please select a number first!');
+                return;
+            }
+            
+            const amount = parseFloat(document.getElementById('betAmount').value);
+            if (amount < 10) {
+                alert('Minimum bet is ₹10');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_URL}/5d/bet`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        gameType: '5d1min',
+                        betType: selectedBetType,
+                        selection: selectedValue,
+                        amount: amount
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    alert('Bet placed successfully!');
+                    document.getElementById('balance').textContent = `₹${data.newBalance.toFixed(2)}`;
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
