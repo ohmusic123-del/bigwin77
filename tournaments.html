@@ -1,1 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournaments - BIGWIN</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            color: white;
+            padding-bottom: 90px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(-2px);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            flex: 1;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding: 5px;
+        }
+
+        .tab {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 24px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-color: transparent;
+        }
+
+        .tournament-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tournament-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .tournament-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .tournament-badge.featured {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+        }
+
+        .tournament-game {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .tournament-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .tournament-type {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+        }
+
+        .tournament-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 12px;
+        }
+
+        .info-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .prize-pool {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .prize-label {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .prize-amount {
+            font-size: 26px;
+            font-weight: 900;
+        }
+
+        .tournament-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .slots-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            width: 100px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s;
+        }
+
+        .slots-text {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .join-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .join-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .join-btn:disabled {
+            background: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-text {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .my-tournaments-link {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .my-tournaments-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .link-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .link-arrow {
+            font-size: 20px;
+        }
+
+        /* Bottom nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(20, 20, 40, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 15px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            .tournament-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="window.location.href='home.html'">←</button>
+            <h1 class="page-title">Tournaments</h1>
+            <div style="width: 40px;"></div>
+        </div>
+
+        <div class="my-tournaments-link" onclick="window.location.href='my-tournaments.html'">
+            <span class="link-text">📋 My Tournaments</span>
+            <span class="link-arrow">→</span>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-status="all">All</div>
+            <div class="tab" data-status="registration_open">Open</div>
+            <div class="tab" data-status="ongoing">Live</div>
+            <div class="tab" data-status="completed">Completed</div>
+        </div>
+
+        <div id="tournaments-container">
+            <div class="loading">Loading tournaments...</div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-container">
+            <a href="home.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Home</span>
+            </a>
+            <a href="tournaments.html" class="nav-item active">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-label">Tournaments</span>
+            </a>
+            <a href="wallet.html" class="nav-item">
+                <span class="nav-icon">💰</span>
+                <span class="nav-label">Wallet</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">Profile</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+        let currentStatus = 'all';
+
+        // Game icons
+        const gameIcons = {
+            freefire: '🔥',
+            pubg: '🎮',
+            bgmi: '🎯',
+            cod: '🔫',
+            valorant: '⚔️',
+            other: '🎲'
+        };
+
+        // Load tournaments
+        async function loadTournaments() {
+            try {
+                const container = document.getElementById('tournaments-container');
+                container.innerHTML = '<div class="loading">Loading tournaments...</div>';
+
+                const params = new URLSearchParams();
+                if (currentStatus !== 'all') {
+                    params.append('status', currentStatus);
+                }
+
+                const response = await fetch(`${API_URL}/tournaments?${params}`);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to load tournaments');
+                }
+
+                if (data.tournaments.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🏆</div>
+                            <div class="empty-text">No tournaments available</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = data.tournaments.map(t => createTournamentCard(t)).join('');
+            } catch (err) {
+                console.error('Error loading tournaments:', err);
+                document.getElementById('tournaments-container').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⚠️</div>
+                        <div class="empty-text">${err.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        function createTournamentCard(tournament) {
+            const startDate = new Date(tournament.startTime);
+            const formattedDate = startDate.toLocaleDateString('en-IN', { 
+                day: 'numeric', 
+                month: 'short', 
+                year: 'numeric' 
+            });
+            const formattedTime = startDate.toLocaleTimeString('en-IN', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+
+            const slotsRemaining = tournament.totalSlots - tournament.currentParticipants;
+            const slotPercentage = (tournament.currentParticipants / tournament.totalSlots) * 100;
+            const isFull = slotsRemaining <= 0;
+            const isRegistrationClosed = tournament.status !== 'registration_open';
+
+            const gameIcon = gameIcons[tournament.game] || gameIcons.other;
+            const gameName = tournament.game === 'other' && tournament.gameCustomName 
+                ? tournament.gameCustomName 
+                : tournament.game.toUpperCase();
+
+            let statusBadge = '';
+            if (tournament.featured) {
+                statusBadge = '<div class="tournament-badge featured">⭐ Featured</div>';
+            } else if (tournament.status === 'ongoing') {
+                statusBadge = '<div class="tournament-badge">🔴 LIVE</div>';
+            }
+
+            return `
+                <div class="tournament-card" onclick="viewTournament('${tournament._id}')">
+                    ${statusBadge}
+                    <div class="tournament-game">${gameIcon} ${gameName}</div>
+                    <div class="tournament-title">${tournament.title}</div>
+                    <div class="tournament-type">${tournament.type.toUpperCase()} • ${tournament.map || 'TBD'}</div>
+                    
+                    <div class="prize-pool">
+                        <div class="prize-label">Prize Pool</div>
+                        <div class="prize-amount">₹${tournament.prizePool.toFixed(2)}</div>
+                    </div>
+
+                    <div class="tournament-info">
+                        <div class="info-item">
+                            <div class="info-label">Entry Fee</div>
+                            <div class="info-value">₹${tournament.entryFee.toFixed(2)}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Total Slots</div>
+                            <div class="info-value">${tournament.totalSlots}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Start Date</div>
+                            <div class="info-value" style="font-size: 13px;">${formattedDate}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Start Time</div>
+                            <div class="info-value" style="font-size: 13px;">${formattedTime}</div>
+                        </div>
+                    </div>
+
+                    <div class="tournament-footer">
+                        <div class="slots-info">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${slotPercentage}%"></div>
+                            </div>
+                            <div class="slots-text">${slotsRemaining} slots left</div>
+                        </div>
+                        <button class="join-btn" ${isFull || isRegistrationClosed ? 'disabled' : ''} 
+                                onclick="event.stopPropagation(); viewTournament('${tournament._id}')">
+                            ${isFull ? 'Full' : isRegistrationClosed ? 'Closed' : 'Join Now'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function viewTournament(id) {
+            window.location.href = `tournament-details.html?id=${id}`;
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentStatus = tab.dataset.status;
+                loadTournaments();
+            });
+        });
+
+        // Initial load
+        loadTournaments();
+
+        // Refresh every 30 seconds
+        setInterval(loadTournaments, 30000);
+    </script>
+</body>
+</html>
