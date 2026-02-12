@@ -828,7 +828,314 @@
                 }
             }
         }
+<!-- ==================================================
+     TOURNAMENT SECTION FOR HOME PAGE
+     Add this section to your home.html file
+     ================================================== -->
 
+<style>
+    .tournaments-section {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 25px;
+        margin-bottom: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-size: 22px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .view-all-link {
+        color: #667eea;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .tournament-scroll {
+        display: flex;
+        gap: 15px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(102, 126, 234, 0.5) rgba(255, 255, 255, 0.1);
+    }
+
+    .tournament-scroll::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .tournament-scroll::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    .tournament-scroll::-webkit-scrollbar-thumb {
+        background: rgba(102, 126, 234, 0.5);
+        border-radius: 10px;
+    }
+
+    .mini-tournament-card {
+        min-width: 280px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 16px;
+        padding: 18px;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+    }
+
+    .mini-tournament-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        border-color: rgba(102, 126, 234, 0.5);
+    }
+
+    .tournament-live-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff0000 100%);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .live-dot {
+        width: 6px;
+        height: 6px;
+        background: white;
+        border-radius: 50%;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+
+    .mini-game-tag {
+        display: inline-block;
+        background: rgba(102, 126, 234, 0.3);
+        color: #667eea;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .mini-tournament-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 5px;
+        line-height: 1.3;
+    }
+
+    .mini-tournament-type {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 12px;
+    }
+
+    .mini-prize {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+    }
+
+    .mini-prize-label {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 3px;
+    }
+
+    .mini-prize-amount {
+        font-size: 20px;
+        font-weight: 900;
+        color: white;
+    }
+
+    .mini-tournament-info {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    .mini-info-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mini-info-label {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 10px;
+        margin-bottom: 3px;
+    }
+
+    .mini-info-value {
+        color: white;
+        font-weight: 600;
+    }
+
+    .mini-slots-bar {
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 5px;
+    }
+
+    .mini-slots-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transition: width 0.3s;
+    }
+
+    .mini-slots-text {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .tournament-empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .tournament-empty-icon {
+        font-size: 48px;
+        margin-bottom: 10px;
+        opacity: 0.3;
+    }
+</style>
+
+<!-- Tournament Section HTML -->
+<div class="tournaments-section">
+    <div class="section-header">
+        <h2 class="section-title">🏆 Tournaments</h2>
+        <a href="tournaments.html" class="view-all-link">View All →</a>
+    </div>
+    
+    <div id="home-tournaments-container" class="tournament-scroll">
+        <div style="padding: 20px; color: rgba(255, 255, 255, 0.5);">Loading tournaments...</div>
+    </div>
+</div>
+
+<!-- Tournament Section JavaScript -->
+<script>
+    // Add this to your home.html JavaScript section
+    async function loadHomeTournaments() {
+        try {
+            const response = await fetch(`${API_URL}/tournaments?status=registration_open&featured=true`);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to load tournaments');
+            }
+
+            const container = document.getElementById('home-tournaments-container');
+
+            if (data.tournaments.length === 0) {
+                container.innerHTML = `
+                    <div class="tournament-empty">
+                        <div class="tournament-empty-icon">🏆</div>
+                        <div>No tournaments available</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Show only first 5 featured tournaments
+            const tournaments = data.tournaments.slice(0, 5);
+
+            container.innerHTML = tournaments.map(t => {
+                const slotsRemaining = t.totalSlots - t.currentParticipants;
+                const slotPercentage = (t.currentParticipants / t.totalSlots) * 100;
+                const isLive = t.status === 'ongoing';
+
+                return `
+                    <div class="mini-tournament-card" onclick="window.location.href='tournament-details.html?id=${t._id}'">
+                        ${isLive ? `
+                        <div class="tournament-live-badge">
+                            <span class="live-dot"></span>
+                            LIVE
+                        </div>
+                        ` : ''}
+                        
+                        <div class="mini-game-tag">${t.game.toUpperCase()}</div>
+                        <div class="mini-tournament-title">${t.title}</div>
+                        <div class="mini-tournament-type">${t.type.toUpperCase()}</div>
+                        
+                        <div class="mini-prize">
+                            <div class="mini-prize-label">Prize Pool</div>
+                            <div class="mini-prize-amount">₹${t.prizePool.toFixed(0)}</div>
+                        </div>
+
+                        <div class="mini-tournament-info">
+                            <div class="mini-info-item">
+                                <span class="mini-info-label">Entry Fee</span>
+                                <span class="mini-info-value">₹${t.entryFee.toFixed(0)}</span>
+                            </div>
+                            <div class="mini-info-item">
+                                <span class="mini-info-label">Slots</span>
+                                <span class="mini-info-value">${t.totalSlots}</span>
+                            </div>
+                            <div class="mini-info-item">
+                                <span class="mini-info-label">Start Time</span>
+                                <span class="mini-info-value">${new Date(t.startTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</span>
+                            </div>
+                        </div>
+
+                        <div class="mini-slots-bar">
+                            <div class="mini-slots-fill" style="width: ${slotPercentage}%"></div>
+                        </div>
+                        <div class="mini-slots-text">${slotsRemaining} slots remaining</div>
+                    </div>
+                `;
+            }).join('');
+        } catch (err) {
+            console.error('Error loading tournaments:', err);
+            document.getElementById('home-tournaments-container').innerHTML = `
+                <div style="padding: 20px; color: #f44336;">Failed to load tournaments</div>
+            `;
+        }
+    }
+         // Call this function when home page loads
+    // Add to your existing window.onload or DOMContentLoaded event
+    loadHomeTournaments();
+
+    // Optional: Refresh tournaments every 30 seconds
+    setInterval(loadHomeTournaments, 30000)
         // Load data on page load
         loadData();
         setInterval(loadData, 10000); // Refresh every 10 seconds
