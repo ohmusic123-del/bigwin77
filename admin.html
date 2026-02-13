@@ -530,6 +530,11 @@
                 <i class="fas fa-sync"></i>
                 <span>Game Rounds</span>
             </div>
+            <div class="menu-item" data-section="tournaments">
+    <i class="fas fa-trophy"></i>
+    <span>Tournaments</span>
+</div>
+
             <div class="menu-item" data-section="monitor-users">
                 <i class="fas fa-user-shield"></i>
                 <span>Monitor Users</span>
@@ -976,6 +981,28 @@
             </div>
         </div>
     </div>
+<!-- Tournaments Section -->
+<div class="section" id="tournaments-section" style="display: none;">
+    <div class="section-header">
+        <h2>Tournament Management</h2>
+        <a href="admin-tournaments.html" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Open Tournament Manager
+        </a>
+    </div>
+    
+    <div class="card" style="margin-top: 20px;">
+        <div class="card-body text-center" style="padding: 40px;">
+            <i class="fas fa-trophy" style="font-size: 48px; color: var(--primary); margin-bottom: 20px;"></i>
+            <h3 style="margin-bottom: 10px;">Tournament System</h3>
+            <p style="color: var(--text-light); margin-bottom: 20px;">
+                Manage Free Fire, PUBG, BGMI and other game tournaments
+            </p>
+            <a href="admin-tournaments.html" class="btn btn-primary" style="display: inline-block;">
+                Go to Tournament Manager
+            </a>
+        </div>
+    </div>
+</div>
 
     <!-- Create Gift Code Modal -->
     <div id="createGiftCodeModal" class="modal">
@@ -1168,7 +1195,8 @@
                     'monitor-users': 'Monitor Users',
                     'referrals': 'Referral System',
                     'analytics': 'Analytics',
-                    'settings': 'Settings'
+                    'settings': 'Settings',
+                    'tournaments':'tournaments'
                 };
                 document.getElementById('pageTitle').textContent = titles[section] || 'Dashboard';
                 
@@ -1209,6 +1237,9 @@
                     break;
                 case 'analytics':
                     loadAnalytics();
+                    break;
+                     case  'tournaments':
+                    loadTournaments();
                     break;
             }
         }
@@ -1739,26 +1770,122 @@
             displayWithdrawals(filtered);
         }
 
-        async function approveWithdrawal(id) {
-            if (!confirm('Approve this withdrawal?')) return;
+       // ========== DEPOSIT APPROVAL FUNCTIONS ==========
 
-            const result = await apiCall(`/admin/withdraw/${id}`, 'POST', { action: 'approve' });
-            if (result) {
-                alert('Withdrawal approved successfully');
-                loadWithdrawals();
-                loadDashboard(); // Refresh stats
+async function approveDeposit(depositId) {
+    if (!confirm('Are you sure you want to approve this deposit?')) return;
+    
+    try {
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch(`${API_URL}/admin/deposits/${depositId}/approve`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to approve deposit');
         }
+        
+        alert('✅ Deposit approved successfully!\nWallet credited: ₹' + data.newBalance);
+        loadDeposits(); // Reload deposits table
+    } catch (err) {
+        console.error('Error approving deposit:', err);
+        alert('❌ Error: ' + err.message);
+    }
+}
 
-        async function rejectWithdrawal(id) {
-            if (!confirm('Reject this withdrawal? Amount will be returned to user wallet.')) return;
+async function rejectDeposit(depositId) {
+    const reason = prompt('Enter rejection reason:');
+    if (!reason) return;
+    
+    try {
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch(`${API_URL}/admin/deposits/${depositId}/reject`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ reason })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to reject deposit');
+        }
+        
+        alert('✅ Deposit rejected successfully!');
+        loadDeposits(); // Reload deposits table
+    } catch (err) {
+        console.error('Error rejecting deposit:', err);
+        alert('❌ Error: ' + err.message);
+    }
+}
 
-            const result = await apiCall(`/admin/withdraw/${id}`, 'POST', { action: 'reject' });
-            if (result) {
-                alert('Withdrawal rejected successfully');
-                loadWithdrawals();
+// ========== WITHDRAWAL APPROVAL FUNCTIONS ==========
+
+async function approveWithdrawal(withdrawalId) {
+    if (!confirm('Are you sure you want to approve this withdrawal?\n\n⚠️ Make sure to process the payment manually!')) return;
+    
+    try {
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch(`${API_URL}/admin/withdrawals/${withdrawalId}/approve`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to approve withdrawal');
         }
+        
+        alert('✅ Withdrawal approved successfully!\n\n⚠️ REMINDER: Process the payment manually to the user.');
+        loadWithdrawals(); // Reload withdrawals table
+    } catch (err) {
+        console.error('Error approving withdrawal:', err);
+        alert('❌ Error: ' + err.message);
+    }
+}
+
+async function rejectWithdrawal(withdrawalId) {
+    const reason = prompt('Enter rejection reason:');
+    if (!reason) return;
+    
+    try {
+        const token = localStorage.getItem('adminToken');
+        const response = await fetch(`${API_URL}/admin/withdrawals/${withdrawalId}/reject`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ reason })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to reject withdrawal');
+        }
+        
+        alert('✅ Withdrawal rejected successfully!\nAmount refunded: ₹' + data.refundedAmount + '\nNew wallet balance: ₹' + data.newBalance);
+        loadWithdrawals(); // Reload withdrawals table
+    } catch (err) {
+        console.error('Error rejecting withdrawal:', err);
+        alert('❌ Error: ' + err.message);
+    }
+}
+
 
         // Load Bets - FIXED
         async function loadBets() {
