@@ -365,7 +365,7 @@
         <a href="wallet.html" class="nav-item active">💰<br>Wallet</a>
         <a href="profile.html" class="nav-item">👤<br>Profile</a>
     </div>
-<script src="js/config.js"></script>
+
     <script src="js/api.js"></script>
     <script>
         let currentBalance = 0;
@@ -429,57 +429,66 @@
             }
         }
 
-        // Load wallet data
-        async function loadWalletData() {
-            try {
-                const token = localStorage.getItem('token');
-                
-                const res = await fetch(`${API}/wallet`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+       // Load wallet data
+async function loadWalletData() {
+    try {
+        const token = localStorage.getItem('token');
+        
+        const res = await fetch(`${API}/withdraw`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
-                const data = await res.json();
+        if (!res.ok) {
+            throw new Error('Failed to load withdrawal data');
+        }
 
-                if (res.ok) {
-                    const wallet = parseFloat(data.wallet || 0);
-                    const totalWagered = parseFloat(data.totalWagered || 0);
-                    const depositAmount = parseFloat(data.depositAmount || 0);
-                    const bonus = parseFloat(data.bonus || 0);
-                    const deposited = data.deposited || false;
+        const data = await res.json();
 
-                    currentBalance = wallet;
-                    document.getElementById('availableBalance').textContent = `₹${wallet.toFixed(2)}`;
+        if (data.success) {
+            const wallet = parseFloat(data.balance || 0);
+            currentBalance = wallet;
+            document.getElementById('availableBalance').textContent = `₹${wallet.toFixed(2)}`;
 
-                    // Check wagering requirement
-                    if (!deposited) {
-                        document.getElementById('wageringWarning').style.display = 'block';
-                        document.getElementById('wageringText').textContent = 
-                            '⚠️ Please make a deposit first before withdrawing';
-                        document.getElementById('withdrawBtn').disabled = true;
-                        canWithdraw = false;
-                    } else {
-                        const requiredWager = depositAmount + bonus;
-                        
-                        if (totalWagered < requiredWager) {
-                            const remaining = requiredWager - totalWagered;
-                            document.getElementById('wageringWarning').style.display = 'block';
-                            document.getElementById('wageringText').textContent = 
-                                `⚠️ Wager ₹${remaining.toFixed(2)} more to unlock withdrawals (${totalWagered.toFixed(2)} / ${requiredWager.toFixed(2)})`;
-                            document.getElementById('withdrawBtn').disabled = true;
-                            canWithdraw = false;
-                        } else {
-                            document.getElementById('wageringWarning').style.display = 'none';
-                            document.getElementById('withdrawBtn').disabled = false;
-                            canWithdraw = true;
-                        }
-                    }
+            // Check if withdrawal method is set
+            if (!data.withdrawMethod) {
+                if (confirm('⚠️ Please set up your withdrawal method first. Go to setup page?')) {
+                    window.location.href = 'withdraw-method.html';
                 }
-            } catch (err) {
-                console.error('Wallet load error:', err);
+                document.getElementById('withdrawBtn').disabled = true;
+                canWithdraw = false;
+                return;
+            }
+
+            // Display method
+            const display = document.getElementById('methodDisplay');
+            const text = document.getElementById('methodText');
+            
+            if (display && text) {
+                display.style.display = 'block';
+                text.textContent = `UPI: ${data.withdrawMethod.upiId}`;
+            }
+
+            // Enable withdrawal if balance is sufficient
+            const minWithdraw = data.minWithdraw || 100;
+            if (wallet < minWithdraw) {
+                document.getElementById('wageringWarning').style.display = 'block';
+                document.getElementById('wageringText').textContent = 
+                    `⚠️ Minimum withdrawal amount is ₹${minWithdraw}`;
+                document.getElementById('withdrawBtn').disabled = true;
+                canWithdraw = false;
+            } else {
+                document.getElementById('wageringWarning').style.display = 'none';
+                document.getElementById('withdrawBtn').disabled = false;
+                canWithdraw = true;
             }
         }
+    } catch (err) {
+        console.error('Wallet load error:', err);
+        alert('❌ Error loading withdrawal data. Please try again.');
+    }
+}
 
         // Load withdrawal history
         async function loadHistory() {
