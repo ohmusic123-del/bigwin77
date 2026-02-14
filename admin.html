@@ -1215,12 +1215,12 @@
                     
                     <div class="form-group">
                         <label class="form-label">Type</label>
-                       <select class="form-control" id="tournament-type" required onchange="handleTournamentTypeChange()">
+                      <select class="form-control" id="tournament-type" required onchange="handleTournamentTypeChange()">
     <option value="">Select Type</option>
     <option value="solo">Solo</option>
     <option value="duo">Duo</option>
     <option value="squad">Squad</option>
-    <option value="kill_based">Kill Based (Pay Per Kill)</option>
+    <option value="kill_based">💰 Kill Based (Pay Per Kill)</option>
 </select>
                     </div>
                 </div>
@@ -1298,46 +1298,61 @@
             </div>
         </div>
     </div>
-<!-- Kill-Based Settings (Hidden by default) -->
-<div id="kill-based-settings" style="display: none;">
-    <hr style="margin: 20px 0;">
-    <h4 style="color: var(--primary); margin-bottom: 15px;">
-        <i class="fas fa-crosshairs"></i> Kill-Based Rewards
+<!-- Kill-Based Settings (Initially Hidden) -->
+<div id="kill-based-settings" style="display: none; margin-top: 25px; padding: 20px; background: rgba(102, 126, 234, 0.1); border-radius: 12px; border: 2px solid var(--primary);">
+    <h4 style="color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+        <i class="fas fa-crosshairs"></i> Kill-Based Tournament Settings
     </h4>
     
     <div class="form-group">
         <label class="form-label">
-            Amount Per Kill
-            <small style="color: var(--text-light);">(₹ paid for each kill)</small>
+            💰 Amount Per Kill
+            <small style="color: var(--text-light); display: block; margin-top: 5px;">
+                How much players earn for each kill (e.g., ₹8 per kill)
+            </small>
         </label>
-        <input type="number" class="form-control" id="per-kill-amount" placeholder="10" min="1">
+        <input type="number" class="form-control" id="per-kill-amount" placeholder="8" min="1" step="0.01">
     </div>
     
     <div class="form-group">
         <label class="form-label">
-            Kill Milestones (Bonuses)
-            <small style="color: var(--text-light);">(Extra rewards for reaching kill counts)</small>
+            🎯 Kill Milestones (Optional Bonuses)
+            <small style="color: var(--text-light); display: block; margin-top: 5px;">
+                Extra rewards for reaching specific kill counts
+            </small>
         </label>
         <div id="kill-milestones">
-            <div style="display: grid; grid-template-columns: auto 1fr auto; gap: 10px; margin-bottom: 10px;">
-                <input type="number" class="form-control" placeholder="Kills" id="milestone-kills-1" style="width: 100px;">
-                <input type="number" class="form-control" placeholder="Bonus ₹" id="milestone-bonus-1">
-                <button class="btn btn-sm btn-success" onclick="addKillMilestone()">
+            <div style="display: grid; grid-template-columns: 120px 1fr auto; gap: 10px; margin-bottom: 10px; align-items: center;">
+                <input type="number" class="form-control" placeholder="Kills (e.g., 10)" id="milestone-kills-1" style="width: 100%;" min="1">
+                <input type="number" class="form-control" placeholder="Bonus ₹ (e.g., 50)" id="milestone-bonus-1" min="1" step="0.01">
+                <button type="button" class="btn btn-sm btn-success" onclick="addKillMilestone()" title="Add Another Milestone">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
         </div>
-        <small style="color: var(--text-light); font-size: 12px;">
-            Example: 10 kills = ₹50 bonus, 20 kills = ₹150 bonus
+        <small style="color: var(--text-light); font-size: 12px; display: block; margin-top: 8px;">
+            💡 Example: 10 kills = ₹50 bonus, 20 kills = ₹150 bonus
         </small>
     </div>
     
     <div class="form-group">
         <label class="form-label">
-            Maximum Payout Per Player
-            <small style="color: var(--text-light);">(Optional cap on total earnings)</small>
+            🔒 Maximum Payout Per Player (Optional)
+            <small style="color: var(--text-light); display: block; margin-top: 5px;">
+                Cap on total earnings per player (leave empty for no limit)
+            </small>
         </label>
-        <input type="number" class="form-control" id="max-payout" placeholder="1000">
+        <input type="number" class="form-control" id="max-payout" placeholder="1000 (optional)" min="0" step="0.01">
+    </div>
+    
+    <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid var(--success);">
+        <strong style="color: var(--success);">📊 Example Calculation:</strong>
+        <p style="margin: 10px 0 5px; color: var(--text); font-size: 14px;">
+            Entry Fee: ₹10, Per Kill: ₹8
+        </p>
+        <p style="margin: 0; color: var(--text); font-size: 14px;">
+            Player gets 15 kills → Earns 15 × ₹8 = ₹120 → Net profit: ₹110 ✅
+        </p>
     </div>
 </div>
     <!-- View Participants Modal -->
@@ -2498,13 +2513,18 @@ async function createTournament() {
         // Collect data based on tournament type
         if (type === 'kill_based') {
             // Collect kill-based settings
-            const perKill = parseFloat(document.getElementById('per-kill-amount').value) || 0;
-            const bonusKills = [];
+            const perKill = parseFloat(document.getElementById('per-kill-amount')?.value) || 0;
             
+            if (perKill <= 0) {
+                alert('Please enter amount per kill');
+                return;
+            }
+            
+            const bonusKills = [];
             for (let i = 1; i <= milestoneCount; i++) {
                 const killsInput = document.getElementById(`milestone-kills-${i}`);
                 const bonusInput = document.getElementById(`milestone-bonus-${i}`);
-                if (killsInput && killsInput.value && bonusInput && bonusInput.value) {
+                if (killsInput?.value && bonusInput?.value) {
                     bonusKills.push({
                         kills: parseInt(killsInput.value),
                         bonus: parseFloat(bonusInput.value)
@@ -2515,8 +2535,11 @@ async function createTournament() {
             killRewards = {
                 perKill: perKill,
                 bonusKills: bonusKills,
-                maxPayout: parseFloat(document.getElementById('max-payout').value) || null
+                maxPayout: parseFloat(document.getElementById('max-payout')?.value) || null
             };
+            
+            console.log('Kill-based tournament settings:', killRewards);
+            
         } else {
             // Collect normal prize distribution
             for (let i = 1; i <= prizeRowCount; i++) {
@@ -2540,61 +2563,59 @@ async function createTournament() {
             startTime: document.getElementById('tournament-start-time').value,
             endTime: document.getElementById('tournament-end-time').value,
             registrationDeadline: document.getElementById('tournament-reg-deadline').value,
-            roomId: document.getElementById('tournament-room-id').value,
-            roomPassword: document.getElementById('tournament-room-password').value,
-            description: document.getElementById('tournament-description').value,
-            rules: document.getElementById('tournament-rules').value,
+            roomId: document.getElementById('tournament-room-id')?.value || '',
+            roomPassword: document.getElementById('tournament-room-password')?.value || '',
+            description: document.getElementById('tournament-description')?.value || '',
+            rules: document.getElementById('tournament-rules')?.value || '',
             prizeDistribution: type === 'kill_based' ? [] : prizeDistribution,
             killRewards: killRewards
         };
-                // Validation
-                if (!tournamentData.title || !tournamentData.game || !tournamentData.type) {
-                    alert('Please fill in all required fields');
-                    return;
-                }
-                
-                const response = await fetch(`${API_URL}/admin/tournaments`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': adminToken,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(tournamentData)
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    alert('✅ Tournament created successfully!');
-                    closeModal('create-tournament-modal');
-                    loadTournaments();
-                    
-                    // Reset form
-                    document.getElementById('tournament-title').value = '';
-                    document.getElementById('tournament-game').value = '';
-                    document.getElementById('tournament-type').value = '';
-                    document.getElementById('tournament-slots').value = '';
-                    document.getElementById('tournament-entry-fee').value = '';
-                    document.getElementById('tournament-prize-pool').value = '';
-                    document.getElementById('tournament-description').value = '';
-                    document.getElementById('tournament-rules').value = '';
-                    prizeRowCount = 1;
-                    document.getElementById('prize-distribution').innerHTML = `
-                        <div style="display: grid; grid-template-columns: auto 1fr auto; gap: 10px; margin-bottom: 10px;">
-                            <input type="number" class="form-control" placeholder="1" value="1" readonly style="width: 80px;">
-                            <input type="number" class="form-control" placeholder="Prize amount" id="prize-1">
-                            <button class="btn btn-sm btn-success" onclick="addPrizeRow()"><i class="fas fa-plus"></i></button>
-                        </div>
-                    `;
-                } else {
-                    alert('❌ Error: ' + (data.error || 'Failed to create tournament'));
-                }
-            } catch (err) {
-                console.error('Error creating tournament:', err);
-                alert('❌ Error: ' + err.message);
-            }
+        
+        // Validation
+        if (!tournamentData.title || !tournamentData.game || !tournamentData.type) {
+            alert('Please fill in all required fields');
+            return;
         }
-
+        
+        console.log('Creating tournament:', tournamentData);
+        
+        const response = await fetch(`${API}/admin/tournaments`, {
+            method: 'POST',
+            headers: {
+                'Authorization': adminToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tournamentData)
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            alert('✅ Tournament created successfully!');
+            closeModal('create-tournament-modal');
+            loadTournaments();
+            
+            // Reset form
+            document.getElementById('tournament-title').value = '';
+            // ... reset other fields
+            milestoneCount = 1;
+            document.getElementById('kill-milestones').innerHTML = `
+                <div style="display: grid; grid-template-columns: 120px 1fr auto; gap: 10px; margin-bottom: 10px; align-items: center;">
+                    <input type="number" class="form-control" placeholder="Kills (e.g., 10)" id="milestone-kills-1" style="width: 100%;" min="1">
+                    <input type="number" class="form-control" placeholder="Bonus ₹ (e.g., 50)" id="milestone-bonus-1" min="1" step="0.01">
+                    <button type="button" class="btn btn-sm btn-success" onclick="addKillMilestone()" title="Add Another Milestone">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            `;
+        } else {
+            alert('❌ Error: ' + (data.error || 'Failed to create tournament'));
+        }
+    } catch (err) {
+        console.error('Error creating tournament:', err);
+        alert('❌ Error: ' + err.message);
+    }
+}
         // View Participants
         async function viewParticipants(tournamentId, title) {
             try {
@@ -2777,35 +2798,36 @@ async function createTournament() {
             }
         }
         // Handle tournament type change
+let milestoneCount = 1;
+
 function handleTournamentTypeChange() {
     const type = document.getElementById('tournament-type').value;
     const killSettings = document.getElementById('kill-based-settings');
-    const prizeDistribution = document.getElementById('prize-distribution').parentElement.parentElement;
+    const normalPrizeSection = document.getElementById('prize-distribution')?.parentElement?.parentElement;
     
     if (type === 'kill_based') {
         // Show kill-based settings
-        killSettings.style.display = 'block';
+        if (killSettings) killSettings.style.display = 'block';
         // Hide normal prize distribution
-        prizeDistribution.style.display = 'none';
+        if (normalPrizeSection) normalPrizeSection.style.display = 'none';
     } else {
         // Hide kill-based settings
-        killSettings.style.display = 'none';
+        if (killSettings) killSettings.style.display = 'none';
         // Show normal prize distribution
-        prizeDistribution.style.display = 'block';
+        if (normalPrizeSection) normalPrizeSection.style.display = 'block';
     }
 }
 
 // Add kill milestone row
-let milestoneCount = 1;
 function addKillMilestone() {
     milestoneCount++;
     const container = document.getElementById('kill-milestones');
     const newRow = document.createElement('div');
-    newRow.style.cssText = 'display: grid; grid-template-columns: auto 1fr auto; gap: 10px; margin-bottom: 10px;';
+    newRow.style.cssText = 'display: grid; grid-template-columns: 120px 1fr auto; gap: 10px; margin-bottom: 10px; align-items: center;';
     newRow.innerHTML = `
-        <input type="number" class="form-control" placeholder="Kills" id="milestone-kills-${milestoneCount}" style="width: 100px;">
-        <input type="number" class="form-control" placeholder="Bonus ₹" id="milestone-bonus-${milestoneCount}">
-        <button class="btn btn-sm btn-danger" onclick="this.parentElement.remove()">
+        <input type="number" class="form-control" placeholder="Kills" id="milestone-kills-${milestoneCount}" style="width: 100%;" min="1">
+        <input type="number" class="form-control" placeholder="Bonus ₹" id="milestone-bonus-${milestoneCount}" min="1" step="0.01">
+        <button type="button" class="btn btn-sm btn-danger" onclick="this.parentElement.remove()" title="Remove">
             <i class="fas fa-minus"></i>
         </button>
     `;
