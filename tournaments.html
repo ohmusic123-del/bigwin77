@@ -405,7 +405,8 @@
 
         // Game icons
         const gameIcons = {
-            freefire: '🔥',
+            freefire:'<img src="images/games/freefire.png" class="game-img" />',
+
             pubg: '🎮',
             bgmi: '🎯',
             cod: '🔫',
@@ -414,46 +415,109 @@
         };
 
         // Load tournaments
-        async function loadTournaments() {
-            try {
-                const container = document.getElementById('tournaments-container');
-                container.innerHTML = '<div class="loading">Loading tournaments...</div>';
+       async function loadTournaments(filter = 'all') {
+    try {
+        document.getElementById('loadingSpinner').style.display = 'flex';
+        document.getElementById('tournamentsContainer').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'none';
 
-                const params = new URLSearchParams();
-                if (currentStatus !== 'all') {
-                    params.append('status', currentStatus);
-                }
+        const token = localStorage.getItem('token');
+        
+        // Build query based on filter
+        let query = '';
+        if (currentGame && currentGame !== 'all') {
+            query = `?game=${currentGame}`;
+        }
+        
+        console.log('Loading tournaments with query:', query);
+        
+        const response = await fetch(`${API}/tournaments${query}`, {
+            headers: token ? {
+                'Authorization': `Bearer ${token}`
+            } : {}
+        });
 
-                const response = await fetch(`${API_URL}/tournaments?${params}`);
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Failed to load tournaments');
-                }
-
-            const tournaments = Array.isArray(data) ? data : (data.tournaments || []);
-if (tournaments.length > 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">🏆</div>
-                            <div class="empty-text">No tournaments available</div>
-                        </div>
-                    `;
-                    return;
-                }
-
-                container.innerHTML = data.tournaments.map(t => createTournamentCard(t)).join('');
-            } catch (err) {
-                console.error('Error loading tournaments:', err);
-                document.getElementById('tournaments-container').innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">⚠️</div>
-                        <div class="empty-text">${err.message}</div>
-                    </div>
-                `;
-            }
+        if (!response.ok) {
+            throw new Error('Failed to load tournaments');
         }
 
+        const data = await response.json();
+        
+        // Handle both array and object response
+        const tournaments = Array.isArray(data) ? data : (data.tournaments || []);
+        
+        console.log('Loaded tournaments:', tournaments.length);
+
+        document.getElementById('loadingSpinner').style.display = 'none';
+
+        if (tournaments.length === 0) {
+            document.getElementById('emptyState').style.display = 'flex';
+            return;
+        }
+
+        // Filter by status
+        let filteredTournaments = tournaments;
+        if (filter !== 'all') {
+            filteredTournaments = tournaments.filter(t => {
+                if (filter === 'open') return t.status === 'registration_open';
+                if (filter === 'live') return t.status === 'ongoing';
+                if (filter === 'completed') return t.status === 'completed';
+                return true;
+            });
+        }
+
+        if (filteredTournaments.length === 0) {
+            document.getElementById('emptyState').style.display = 'flex';
+            return;
+        }
+
+        // Render tournaments
+        document.getElementById('tournamentsContainer').style.display = 'grid';
+        document.getElementById('tournamentsContainer').innerHTML = filteredTournaments.map(t => {
+            const slotsUsed = t.currentParticipants || 0;
+            const slotsTotal = t.totalSlots;
+            const slotsFull = slotsUsed >= slotsTotal;
+            
+            return `
+                <div class="tournament-card" onclick="window.location.href='tournament-details.html?id=${t._id}'">
+                    <div class="tournament-banner" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="game-badge">${t.game.toUpperCase()}</div>
+                    </div>
+                    <div class="tournament-info">
+                        <h3>${t.title}</h3>
+                        <div class="tournament-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Type</span>
+                                <span class="meta-value">${t.type.toUpperCase()}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Entry Fee</span>
+                                <span class="meta-value">₹${t.entryFee}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Prize Pool</span>
+                                <span class="meta-value">₹${t.prizePool}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Slots</span>
+                                <span class="meta-value ${slotsFull ? 'text-danger' : ''}">${slotsUsed}/${slotsTotal}</span>
+                            </div>
+                        </div>
+                        <div class="tournament-status ${t.status === 'registration_open' ? 'status-open' : ''}">
+                            ${t.status.replace('_', ' ').toUpperCase()}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+    } catch (err) {
+        console.error('Error loading tournaments:', err);
+        document.getElementById('loadingSpinner').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'flex';
+        document.querySelector('.empty-message').textContent = 'Failed to load tournaments';
+    }
+}
         function createTournamentCard(tournament) {
             const startDate = new Date(tournament.startTime);
             const formattedDate = startDate.toLocaleDateString('en-IN', { 
