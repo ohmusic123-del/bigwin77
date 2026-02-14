@@ -1740,12 +1740,15 @@
                     throw new Error(data.error || 'Failed to load deposits');
                 }
                 
-                if (data.deposits.length === 0) {
+                // Backend returns array directly, not wrapped in object
+                const deposits = Array.isArray(data) ? data : (data.deposits || []);
+                
+                if (deposits.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No deposits found</td></tr>';
                     return;
                 }
                 
-                tbody.innerHTML = data.deposits.map(d => `
+                tbody.innerHTML = deposits.map(d => `
                     <tr>
                         <td><strong>${d.userId?.mobile || 'N/A'}</strong></td>
                         <td>₹${d.amount.toFixed(2)}</td>
@@ -1857,12 +1860,15 @@
                     throw new Error(data.error || 'Failed to load withdrawals');
                 }
                 
-                if (data.withdraws.length === 0) {
+                // Backend returns array directly, not wrapped in object
+                const withdrawals = Array.isArray(data) ? data : (data.withdraws || []);
+                
+                if (withdrawals.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No withdrawals found</td></tr>';
                     return;
                 }
                 
-                tbody.innerHTML = data.withdraws.map(w => `
+                tbody.innerHTML = withdrawals.map(w => `
                     <tr>
                         <td><strong>${w.userId?.mobile || 'N/A'}</strong></td>
                         <td>₹${w.amount.toFixed(2)}</td>
@@ -2183,12 +2189,15 @@
                     throw new Error(data.error || 'Failed to load monitor users');
                 }
                 
-                if (data.monitoredUsers.length === 0) {
+                // Backend returns array directly, not wrapped in object
+                const monitoredUsers = Array.isArray(data) ? data : (data.monitoredUsers || []);
+                
+                if (monitoredUsers.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No monitored users</td></tr>';
                     return;
                 }
                 
-                tbody.innerHTML = data.monitoredUsers.map(mu => `
+                tbody.innerHTML = monitoredUsers.map(mu => `
                     <tr>
                         <td><strong>${mu.mobile}</strong></td>
                         <td>${mu.reason}</td>
