@@ -315,7 +315,7 @@
 
             <!-- Info Box -->
             <div class="info-box">
-                <p>⏱️ Withdrawals are processed within 24 hours. Minimum withdrawal: ₹100</p>
+                <p>⏱️ Withdrawals are processed within 24 hours. Minimum withdrawal: ₹50</p>
             </div>
 
             <!-- Form -->
@@ -325,14 +325,14 @@
                     <input 
                         type="number" 
                         id="withdrawAmount" 
-                        placeholder="Enter amount (Min: ₹100)"
-                        min="100"
+                        placeholder="Enter amount (Min: ₹50)"
+                        min="50"
                         required
                     >
                     <div class="quick-amounts">
-                        <button type="button" class="quick-btn" onclick="setAmount(100)">₹100</button>
-                        <button type="button" class="quick-btn" onclick="setAmount(500)">₹500</button>
-                        <button type="button" class="quick-btn" onclick="setAmount(1000)">₹1000</button>
+                        <button type="button" class="quick-btn" onclick="setAmount(100)">₹50</button>
+                        <button type="button" class="quick-btn" onclick="setAmount(500)">₹100</button>
+                        <button type="button" class="quick-btn" onclick="setAmount(1000)">₹500</button>
                         <button type="button" class="quick-btn" onclick="setAmount('max')">Max</button>
                     </div>
                 </div>
@@ -394,7 +394,9 @@
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
-                });
+                })
+                
+                ;
 
                 const data = await res.json();
 
@@ -524,8 +526,8 @@
 
             const amount = parseInt(document.getElementById('withdrawAmount').value);
 
-            if (!amount || amount < 100) {
-                alert('❌ Minimum withdrawal is ₹100');
+            if (!amount || amount < 50) {
+                alert('❌ Minimum withdrawal is ₹50');
                 return;
             }
 
@@ -541,14 +543,11 @@
             try {
                 const token = localStorage.getItem('token');
                 
-                const res = await fetch(`${API}/wallet/withdraw`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ amount })
-                });
+               const response = await fetch(`${API_URL}/withdraw`, {
+    headers: {
+        'Authorization': `Bearer ${token}`
+    }
+});
 
                 const data = await res.json();
 
