@@ -462,29 +462,60 @@
         }
 
         // Load tournament details
-        async function loadTournament() {
-            try {
-                const response = await fetch(`${API_URL}/tournaments/${tournamentId}`);
-                const data = await response.json();
+     async function loadTournament() {
+    try {
+        document.getElementById('loadingState').style.display = 'block';
+        document.getElementById('tournamentContent').style.display = 'none';
+        document.getElementById('errorState').style.display = 'none';
 
-                if (!response.ok) {
-                    throw new Error(data.error || 'Failed to load tournament');
-                }
-
-                currentTournament = data.tournament;
-                displayTournament(currentTournament);
-                loadParticipants();
-            } catch (err) {
-                console.error('Error loading tournament:', err);
-                document.getElementById('content-container').innerHTML = `
-                    <div class="section">
-                        <div style="text-align: center; color: #ff6b6b;">
-                            ${err.message}
-                        </div>
-                    </div>
-                `;
-            }
+        const response = await fetch(`${API}/tournaments/${tournamentId}`);
+        
+        if (!response.ok) {
+            throw new Error('Tournament not found');
         }
+
+        const data = await response.json();
+        tournament = data.tournament || data;
+
+        console.log('Loaded tournament:', tournament);
+
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('tournamentContent').style.display = 'block';
+
+        // Render tournament details
+        document.getElementById('tournamentTitle').textContent = tournament.title;
+        document.getElementById('tournamentGame').textContent = tournament.game.toUpperCase();
+        document.getElementById('tournamentType').textContent = tournament.type.toUpperCase();
+        document.getElementById('entryFee').textContent = `₹${tournament.entryFee}`;
+        document.getElementById('prizePool').textContent = `₹${tournament.prizePool}`;
+        
+        const slotsUsed = tournament.currentParticipants || 0;
+        const slotsTotal = tournament.totalSlots;
+        document.getElementById('slots').textContent = `${slotsUsed}/${slotsTotal}`;
+        
+        document.getElementById('status').textContent = tournament.status.replace('_', ' ').toUpperCase();
+        document.getElementById('startTime').textContent = new Date(tournament.startTime).toLocaleString();
+
+        // Check if user can register
+        const token = localStorage.getItem('token');
+        if (!token) {
+            document.getElementById('registerBtn').textContent = 'Login to Register';
+            document.getElementById('registerBtn').onclick = () => window.location.href = 'index.html';
+        } else if (tournament.status !== 'registration_open') {
+            document.getElementById('registerBtn').disabled = true;
+            document.getElementById('registerBtn').textContent = 'Registration Closed';
+        } else if (slotsUsed >= slotsTotal) {
+            document.getElementById('registerBtn').disabled = true;
+            document.getElementById('registerBtn').textContent = 'Tournament Full';
+        }
+
+    } catch (err) {
+        console.error('Error loading tournament:', err);
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('errorState').style.display = 'block';
+        document.getElementById('errorMessage').textContent = err.message;
+    }
+}
 
         function displayTournament(t) {
             document.getElementById('header-title').textContent = t.title;
